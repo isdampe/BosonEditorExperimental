@@ -1,0 +1,164 @@
+$themebodybg: #4d5052;
+$themebodyfg: #bbbbbb;
+$themeboxborder: #2f3233;
+$themeboxfadeborder: #505455;
+$themetopbarbg: #4a4b4b;
+$themeeditorbg: #393939;
+$tabactivebottom: #4f4f4f;
+$sidebarhighlight: #2b5a76;
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: Cantarell;
+	font-size: 13px;
+	background: $themebodybg;
+	color: $themebodyfg;
+	cursor: default;
+}
+
+
+#sidebar-entrypoint {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 240px;
+	border-right: 1px solid $themeboxborder;
+	-webkit-user-select: none;
+
+	.module {
+		background: #4d5053;
+
+		header {
+			width: 100%;
+			height: 32px;
+			background: #484c4e;
+			border-bottom: 1px solid #2e3133;
+			border-top: 1px solid #646769;
+			line-height: 33px;
+			padding: 0 14px;
+		}
+
+	}
+}
+#sidebar-entrypoint:before {
+  content: " ";
+  position: absolute;
+  z-index: -1;
+  top: 1px;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+  border-right: 1px solid $themeboxfadeborder;
+}
+
+#topbar-entrypoint {
+	position: fixed;
+	top: 1px;
+	left: 241px;
+	height: 30px;
+	width: calc(100% - 241px);
+	border-bottom: 1px solid $themeboxborder;
+	border-top: 1px solid $themeboxfadeborder;
+	background: $themetopbarbg;
+	-webkit-user-select: none;
+
+	#bottom-border {
+		position: fixed;
+		top: 31px;
+		width: calc(100% - 241px);
+		height: 3px;
+		background: #646565;
+		border-top: 1px solid #6f6d6e;
+	}
+}
+
+#tabs-entrypoint {
+	margin: 0 0 0 -1px;
+	padding-left: 0;
+	height: 24px;
+	margin-top: 4px;
+	-webkit-user-select: none;
+	font-size: 12px;
+	background: #4c4d4e;
+
+	ul {
+		margin: 0;
+		padding: 0;
+	}
+	li {
+		display: block;
+		float: left;
+		padding: 2px 15px;
+		margin: 0;
+		height: 25px;
+		min-width: 150px;
+		list-style-type: none;
+		margin-top: 0;
+		background: $themebodybg;
+		border: 1px solid #323337;
+		margin-left: -1px;
+	}
+	li.active {
+		background: #646565;
+		height: 26px;
+		padding: 3px 15px;
+		margin-top: 0;
+		color: #fff;
+
+	}
+}
+
+#editor-entrypoint {
+	position: fixed;
+	top: 36px;
+	left: 241px;
+	width: calc(100% - 241px);
+	height: calc(100% - 36px);
+	background: $themeeditorbg;
+}
+
+.CodeMirror {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	font-family: Ubuntu mono;
+	font-weight: 400;
+	font-size: 20px!important;
+	text-shadow: none;
+	line-height: 1!important;
+}
+
+
+//Project module.
+#module-project {
+
+	ul {
+		margin: 0;
+		padding: 5px 0 0 0;
+		color: #eee;
+	}
+
+	li {
+		padding: 3px 0;
+		list-style-type: none;
+
+		span {
+			padding: 0 0 0 15px;
+		}
+	}
+
+	li.current {
+		background: $sidebarhighlight;
+	}
+
+	li ul li span {
+		margin: 0;
+		padding: 3px 0 0 30px;
+	}
+
+}

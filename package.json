@@ -1,0 +1,21 @@
+{
+  "main": "editor.html",
+  "name": "nw-demo",
+  "description": "Boson Editor",
+  "version": "0.1.0",
+  "window": {
+    "title": "Boson Editor",
+    "icon": "",
+    "toolbar": true,
+    "frame": true,
+    "width": 1280,
+    "height": 720,
+    "position": "mouse",
+    "min_width": 400,
+    "min_height": 200,
+    "show": false
+  },
+  "webkit": {
+    "plugin": false
+  }
+}

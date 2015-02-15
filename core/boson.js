@@ -1,0 +1,213 @@
+/*
+ * Boson.js core
+ * This handle all core app things.
+*/
+
+var gui = require('nw.gui');
+var menu = require(process.cwd() + '/core/modules/menu.js');
+var keybindings = require(process.cwd() + '/core/modules/keybindings.js');
+var fs = require('fs');
+
+(function(window,config){
+
+  var boson = {
+    current_editor: null,
+    title: "Boson Editor"
+  }, elements = {}, editor = [], tabs = [], dom, editorData = [], win;
+
+  this.preloadDom = function() {
+    elements.editorEntryPoint = document.getElementById("editor-entrypoint");
+    elements.tabsEntryPoint = document.getElementById("tabs-entrypoint");
+  };
+
+  this.log = function(buffer) {
+
+    console.log(buffer);
+
+  };
+
+  this.createTab = function(object, i) {
+
+    var tab;
+
+    tab = document.createElement("li");
+    tab.id = "tab-" + object.guid;
+    tab.innerHTML = object.name;
+
+    //Hook onclick.
+    tab.onclick = function(e) {
+      e.preventDefault();
+      bs.switchToEditor(i);
+    };
+
+    elements.tabsEntryPoint.appendChild( tab );
+
+    tabs[i] = tab;
+
+  };
+
+  this.activateTab = function(i) {
+    if ( boson.current_editor !== null ) {
+      tabs[boson.current_editor].className = "";
+    }
+    tabs[i].className =  "active";
+  }
+
+  this.createEditor = function(object, i) {
+
+    var textarea;
+
+    //Create the textarea.
+    textarea = document.createElement("textarea");
+    textarea.id = "ta-" + object.guid;
+    textarea.value = object.buffer;
+
+    //Create a tab.
+    this.createTab(object, i);
+
+    //Inject into DOM.
+    elements.editorEntryPoint.appendChild(textarea);
+
+    //Create the editor.
+    editor[i] = {
+      cm: CodeMirror.fromTextArea(textarea, {
+          lineNumbers: true,
+          theme: config.theme
+        }),
+      ta: textarea
+    };
+
+    //Hide the editor.
+    editor[i].cm.getWrapperElement().style.display = "none";
+
+  };
+
+  this.showEditor = function(i) {
+
+    editor[i].cm.getWrapperElement().style.display = "block";
+    editor[i].cm.focus();
+
+  }
+
+  this.hideEditor = function(i) {
+
+    editor[i].cm.getWrapperElement().style.display = "none";
+
+  }
+
+  this.switchToEditor = function(i) {
+    if ( boson.current_editor !== i ) {
+      if ( boson.current_editor !== null ) {
+        this.hideEditor(boson.current_editor)
+      }
+      this.showEditor(i);
+      this.activateTab(i);
+      boson.current_editor = i;
+      this.setTitle(editorData[i].cwd + "/" + editorData[i].name);
+    }
+  };
+
+  this.bsError = function(err) {
+    console.log("BOSON ERROR: " + err);
+  };
+
+  this.saveBuffer = function(i) {
+
+    //Save the specified buffer changes to buffer.
+    var fh, fileBuffer;
+
+    //Sync Codemirror and editorData.
+    editorData[i].buffer = editor[i].cm.getValue();
+
+    fileBuffer = editorData[i];
+    console.log(fileBuffer);
+
+    fs.writeFile( fileBuffer.cwd + "/" + fileBuffer.name, fileBuffer.buffer, function(err){
+      if ( err ) {
+        this.bsError(err);
+      }
+      this.log("Saved buffer  to " + fileBuffer.cwd + "/" + fileBuffer.name );
+    });
+
+  };
+
+  this.saveCurrentBuffer = function() {
+
+    this.saveBuffer(boson.current_editor);
+
+  };
+
+  this.setTitle = function(titleBuffer) {
+
+    var proposedTitle;
+
+    proposedTitle = titleBuffer + " - Boson Editor";
+
+    if ( boson.title !== proposedTitle ) {
+      //Set title.
+      gui.Window.get().title = proposedTitle;
+      boson.title = proposedTitle;
+    }
+
+  }
+
+  this.init = function() {
+
+    var startupTime, bootUpTime, totalBootTime, i, fileCount;
+
+    //Log the startup time.
+    startupTime = new Date().getTime();
+
+
+    //Debug only.
+    //This should read data file.
+    editorData.push({
+      name: "index.html",
+      guid: "7812tg87gas87dgasd",
+      cwd: "/home/dampe/public_html",
+      buffer: "asd967asdg978asvdbasd"
+    });
+    editorData.push({
+      name: "editor.html",
+      guid: "abcdefghj",
+      cwd: "/home/dampe/public_html",
+      buffer: "asd967asdg97asdasdasdasdasdasdasd"
+    });
+
+    //Preload dom selection.
+    this.preloadDom();
+
+    fileCount = editorData.length;
+    for ( i=0; i<fileCount; i++ ) {
+      this.createEditor(editorData[i], i);
+    }
+
+    //Fetch window.
+    win = gui.Window.get();
+
+    //Build menus.
+    menu.init(gui,win,this);
+    keybindings.init(gui,win,this);
+
+    //Show the window.
+    win.show();
+
+    bootUpTime = new Date().getTime();
+    totalBootTime = bootUpTime - startupTime;
+
+    if ( boson.current_editor === null ) {
+      if ( fileCount >= 1 ) {
+        this.switchToEditor(fileCount -1);
+      }
+    }
+
+    this.log("Boot complete, " + totalBootTime + " ms");
+
+  };
+
+  window.bs = this;
+  this.init();
+
+})(window, {
+  theme: "ambiance"
+});
