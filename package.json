@@ -6,7 +6,7 @@
   "window": {
     "title": "Boson Editor",
     "icon": "",
-    "toolbar": true,
+    "toolbar": false,
     "frame": true,
     "width": 1280,
     "height": 720,

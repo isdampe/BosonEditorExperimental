@@ -12,7 +12,8 @@ var fs = require('fs');
 
   var boson = {
     current_editor: null,
-    title: "Boson Editor"
+    title: "Boson Editor",
+    working_dir: process.env.PWD
   }, elements = {}, editor = [], tabs = [], dom, editorData = [], win;
 
   this.preloadDom = function() {
@@ -33,6 +34,7 @@ var fs = require('fs');
     tab = document.createElement("li");
     tab.id = "tab-" + object.guid;
     tab.innerHTML = object.name;
+    tab.setAttribute("data-name", object.name);
 
     //Hook onclick.
     tab.onclick = function(e) {
@@ -47,7 +49,7 @@ var fs = require('fs');
   };
 
   this.activateTab = function(i) {
-    if ( boson.current_editor !== null ) {
+    if ( boson.current_editor !== null && boson.current_editor !== false ) {
       tabs[boson.current_editor].className = "";
     }
     tabs[i].className =  "active";
@@ -74,11 +76,40 @@ var fs = require('fs');
           lineNumbers: true,
           theme: config.theme
         }),
-      ta: textarea
+      ta: textarea,
+      changed: false
     };
 
     //Hide the editor.
     editor[i].cm.getWrapperElement().style.display = "none";
+
+    //Create on change hook for save notifications.
+    editor[i].cm.on("change", function(cm) {
+      if ( editor[i].changed === false ) {
+         this.flagHasChanged(i, true);
+      }
+    });
+
+  };
+
+  this.closeEditor = function(i) {
+
+    //Remove the CM element.
+    editor[i].cm.toTextArea();
+
+    //Remove the text area.
+    editor[i].ta.parentElement.removeChild(editor[i].ta);
+
+    //Remove the tab.
+    tabs[i].parentElement.removeChild(tabs[i]);
+
+
+    //Clear the editor object.
+    editor[i] = {};
+    editorData[i] = {};
+    tabs[i] = null;
+
+    boson.current_editor = false;
 
   };
 
@@ -91,7 +122,9 @@ var fs = require('fs');
 
   this.hideEditor = function(i) {
 
-    editor[i].cm.getWrapperElement().style.display = "none";
+    if ( i !== false ) {
+      editor[i].cm.getWrapperElement().style.display = "none";
+    }
 
   }
 
@@ -103,12 +136,42 @@ var fs = require('fs');
       this.showEditor(i);
       this.activateTab(i);
       boson.current_editor = i;
-      this.setTitle(editorData[i].cwd + "/" + editorData[i].name);
+      if ( editor[i].changed === true ) {
+        this.setTitle( editorData[i].cwd + "/" + editorData[i].name + " *" );
+      } else {
+        this.setTitle( editorData[i].cwd + "/" + editorData[i].name );
+      }
     }
+  };
+
+  this.closeCurrentTab = function() {
+
+    if ( editor[boson.current_editor].changed === true ) {
+      //Confirm save.
+    } else {
+      this.closeEditor(boson.current_editor);
+    }
+
   };
 
   this.bsError = function(err) {
     console.log("BOSON ERROR: " + err);
+  };
+
+  this.flagHasChanged = function(i, status) {
+
+    editor[i].changed = status;
+
+    if ( status === true ) {
+      //Set both tab title and window title.
+      tabs[i].innerHTML = tabs[i].getAttribute("data-name") + "*";
+      this.setTitle( editorData[i].cwd + "/" + editorData[i].name + " *" );
+    } else {
+      //Set both tab title and window title.
+      tabs[i].innerHTML = tabs[i].getAttribute("data-name");
+      this.setTitle( editorData[i].cwd + "/" + editorData[i].name );
+    }
+
   };
 
   this.saveBuffer = function(i) {
@@ -120,13 +183,16 @@ var fs = require('fs');
     editorData[i].buffer = editor[i].cm.getValue();
 
     fileBuffer = editorData[i];
-    console.log(fileBuffer);
 
     fs.writeFile( fileBuffer.cwd + "/" + fileBuffer.name, fileBuffer.buffer, function(err){
       if ( err ) {
         this.bsError(err);
       }
       this.log("Saved buffer  to " + fileBuffer.cwd + "/" + fileBuffer.name );
+
+      //Remove the "changed" symbol and flag.
+      this.flagHasChanged(i, false);
+
     });
 
   };
