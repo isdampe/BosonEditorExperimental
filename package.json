@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "window": {
     "title": "Boson Editor",
-    "icon": "",
+    "icon": "assets/boson/media/logo.png",
     "toolbar": false,
     "frame": true,
     "width": 1280,

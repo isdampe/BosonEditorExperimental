@@ -1,11 +1,12 @@
 /*
  * Boson.js core
- * This handle all core app things.
+ * This handles all core app things.
 */
 
 var gui = require('nw.gui');
 var menu = require(process.cwd() + '/core/modules/menu.js');
 var keybindings = require(process.cwd() + '/core/modules/keybindings.js');
+var livepreview = require(process.cwd() + '/core/modules/livepreview.js');
 var fs = require('fs');
 
 (function(window,config){
@@ -146,6 +147,10 @@ var fs = require('fs');
 
   this.closeCurrentTab = function() {
 
+    if ( boson.current_editor === null || boson.current_editor === false ) {
+      return;
+    }
+
     if ( editor[boson.current_editor].changed === true ) {
       //Confirm save.
     } else {
@@ -217,6 +222,14 @@ var fs = require('fs');
 
   }
 
+  this.debug = function() {
+    win.showDevTools();
+  };
+
+  this.reinit = function() {
+    win.reload();
+  };
+
   this.init = function() {
 
     var startupTime, bootUpTime, totalBootTime, i, fileCount;
@@ -254,6 +267,7 @@ var fs = require('fs');
     //Build menus.
     menu.init(gui,win,this);
     keybindings.init(gui,win,this);
+    livepreview.init(gui,win,this);
 
     //Show the window.
     win.show();
