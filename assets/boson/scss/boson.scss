@@ -162,3 +162,106 @@ body {
 	}
 
 }
+
+.popOut {
+	-webkit-animation: popOut 0.15s forwards!important;
+}
+
+.popup {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 380px;
+	height: 225px;
+	margin: auto;
+	border: 1px solid #111;
+	background: #393939;
+	text-align: center;
+	-webkit-user-select: none;
+	-webkit-animation: popIn 0.25s forwards;
+	-webkit-transform: scale(0.1);
+
+	.logo {
+		margin: 20px auto 10px auto;
+		width: 64px;
+		height: 64px;
+		background: url("../media/logo-64.png");
+		-webkit-animation: rotate 1.5s infinite;
+	}
+
+	h4 {
+		text-align: center;
+		margin: 10px 0;
+		font-weight: normal;
+		font-size: 16px;
+	}
+
+	.dialogue {
+		text-align: center;
+		width: 350px;
+		margin: 0 auto 20px auto;
+	}
+
+	button {
+		margin: 0 5px;
+		font-size: 13px;
+		text-align: center;
+		padding: 0.75em 2.5em;
+		border-style: none;
+	}
+
+	button:focus {
+		outline: none;
+	}
+
+	button:active {
+		opacity: 0.8;
+	}
+
+	.btn-accept {
+		color: #eee;
+		background: $sidebarhighlight;
+		border-style: none;
+	}
+
+	.btn-decline {
+		color: #aaa;
+		background: #333;
+		border-style: none;
+	}
+
+}
+
+@-webkit-keyframes rotate {
+	0% {
+		-webkit-transform: rotate(0deg);
+	}
+	50% {
+		-webkit-transform: rotate(180deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+	}
+}
+@-webkit-keyframes popIn {
+	0% {
+		-webkit-transform: scale(0.1);
+	}
+	80% {
+		-webkit-transform: scale(1.05);
+	}
+	100% {
+		-webkit-transform: scale(1);
+	}
+}
+
+@-webkit-keyframes popOut {
+	0% {
+		-webkit-transform: scale(1);
+	}
+	100% {
+		-webkit-transform: scale(0);
+	}
+}

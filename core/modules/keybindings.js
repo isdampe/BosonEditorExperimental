@@ -1,7 +1,7 @@
 exports.init = function(gui,win,bs) {
 
 	window.onkeypress = function(e) {
-		console.log("W:" + e.which );
+		//console.log("W:" + e.which );
 		switch( e.which ) {
 			case 19:
 				bs.saveCurrentBuffer();
@@ -14,6 +14,9 @@ exports.init = function(gui,win,bs) {
 			break;
 			case 82:
 				bs.reinit();
+			break;
+			case 17:
+				//Ctrl + Q, Quit.
 			break;
 		}
 

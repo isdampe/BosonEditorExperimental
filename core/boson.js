@@ -20,6 +20,7 @@ var fs = require('fs');
   this.preloadDom = function() {
     elements.editorEntryPoint = document.getElementById("editor-entrypoint");
     elements.tabsEntryPoint = document.getElementById("tabs-entrypoint");
+    elements.bodyEntryPoint = document.getElementById("body-entrypoint");
   };
 
   this.log = function(buffer) {
@@ -38,7 +39,7 @@ var fs = require('fs');
     tab.setAttribute("data-name", object.name);
 
     //Hook onclick.
-    tab.onclick = function(e) {
+    tab.onmousedown = function(e) {
       e.preventDefault();
       bs.switchToEditor(i);
     };
@@ -145,6 +146,72 @@ var fs = require('fs');
     }
   };
 
+  this.createPopupDialogue = function(title, message, accept, decline, onSuccess, onFailure, i) {
+
+    var popup, popup_logo, popup_title, popup_description, popup_accept_button, popup_decline_button;
+
+    popup = document.createElement("div");
+    popup.className = "popup prompt";
+
+    popup_logo = document.createElement("div");
+    popup_logo.className = "logo";
+
+    popup_title = document.createElement("h4");
+    popup_title.innerHTML = title;
+
+    popup_description = document.createElement("div");
+    popup_description.className = "dialogue";
+    popup_description.innerHTML = message;
+
+    popup_accept_button = document.createElement("button");
+    popup_accept_button.className = "btn btn-accept";
+    popup_accept_button.innerHTML = accept;
+
+    popup_decline_button = document.createElement("button");
+    popup_decline_button.className = "btn btn-decline";
+    popup_decline_button.innerHTML = decline;
+
+    popup_accept_button.addEventListener("click", function(e){
+      e.preventDefault();
+      onSuccess(i);
+      bs.removePopupDialogue(popup);
+    });
+
+     popup_decline_button.addEventListener("click", function(e){
+      e.preventDefault();
+      onFailure(i);
+      bs.removePopupDialogue(popup);
+    });
+
+    popup.appendChild(popup_logo);
+    popup.appendChild(popup_title);
+    popup.appendChild(popup_description);
+    popup.appendChild(popup_decline_button);
+    popup.appendChild(popup_accept_button);
+
+    elements.bodyEntryPoint.appendChild(popup);
+
+  };
+
+  this.removePopupDialogue = function(popup) {
+
+    popup.className = "popup prompt popOut";
+    setTimeout(function(){
+      popup.parentElement.removeChild(popup);
+    }, 150);
+
+  };
+
+  this.warnSave = function(i, onSuccess, onFailure) {
+
+    var dialogueMessage;
+
+    dialogueMessage = "Do you want to save " + editorData[i].name + " before closing it?";
+
+    this.createPopupDialogue("Save before closing?", dialogueMessage, "Save", "Don't save", onSuccess, onFailure, i);
+
+  };
+
   this.closeCurrentTab = function() {
 
     if ( boson.current_editor === null || boson.current_editor === false ) {
@@ -153,6 +220,17 @@ var fs = require('fs');
 
     if ( editor[boson.current_editor].changed === true ) {
       //Confirm save.
+      this.warnSave(boson.current_editor, function(i){
+        //On save.
+        bs.saveCurrentBuffer(function(){
+          bs.closeEditor(boson.current_editor);
+        });
+
+      }, function(i){
+        //On not save.
+        bs.closeEditor(boson.current_editor);
+
+      });
     } else {
       this.closeEditor(boson.current_editor);
     }
@@ -179,7 +257,7 @@ var fs = require('fs');
 
   };
 
-  this.saveBuffer = function(i) {
+  this.saveBuffer = function(i, callback) {
 
     //Save the specified buffer changes to buffer.
     var fh, fileBuffer;
@@ -198,13 +276,22 @@ var fs = require('fs');
       //Remove the "changed" symbol and flag.
       this.flagHasChanged(i, false);
 
+      if ( typeof callback === "function" ) {
+        callback();
+      }
+
     });
 
   };
 
-  this.saveCurrentBuffer = function() {
+  this.saveCurrentBuffer = function(callback) {
 
-    this.saveBuffer(boson.current_editor);
+    
+    if ( typeof callback === "function" ) {
+      this.saveBuffer(boson.current_editor, callback);
+    } else {
+      this.saveBuffer(boson.current_editor);
+    }
 
   };
 
