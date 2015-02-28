@@ -8,6 +8,7 @@ var menu = require(process.cwd() + '/core/modules/menu.js');
 var keybindings = require(process.cwd() + '/core/modules/keybindings.js');
 var livepreview = require(process.cwd() + '/core/modules/livepreview.js');
 var fs = require('fs');
+var path = require('path');
 
 (function(window,config){
 
@@ -21,11 +22,92 @@ var fs = require('fs');
     elements.editorEntryPoint = document.getElementById("editor-entrypoint");
     elements.tabsEntryPoint = document.getElementById("tabs-entrypoint");
     elements.bodyEntryPoint = document.getElementById("body-entrypoint");
+    elements.selectFilesInput = document.getElementById("boson-select-files");
+
+    //Hook on change selectFilesInput.
+    elements.selectFilesInput.addEventListener("change", function(res){
+      bs.attemptOpenFiles(this.value);
+    }, false);
   };
 
   this.log = function(buffer) {
 
     console.log(buffer);
+
+  };
+
+  this.attemptOpenFiles = function( fp ) {
+
+    var files;
+
+    //Split the string, check if multiple files have been selected.
+    files = fp.split(";");
+
+    for ( key in files ) {
+      bs.openFileFromPath( files[key] );
+    }
+
+  };
+
+  this.openFileFromPath = function( fp ) {
+
+    var key, cfp, currentFileId;
+
+    if ( typeof fp === "undefined" || fp === "" ) {
+      bs.bsError("Tried to open file with blank filepath.");
+      return;
+    }
+
+    //Is the file currently open?
+    for ( key in editorData ) {
+      cfp = editorData[key].cwd + "/" + editorData[key].name;
+      if ( cfp === fp ) {
+        //File is already open.
+        bs.log("File already open, switching to tab.");
+        bs.switchToEditor( key );
+        return;
+      }
+    }
+
+    //Open the file.
+    fs.exists(fp, function (exists) {
+      if ( exists ) {
+
+        //Open the file buffer.
+        fs.readFile(fp, {
+          encoding: "utf-8"
+        }, function(err, data){
+
+          if ( err ) {
+            bs.bsError("There was an error opening " + fp);
+            return;
+          }
+
+          currentFileId = editorData.length;
+
+          //Open new tab.
+          editorData.push({
+            name: path.basename(fp),
+            guid: fp,
+            cwd: path.dirname(fp),
+            buffer: data
+          });
+
+          this.createEditor(editorData[currentFileId], currentFileId, true);
+
+        });
+
+      } else {
+        bs.bsError("Tried to open file that doesn't exist, " + fp);
+        return;
+      }
+    });
+
+  };
+
+  this.openFileDialogue = function() {
+
+    elements.selectFilesInput.click();
 
   };
 
@@ -57,7 +139,7 @@ var fs = require('fs');
     tabs[i].className =  "active";
   }
 
-  this.createEditor = function(object, i) {
+  this.createEditor = function(object, i, activateOnComplete) {
 
     var textarea;
 
@@ -92,6 +174,12 @@ var fs = require('fs');
       }
     });
 
+    if ( typeof activateOnComplete !== "undefined" ) {
+      if ( activateOnComplete === true ) {
+        bs.switchToEditor(i);
+      }
+    }
+
   };
 
   this.closeEditor = function(i) {
@@ -112,6 +200,29 @@ var fs = require('fs');
     tabs[i] = null;
 
     boson.current_editor = false;
+    bs.setTitle("Nothing open");
+
+    //Find another editor to activate.
+    bs.findAndActivateTab(i);
+
+  };
+
+  this.findAndActivateTab = function(i) {
+
+    var newTab = false, max, x;
+
+    max = editorData.length - 1;
+
+    for ( x = max; x >= 0; x-- ) {
+      if ( editorData[x].hasOwnProperty('name') ) {
+        newTab = x;
+        break;
+      }
+    }
+
+    if ( newTab !== false ) {
+      bs.switchToEditor(x);
+    }
 
   };
 
