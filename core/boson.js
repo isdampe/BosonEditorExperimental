@@ -49,6 +49,38 @@ var path = require('path');
 
   };
 
+  this.fileExtensionToMode = function ( ext ) {
+
+    var mode = false;
+
+    switch ( ext ) {
+      case ".html":
+        mode = "htmlmixed";
+      break;
+      case ".htm":
+        mode = "htmlmixed";
+      break;
+      case ".php":
+        mode = "php";
+      break;
+      case ".js":
+        mode = "javascript";
+      break;
+      case ".sass":
+        mode = "sass";
+      break;
+      case ".scss":
+        mode = "sass";
+      break;
+      case ".css":
+        mode = "css";
+      break;
+    }
+
+    return mode;
+
+  };
+
   this.openFileFromPath = function( fp ) {
 
     var key, cfp, currentFileId;
@@ -141,7 +173,7 @@ var path = require('path');
 
   this.createEditor = function(object, i, activateOnComplete) {
 
-    var textarea;
+    var textarea, cmMode;
 
     //Create the textarea.
     textarea = document.createElement("textarea");
@@ -154,11 +186,15 @@ var path = require('path');
     //Inject into DOM.
     elements.editorEntryPoint.appendChild(textarea);
 
+    //Try to find file type mode for CM.
+    cmMode = bs.fileExtensionToMode( path.extname( editorData[i].name ) );
+    console.log(cmMode);
     //Create the editor.
     editor[i] = {
       cm: CodeMirror.fromTextArea(textarea, {
           lineNumbers: true,
-          theme: config.theme
+          theme: config.theme,
+          mode: cmMode
         }),
       ta: textarea,
       changed: false
