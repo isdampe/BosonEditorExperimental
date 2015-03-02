@@ -434,18 +434,21 @@ var path = require('path');
     popup_cancel_button.addEventListener("click", function(e){
       e.preventDefault();
       bs.removePopupDialogue(popup);
+      bs.suspendCancelEvent( "confirm-save" );
     });
 
     popup_accept_button.addEventListener("click", function(e){
       e.preventDefault();
       onSuccess(i);
       bs.removePopupDialogue(popup);
+      bs.suspendCancelEvent( "confirm-save" );
     });
 
     popup_decline_button.addEventListener("click", function(e){
       e.preventDefault();
       onFailure(i);
       bs.removePopupDialogue(popup);
+      bs.suspendCancelEvent( "confirm-save" );
     });
 
     popup.appendChild(popup_cancel_button);
