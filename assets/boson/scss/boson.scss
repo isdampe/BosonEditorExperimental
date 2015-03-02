@@ -128,7 +128,7 @@ body {
 	height: 100%;
 	font-family: Ubuntu mono;
 	font-weight: 400;
-	font-size: 20px!important;
+	font-size: 24px!important;
 	text-shadow: none;
 	line-height: 1!important;
 }
@@ -163,6 +163,22 @@ body {
 
 }
 
+.autoload {
+	visibility: hidden;
+	width: 0;
+	height: 0;
+	position: absolute;
+	z-index: -99;
+
+	* {
+		visibility: hidden;
+		width: 0;
+		height: 0;
+		position: absolute;
+		z-index: -99;
+	}
+}
+
 .popOut {
 	-webkit-animation: popOut 0.15s forwards!important;
 }
@@ -182,6 +198,15 @@ body {
 	-webkit-user-select: none;
 	-webkit-animation: popIn 0.25s forwards;
 	-webkit-transform: scale(0.1);
+
+	.cancel {
+		float: right;
+		width: 24px;
+		height: 24px;
+		margin-top: 5px;
+		margin-right: 5px;
+		background: url("../media/icons.png") center center no-repeat;
+	}
 
 	.logo {
 		margin: 20px auto 10px auto;

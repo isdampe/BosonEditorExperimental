@@ -16,7 +16,7 @@ var path = require('path');
     current_editor: null,
     title: "Boson Editor",
     working_dir: process.env.PWD
-  }, elements = {}, editor = [], tabs = [], dom, editorData = [], win, activeModes = {};
+  }, elements = {}, editor = [], tabs = [], dom, editorData = [], win, activeModes = {}, cancelEvents = {};
 
   this.preloadDom = function() {
     elements.editorEntryPoint = document.getElementById("editor-entrypoint");
@@ -37,7 +37,31 @@ var path = require('path');
 
     for ( key in editor ) {
       editor[key].cm.setOption("mode", editor[key].mode);
-      editor[key].cm.refresh();
+      if ( editor[key].cm.hasOwnProperty("refresh") ) {
+        editor[key].cm.refresh();
+      }
+    }
+
+  };
+
+  this.refreshCmById = function(i) {
+
+    editor[i].cm.setOption("mode", editor[i].mode);
+    if ( editor[i].cm.hasOwnProperty("refresh") ) {
+       editor[i].cm.refresh();
+    }
+
+  };
+
+  this.unrefreshCm = function() {
+
+    var key;
+
+    for ( key in editor ) {
+      editor[key].cm.setOption("mode", "text");
+      if ( editor[key].cm.hasOwnProperty("refresh") ) {
+        editor[key].cm.refresh();
+      }
     }
 
   };
@@ -45,6 +69,35 @@ var path = require('path');
   this.log = function(buffer) {
 
     console.log(buffer);
+
+  };
+
+  this.handleCancelEvents = function() {
+
+    var key;
+
+    for ( key in cancelEvents ) {
+      if ( cancelEvents[key].active === true ) {
+        if ( typeof cancelEvents[key].callback === "function" ) {
+          cancelEvents[key].callback();
+        }
+      }
+    }
+
+  };
+
+  this.addCancelEvent = function( name, callback ) {
+
+    cancelEvents[name] = {
+      active: true,
+      callback: callback
+    };
+
+  };
+
+  this.suspendCancelEvent = function ( name ) {
+
+    cancelEvents[name].active = false;
 
   };
 
@@ -61,9 +114,25 @@ var path = require('path');
 
   };
 
+  this.injectModeScript = function( mode ) {
+
+    var modeScript;
+
+    modeScript = document.createElement("script");
+    modeScript.src = "assets/codemirror/mode/" + mode + "/" + mode + ".js";
+
+    elements.footerEntryPoint.appendChild(modeScript);
+    activeModes[mode] = modeScript;
+    
+    modeScript.onload = function(){
+      bs.refreshCm();
+    };
+
+  };
+
   this.injectCodeMirrorMode = function( mode ) {
 
-    var modeScript, key;
+    var modeScript = [], key;
 
     for ( key in mode ) {
 
@@ -71,14 +140,7 @@ var path = require('path');
         return;
       }
 
-      modeScript = document.createElement("script");
-      modeScript.src = "assets/codemirror/mode/" + mode[key] + "/" + mode[key] + ".js";
-      modeScript.onload = function(){
-        bs.refreshCm();
-      };
-
-      elements.footerEntryPoint.appendChild(modeScript);
-      activeModes[mode[key]] = modeScript;
+      bs.injectModeScript( mode[key] );
 
     }
 
@@ -90,10 +152,10 @@ var path = require('path');
 
     switch ( ext ) {
       case ".html":
-        req.push("htmlmixed","xml","javascript","css","vbscript");
+        req.push("htmlmixed","xml","javascript","css");
       break;
       case ".htm":
-        req.push("htmlmixed","xml","javascript","css","vbscript");
+        req.push("htmlmixed","xml","javascript","css");
       break;
       case ".php":
         req.push("php", "xml", "htmlmixed", "javascript", "css");
@@ -195,7 +257,7 @@ var path = require('path');
     tab.onmousedown = function(e) {
       e.preventDefault();
       bs.switchToEditor(i);
-      bs.refreshCm();
+      bs.refreshCmById(i);
     };
 
     elements.tabsEntryPoint.appendChild( tab );
@@ -233,9 +295,6 @@ var path = require('path');
       cmMode[0] = "text";
     }
 
-    //Inject script.
-    bs.injectCodeMirrorMode(cmMode);
-
     //Create the editor.
     editor[i] = {
       cm: CodeMirror.fromTextArea(textarea, {
@@ -247,6 +306,9 @@ var path = require('path');
       ta: textarea,
       changed: false
     };
+
+    //Inject script.
+    bs.injectCodeMirrorMode(cmMode);
 
     //Hide the editor.
     editor[i].cm.getWrapperElement().style.display = "none";
@@ -343,10 +405,13 @@ var path = require('path');
 
   this.createPopupDialogue = function(title, message, accept, decline, onSuccess, onFailure, i) {
 
-    var popup, popup_logo, popup_title, popup_description, popup_accept_button, popup_decline_button;
+    var popup, popup_cancel_button, popup_logo, popup_title, popup_description, popup_accept_button, popup_decline_button;
 
     popup = document.createElement("div");
     popup.className = "popup prompt";
+
+    popup_cancel_button = document.createElement("div");
+    popup_cancel_button.className = "cancel";
 
     popup_logo = document.createElement("div");
     popup_logo.className = "logo";
@@ -366,18 +431,24 @@ var path = require('path');
     popup_decline_button.className = "btn btn-decline";
     popup_decline_button.innerHTML = decline;
 
+    popup_cancel_button.addEventListener("click", function(e){
+      e.preventDefault();
+      bs.removePopupDialogue(popup);
+    });
+
     popup_accept_button.addEventListener("click", function(e){
       e.preventDefault();
       onSuccess(i);
       bs.removePopupDialogue(popup);
     });
 
-     popup_decline_button.addEventListener("click", function(e){
+    popup_decline_button.addEventListener("click", function(e){
       e.preventDefault();
       onFailure(i);
       bs.removePopupDialogue(popup);
     });
 
+    popup.appendChild(popup_cancel_button);
     popup.appendChild(popup_logo);
     popup.appendChild(popup_title);
     popup.appendChild(popup_description);
@@ -385,6 +456,8 @@ var path = require('path');
     popup.appendChild(popup_accept_button);
 
     elements.bodyEntryPoint.appendChild(popup);
+
+    return popup;
 
   };
 
@@ -403,29 +476,40 @@ var path = require('path');
 
     dialogueMessage = "Do you want to save " + editorData[i].name + " before closing it?";
 
-    this.createPopupDialogue("Save before closing?", dialogueMessage, "Save", "Don't save", onSuccess, onFailure, i);
+    return this.createPopupDialogue("Save before closing?", dialogueMessage, "Save", "Don't save", onSuccess, onFailure, i);
 
   };
 
   this.closeCurrentTab = function() {
+
+    var popup;
 
     if ( boson.current_editor === null || boson.current_editor === false ) {
       return;
     }
 
     if ( editor[boson.current_editor].changed === true ) {
+
       //Confirm save.
-      this.warnSave(boson.current_editor, function(i){
+      popup = this.warnSave(boson.current_editor, function(i){
+
         //On save.
         bs.saveCurrentBuffer(function(){
           bs.closeEditor(boson.current_editor);
         });
 
       }, function(i){
+
         //On not save.
         bs.closeEditor(boson.current_editor);
 
       });
+
+      bs.addCancelEvent( "confirm-save", function(){
+        bs.removePopupDialogue( popup );
+        bs.suspendCancelEvent( "confirm-save" );
+      });
+
     } else {
       this.closeEditor(boson.current_editor);
     }
@@ -571,5 +655,5 @@ var path = require('path');
   this.init();
 
 })(window, {
-  theme: "ambiance"
+  theme: "tomorrow-night-eighties"
 });

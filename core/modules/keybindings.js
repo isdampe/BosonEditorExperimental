@@ -1,7 +1,15 @@
 exports.init = function(gui,win,bs) {
 
+	//Global hotkeys.
+	window.onkeydown = function(e) {
+		if ( e.which === 27 ) {
+			//Escape.
+			bs.handleCancelEvents();
+		}
+	};
+
+	//Standard keys.
 	window.onkeypress = function(e) {
-		//console.log("W:" + e.which );
 		switch( e.which ) {
 			case 19:
 				bs.saveCurrentBuffer();

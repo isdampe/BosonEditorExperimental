@@ -1,5 +1,3 @@
-exports.init = function(boson) {
+exports.init = function(gui,win,bs) {
 
-
-
-}
+};
