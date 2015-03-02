@@ -16,18 +16,30 @@ var path = require('path');
     current_editor: null,
     title: "Boson Editor",
     working_dir: process.env.PWD
-  }, elements = {}, editor = [], tabs = [], dom, editorData = [], win;
+  }, elements = {}, editor = [], tabs = [], dom, editorData = [], win, activeModes = {};
 
   this.preloadDom = function() {
     elements.editorEntryPoint = document.getElementById("editor-entrypoint");
     elements.tabsEntryPoint = document.getElementById("tabs-entrypoint");
     elements.bodyEntryPoint = document.getElementById("body-entrypoint");
     elements.selectFilesInput = document.getElementById("boson-select-files");
+    elements.footerEntryPoint = document.getElementById("footer-entrypoint");
 
     //Hook on change selectFilesInput.
     elements.selectFilesInput.addEventListener("change", function(res){
       bs.attemptOpenFiles(this.value);
     }, false);
+  };
+
+  this.refreshCm = function() {
+
+    var key;
+
+    for ( key in editor ) {
+      editor[key].cm.setOption("mode", editor[key].mode);
+      editor[key].cm.refresh();
+    }
+
   };
 
   this.log = function(buffer) {
@@ -49,35 +61,62 @@ var path = require('path');
 
   };
 
+  this.injectCodeMirrorMode = function( mode ) {
+
+    var modeScript, key;
+
+    for ( key in mode ) {
+
+      if ( activeModes.hasOwnProperty(mode[key]) ) {
+        return;
+      }
+
+      modeScript = document.createElement("script");
+      modeScript.src = "assets/codemirror/mode/" + mode[key] + "/" + mode[key] + ".js";
+      modeScript.onload = function(){
+        bs.refreshCm();
+      };
+
+      elements.footerEntryPoint.appendChild(modeScript);
+      activeModes[mode[key]] = modeScript;
+
+    }
+
+  };
+
   this.fileExtensionToMode = function ( ext ) {
 
-    var mode = false;
+    var req = [];
 
     switch ( ext ) {
       case ".html":
-        mode = "htmlmixed";
+        req.push("htmlmixed","xml","javascript","css","vbscript");
       break;
       case ".htm":
-        mode = "htmlmixed";
+        req.push("htmlmixed","xml","javascript","css","vbscript");
       break;
       case ".php":
-        mode = "php";
+        req.push("php", "xml", "htmlmixed", "javascript", "css");
       break;
       case ".js":
-        mode = "javascript";
+        req.push("javascript");
       break;
       case ".sass":
-        mode = "sass";
+        req.push("sass", "css");
       break;
       case ".scss":
-        mode = "sass";
+        req.push("sass", "css");
       break;
       case ".css":
-        mode = "css";
+        req.push("css");
       break;
     }
 
-    return mode;
+    if ( req.length === 0 ) { 
+      return false;
+    } else {
+      return req;
+    }
 
   };
 
@@ -156,6 +195,7 @@ var path = require('path');
     tab.onmousedown = function(e) {
       e.preventDefault();
       bs.switchToEditor(i);
+      bs.refreshCm();
     };
 
     elements.tabsEntryPoint.appendChild( tab );
@@ -188,14 +228,22 @@ var path = require('path');
 
     //Try to find file type mode for CM.
     cmMode = bs.fileExtensionToMode( path.extname( editorData[i].name ) );
-    console.log(cmMode);
+    if ( cmMode === false ) {
+      cmMode = [];
+      cmMode[0] = "text";
+    }
+
+    //Inject script.
+    bs.injectCodeMirrorMode(cmMode);
+
     //Create the editor.
     editor[i] = {
       cm: CodeMirror.fromTextArea(textarea, {
           lineNumbers: true,
           theme: config.theme,
-          mode: cmMode
-        }),
+          mode: cmMode[0]
+      }),
+      mode: cmMode[0],
       ta: textarea,
       changed: false
     };
@@ -481,7 +529,7 @@ var path = require('path');
       buffer: "asd967asdg978asvdbasd"
     });
     editorData.push({
-      name: "editor.html",
+      name: "editor.js",
       guid: "abcdefghj",
       cwd: "/home/dampe/public_html",
       buffer: "asd967asdg97asdasdasdasdasdasdasd"
