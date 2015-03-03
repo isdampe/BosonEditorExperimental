@@ -1,6 +1,7 @@
 {
   "main": "editor.html",
   "name": "nw-demo",
+  "single-instance": false,
   "description": "Boson Editor",
   "version": "0.1.0",
   "window": {

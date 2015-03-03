@@ -36,9 +36,11 @@ var path = require('path');
     var key;
 
     for ( key in editor ) {
-      editor[key].cm.setOption("mode", editor[key].mode);
-      if ( editor[key].cm.hasOwnProperty("refresh") ) {
-        editor[key].cm.refresh();
+      if ( typeof editor[key].cm !== "undefined" ) {
+        editor[key].cm.setOption("mode", editor[key].mode);
+        if ( editor[key].cm.hasOwnProperty("refresh") ) {
+          editor[key].cm.refresh();
+        }
       }
     }
 
