@@ -1,2 +1,2 @@
 #!/bin/sh
-./boson &> /dev/null &
+/home/dampe/git/boson/boson &> /dev/null &
