@@ -2,6 +2,7 @@ exports.init = function(gui,win,bs) {
 
 	//Global hotkeys.
 	window.onkeydown = function(e) {
+		//console.log(e.which);
 		if ( e.which === 27 ) {
 			//Escape.
 			bs.handleCancelEvents();
@@ -10,7 +11,11 @@ exports.init = function(gui,win,bs) {
 
 	//Standard keys.
 	window.onkeypress = function(e) {
+		
 		switch( e.which ) {
+			case 6:
+				bs.findPrompt();
+			break;
 			case 19:
 				bs.saveCurrentBuffer();
 			break;
@@ -21,7 +26,7 @@ exports.init = function(gui,win,bs) {
 				bs.debug();
 			break;
 			case 82:
-				bs.reinit();
+				//bs.reinit();
 			break;
 			case 17:
 				//Ctrl + Q, Quit.

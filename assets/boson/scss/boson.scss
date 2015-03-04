@@ -63,6 +63,10 @@ body {
 	-webkit-user-select: none;
 }
 
+ul.move li:hover {
+	border-left: 5px solid $sidebarhighlight;
+}
+
 #tabs-entrypoint {
 	margin: 0;
 	padding-left: 0;
@@ -76,6 +80,7 @@ body {
 		margin: 0;
 		padding: 0;
 	}
+	
 	li {
 		display: block;
 		float: left;
@@ -88,7 +93,9 @@ body {
 		background: #343434;
 		line-height: 31px;
 		border-right: 1px solid #222;
-		
+		white-space: nowrap;
+  	overflow: hidden;
+  	text-overflow: ellipsis;
 	}
 	li.active {
 		background: #666;
@@ -104,7 +111,7 @@ body {
 	left: 240px;
 	width: calc(100% - 240px);
 	height: calc(100% - 31px);
-	background: #292929;
+	background: url("../media/logo-256.png") center center no-repeat #292929;
 }
 
 .CodeMirror {
@@ -258,9 +265,29 @@ body {
 
 	h4 {
 		text-align: center;
-		margin: 10px 0;
+		margin: 10px auto;
 		font-weight: normal;
 		font-size: 16px;
+		width: 80%;
+		display: block;
+	}
+	h4.find-heading {
+		margin: 40px auto 20px auto;
+	}
+
+	input.find {
+		display: block;
+		width: 80%;
+		background: #292929;
+		border-style: none;
+		margin: 20px auto 50px auto;
+		padding: 0.75em 1em;
+		color: #eee;
+		font-family: Ubuntu mono;
+		font-size: 16px;
+	}
+	input.find:focus {
+		outline: none;
 	}
 
 	.dialogue {
