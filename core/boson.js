@@ -9,13 +9,15 @@ var keybindings = require(process.cwd() + '/core/modules/keybindings.js');
 var livepreview = require(process.cwd() + '/core/modules/livepreview.js');
 var fs = require('fs');
 var path = require('path');
+var args = window.gui.App.argv;
 
 (function(window,config){
 
   var boson = {
     current_editor: null,
     title: "Boson Editor",
-    working_dir: process.env.PWD
+    working_dir: process.env.PWD,
+    maxFileSize: 102400
   }, elements = {}, editor = [], tabs = [], dom, editorData = [], win, activeModes = {}, cancelEvents = {};
 
   this.preloadDom = function() {
@@ -24,6 +26,7 @@ var path = require('path');
     elements.bodyEntryPoint = document.getElementById("body-entrypoint");
     elements.selectFilesInput = document.getElementById("boson-select-files");
     elements.footerEntryPoint = document.getElementById("footer-entrypoint");
+    elements.projectRoot = document.getElementById("project-root-list");
 
     //Hook on change selectFilesInput.
     elements.selectFilesInput.addEventListener("change", function(res){
@@ -99,7 +102,9 @@ var path = require('path');
 
   this.suspendCancelEvent = function ( name ) {
 
-    cancelEvents[name].active = false;
+    if ( cancelEvents.hasOwnProperty(name) ) {
+      cancelEvents[name].active = false;
+    }
 
   };
 
@@ -186,7 +191,7 @@ var path = require('path');
 
   this.openFileFromPath = function( fp ) {
 
-    var key, cfp, currentFileId;
+    var key, cfp, currentFileId, dialogueMessage, saveFunc;
 
     if ( typeof fp === "undefined" || fp === "" ) {
       bs.bsError("Tried to open file with blank filepath.");
@@ -208,29 +213,65 @@ var path = require('path');
     fs.exists(fp, function (exists) {
       if ( exists ) {
 
-        //Open the file buffer.
-        fs.readFile(fp, {
-          encoding: "utf-8"
-        }, function(err, data){
+        //Is the file too big?
+        fs.stat(fp, function(err,data){
 
           if ( err ) {
-            bs.bsError("There was an error opening " + fp);
+            bs.bsError(err);
             return;
           }
 
-          currentFileId = editorData.length;
+          var openFunc = function(){
 
-          //Open new tab.
-          editorData.push({
-            name: path.basename(fp),
-            guid: fp,
-            cwd: path.dirname(fp),
-            buffer: data
-          });
+            //Open the file buffer.
+            fs.readFile(fp, {
+              encoding: "utf-8"
+            }, function(err, data){
 
-          this.createEditor(editorData[currentFileId], currentFileId, true);
+              if ( err ) {
+                bs.bsError("There was an error opening " + fp);
+                return;
+              }
+
+              currentFileId = editorData.length;
+
+              //Open new tab.
+              editorData.push({
+                name: path.basename(fp),
+                guid: fp,
+                cwd: path.dirname(fp),
+                buffer: data
+              });
+
+              this.createEditor(editorData[currentFileId], currentFileId, true);
+
+            });
+
+          };
+
+          if ( data.size > boson.maxFileSize ) {
+
+            var popup = this.createPopupDialogue("Open big file?", "The file you are trying to open is pretty big.", "Open it", "Don't open it", function(){
+              openFunc();  
+              bs.suspendCancelEvent( "Open big file?" );
+            }, function(){
+              //On cancel.
+              bs.suspendCancelEvent( "Open big file?" );
+            }, null);
+
+            bs.addCancelEvent( "Open big file?", function() {
+              bs.removePopupDialogue( popup );
+              bs.suspendCancelEvent( "Open big file?" );
+            });
+
+          } else {
+            openFunc();
+          }
+
 
         });
+
+        
 
       } else {
         bs.bsError("Tried to open file that doesn't exist, " + fp);
@@ -436,21 +477,21 @@ var path = require('path');
     popup_cancel_button.addEventListener("click", function(e){
       e.preventDefault();
       bs.removePopupDialogue(popup);
-      bs.suspendCancelEvent( "confirm-save" );
+      bs.suspendCancelEvent( title );
     });
 
     popup_accept_button.addEventListener("click", function(e){
       e.preventDefault();
       onSuccess(i);
       bs.removePopupDialogue(popup);
-      bs.suspendCancelEvent( "confirm-save" );
+      bs.suspendCancelEvent( title );
     });
 
     popup_decline_button.addEventListener("click", function(e){
       e.preventDefault();
       onFailure(i);
       bs.removePopupDialogue(popup);
-      bs.suspendCancelEvent( "confirm-save" );
+      bs.suspendCancelEvent( title );
     });
 
     popup.appendChild(popup_cancel_button);
@@ -501,18 +542,20 @@ var path = require('path');
         //On save.
         bs.saveCurrentBuffer(function(){
           bs.closeEditor(boson.current_editor);
+          bs.suspendCancelEvent( "Save before closing?" );
         });
 
       }, function(i){
 
         //On not save.
         bs.closeEditor(boson.current_editor);
+        bs.suspendCancelEvent( "Save before closing?" );
 
       });
 
-      bs.addCancelEvent( "confirm-save", function(){
+      bs.addCancelEvent( "Save before closing?", function(){
         bs.removePopupDialogue( popup );
-        bs.suspendCancelEvent( "confirm-save" );
+        bs.suspendCancelEvent( "Save before closing?" );
       });
 
     } else {
@@ -605,38 +648,22 @@ var path = require('path');
 
     var startupTime, bootUpTime, totalBootTime, i, fileCount;
 
+    //Check command line args.
+    if ( args.length > 0 ) {
+      boson.working_dir = args[0];
+    };
+
     //Log the startup time.
     startupTime = new Date().getTime();
 
-
-    //Debug only.
-    //This should read data file.
-    editorData.push({
-      name: "index.html",
-      guid: "7812tg87gas87dgasd",
-      cwd: "/home/dampe/public_html",
-      buffer: "asd967asdg978asvdbasd"
-    });
-    editorData.push({
-      name: "editor.js",
-      guid: "abcdefghj",
-      cwd: "/home/dampe/public_html",
-      buffer: "asd967asdg97asdasdasdasdasdasdasd"
-    });
-
     //Preload dom selection.
     this.preloadDom();
-
-    fileCount = editorData.length;
-    for ( i=0; i<fileCount; i++ ) {
-      this.createEditor(editorData[i], i);
-    }
 
     //Fetch window.
     win = gui.Window.get();
 
     //Build menus.
-    menu.init(gui,win,this);
+    menu.init(gui,win,this,boson,elements);
     keybindings.init(gui,win,this);
     livepreview.init(gui,win,this);
 
