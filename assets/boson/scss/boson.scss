@@ -108,6 +108,16 @@ body {
 	width: calc(100% - 240px);
 	height: calc(100% - 31px);
 	background: url("../media/logo-256.png") center center no-repeat #292929;
+
+	textarea {
+  		position: absolute;
+  		top: 0;
+  		left: 0;
+  		width: 1px;
+  		height: 1px;
+  		z-index: -55;
+  		opacity: 0;
+  	}
 }
 
 .CodeMirror {
