@@ -165,7 +165,7 @@ var args = window.gui.App.argv;
         req.push("htmlmixed","xml","javascript","css");
       break;
       case ".php":
-        req.push("php", "xml", "htmlmixed", "javascript", "css");
+        req.push("php", "xml", "html", "javascript", "css");
       break;
       case ".js":
         req.push("javascript");
@@ -339,36 +339,44 @@ var args = window.gui.App.argv;
       cmMode[0] = "text";
     }
 
-    //Create the editor.
-    editor[i] = {
-      cm: CodeMirror.fromTextArea(textarea, {
-          lineNumbers: true,
-          theme: config.theme,
-          mode: cmMode[0]
-      }),
-      mode: cmMode[0],
-      ta: textarea,
-      changed: false
-    };
-
     //Inject script.
     bs.injectCodeMirrorMode(cmMode);
 
-    //Hide the editor.
-    editor[i].cm.getWrapperElement().style.display = "none";
+    //Fix this.
+    //NW can crash if CM is called before the injected scripts have loaded.
+    //Investigate auto-load via CM.
+    setTimeout(function() {
 
-    //Create on change hook for save notifications.
-    editor[i].cm.on("change", function(cm) {
-      if ( editor[i].changed === false ) {
-         this.flagHasChanged(i, true);
-      }
-    });
+      //Create the editor.
+      editor[i] = {
+        cm: CodeMirror.fromTextArea(textarea, {
+            lineNumbers: true,
+            theme: config.theme,
+            mode: cmMode[0]
+        }),
+        mode: cmMode[0],
+        ta: textarea,
+        changed: false
+      };
 
-    if ( typeof activateOnComplete !== "undefined" ) {
-      if ( activateOnComplete === true ) {
-        bs.switchToEditor(i);
+      //Hide the editor.
+      editor[i].cm.getWrapperElement().style.display = "none";
+
+      //Create on change hook for save notifications.
+      editor[i].cm.on("change", function(cm) {
+        if ( editor[i].changed === false ) {
+           this.flagHasChanged(i, true);
+        }
+      });
+
+      if ( typeof activateOnComplete !== "undefined" ) {
+        if ( activateOnComplete === true ) {
+          bs.switchToEditor(i);
+        }
       }
-    }
+
+    },50);
+    
 
   };
 
