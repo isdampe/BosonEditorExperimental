@@ -289,7 +289,7 @@ var args = window.gui.App.argv;
 
   this.createTab = function(object, i) {
 
-    var tab, mouseup;
+    var tab;
 
     tab = document.createElement("li");
     tab.id = "tab-" + object.guid;
