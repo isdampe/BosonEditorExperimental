@@ -352,7 +352,10 @@ var args = window.gui.App.argv;
         cm: CodeMirror.fromTextArea(textarea, {
             lineNumbers: true,
             theme: config.theme,
-            mode: cmMode[0]
+            mode: cmMode[0],
+            autoCloseBrackets: true,
+            tabSize: config.tabSize,
+            indentWithTabs: config.indentWithTabs
         }),
         mode: cmMode[0],
         ta: textarea,
@@ -453,43 +456,6 @@ var args = window.gui.App.argv;
         this.setTitle( editorData[i].cwd + "/" + editorData[i].name );
       }
     }
-  };
-
-  this.findPrompt = function() {
-
-    var popup, popup_cancel_button, popup_title, popup_search_input, popup_accept_button, popup_decline_button;
-
-    popup = document.createElement("div");
-    popup.className = "popup prompt";
-
-    popup_cancel_button = document.createElement("div");
-    popup_cancel_button.className = "cancel";
-
-    popup_title = document.createElement("h4");
-    popup_title.className = "find-heading";
-    popup_title.innerHTML = "Search for";
-
-    popup_search_input = document.createElement("input");
-    popup_search_input.type = "text";
-    popup_search_input.className = "find";
-
-    popup_accept_button = document.createElement("button");
-    popup_accept_button.className = "btn btn-accept";
-    popup_accept_button.innerHTML = "Find buffer";
-
-    popup_decline_button = document.createElement("button");
-    popup_decline_button.className = "btn btn-decline";
-    popup_decline_button.innerHTML = "Cancel";
-
-    popup.appendChild(popup_cancel_button);
-    popup.appendChild(popup_title);
-    popup.appendChild(popup_search_input);
-    popup.appendChild(popup_decline_button);
-    popup.appendChild(popup_accept_button);
-
-    elements.bodyEntryPoint.appendChild(popup);
-    popup_search_input.focus();
-
   };
 
   this.createPopupDialogue = function(title, message, accept, decline, onSuccess, onFailure, i) {
@@ -733,5 +699,7 @@ var args = window.gui.App.argv;
   this.init();
 
 })(window, {
-  theme: "tomorrow-night-eighties"
+  theme: "tomorrow-night-eighties",
+  tabSize: 2,
+  indentWithTabs: true
 });
