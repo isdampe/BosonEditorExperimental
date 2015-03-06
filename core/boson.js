@@ -11,14 +11,14 @@ var fs = require('fs');
 var path = require('path');
 var args = window.gui.App.argv;
 
-(function(window,config){
+(function(window,config) {
 
   var boson = {
     current_editor: null,
     title: "Boson Editor",
     working_dir: process.env.PWD,
     maxFileSize: 102400
-  }, elements = {}, editor = [], tabs = [], dom, editorData = [], win, activeModes = {}, cancelEvents = {};
+  }, elements = {}, editor = [], tabs = [], dom, editorData = [], win, cancelEvents = {};
 
   this.preloadDom = function() {
     elements.editorEntryPoint = document.getElementById("editor-entrypoint");
@@ -117,74 +117,6 @@ var args = window.gui.App.argv;
 
     for ( key in files ) {
       bs.openFileFromPath( files[key] );
-    }
-
-  };
-
-  this.injectModeScript = function( mode ) {
-
-    var modeScript;
-
-    modeScript = document.createElement("script");
-    modeScript.src = "assets/codemirror/mode/" + mode + "/" + mode + ".js";
-
-    elements.footerEntryPoint.appendChild(modeScript);
-    activeModes[mode] = modeScript;
-    
-    modeScript.onload = function(){
-      bs.refreshCm();
-    };
-
-  };
-
-  this.injectCodeMirrorMode = function( mode ) {
-
-    var modeScript = [], key;
-
-    for ( key in mode ) {
-
-      if ( activeModes.hasOwnProperty(mode[key]) ) {
-        return;
-      }
-
-      bs.injectModeScript( mode[key] );
-
-    }
-
-  };
-
-  this.fileExtensionToMode = function ( ext ) {
-
-    var req = [];
-
-    switch ( ext ) {
-      case ".html":
-        req.push("htmlmixed","xml","javascript","css");
-      break;
-      case ".htm":
-        req.push("htmlmixed","xml","javascript","css");
-      break;
-      case ".php":
-        req.push("php", "xml", "html", "javascript", "css");
-      break;
-      case ".js":
-        req.push("javascript");
-      break;
-      case ".sass":
-        req.push("sass", "css");
-      break;
-      case ".scss":
-        req.push("sass", "css");
-      break;
-      case ".css":
-        req.push("css");
-      break;
-    }
-
-    if ( req.length === 0 ) { 
-      return false;
-    } else {
-      return req;
     }
 
   };
@@ -319,7 +251,7 @@ var args = window.gui.App.argv;
 
   this.createEditor = function(object, i, activateOnComplete) {
 
-    var textarea, cmMode;
+    var textarea, cmMode, m, mode, spec;
 
     //Create the textarea.
     textarea = document.createElement("textarea");
@@ -333,53 +265,58 @@ var args = window.gui.App.argv;
     elements.editorEntryPoint.appendChild(textarea);
 
     //Try to find file type mode for CM.
-    cmMode = bs.fileExtensionToMode( path.extname( editorData[i].name ) );
-    if ( cmMode === false ) {
-      cmMode = [];
-      cmMode[0] = "text";
+    if ( m = /.+\.([^.]+)$/.exec( editorData[i].name ) ) {
+      var info = CodeMirror.findModeByExtension(m[1]);
+      if (info) {
+        mode = info.mode;
+        spec = info.mime;
+      }
+    } else if (/\//.test(val)) {
+      var info = CodeMirror.findModeByMIME(val);
+      if (info) {
+        mode = info.mode;
+        spec = val;
+      }
+    } else {
+      mode = spec = val;
     }
 
-    //Inject script.
-    bs.injectCodeMirrorMode(cmMode);
+    if (! mode ) {
+      mode = "text";
+    }
 
-    //Fix this.
-    //NW can crash if CM is called before the injected scripts have loaded.
-    //Investigate auto-load via CM.
-    setTimeout(function() {
+    //Create the editor.
+    editor[i] = {
+      cm: CodeMirror.fromTextArea(textarea, {
+        lineNumbers: true,
+        theme: config.theme,
+        autoCloseBrackets: true,
+        tabSize: config.tabSize,
+        indentWithTabs: config.indentWithTabs
+      }),
+      ta: textarea,
+      mode: mode,
+      changed: false
+    };
 
-      //Create the editor.
-      editor[i] = {
-        cm: CodeMirror.fromTextArea(textarea, {
-            lineNumbers: true,
-            theme: config.theme,
-            mode: cmMode[0],
-            autoCloseBrackets: true,
-            tabSize: config.tabSize,
-            indentWithTabs: config.indentWithTabs
-        }),
-        mode: cmMode[0],
-        ta: textarea,
-        changed: false
-      };
+    //Hide the editor.
+    editor[i].cm.getWrapperElement().style.display = "none";
 
-      //Hide the editor.
-      editor[i].cm.getWrapperElement().style.display = "none";
-
-      //Create on change hook for save notifications.
-      editor[i].cm.on("change", function(cm) {
-        if ( editor[i].changed === false ) {
-           this.flagHasChanged(i, true);
-        }
-      });
-
-      if ( typeof activateOnComplete !== "undefined" ) {
-        if ( activateOnComplete === true ) {
-          bs.switchToEditor(i);
-        }
+    //Create on change hook for save notifications.
+    editor[i].cm.on("change", function(cm) {
+      if ( editor[i].changed === false ) {
+         this.flagHasChanged(i, true);
       }
+    });
 
-    },50);
-    
+    if ( typeof activateOnComplete !== "undefined" ) {
+      if ( activateOnComplete === true ) {
+        bs.switchToEditor(i);
+      }
+    }
+
+    editor[i].cm.setOption("mode", spec);
+    CodeMirror.autoLoadMode(editor[i].cm, mode);
 
   };
 
@@ -667,6 +604,9 @@ var args = window.gui.App.argv;
 
     //Log the startup time.
     startupTime = new Date().getTime();
+
+    //Set Codemirror options.
+    CodeMirror.modeURL = "assets/codemirror/mode/%N/%N.js";
 
     //Preload dom selection.
     this.preloadDom();
