@@ -29,6 +29,7 @@ body {
 	width: 240px;
 	-webkit-user-select: none;
 	background: #222;
+	overflow-y: scroll;
 
 	.module {
 
@@ -43,6 +44,7 @@ body {
 
 	}
 }
+
 #sidebar-entrypoint:before {
   content: " ";
   position: absolute;
@@ -420,3 +422,4 @@ body {
 }
 
 @import "dialog";
+@import "scrollbars";

@@ -34,43 +34,6 @@ var args = window.gui.App.argv;
     }, false);
   };
 
-  this.refreshCm = function() {
-
-    var key;
-
-    for ( key in editor ) {
-      if ( typeof editor[key].cm !== "undefined" ) {
-        editor[key].cm.setOption("mode", editor[key].mode);
-        if ( editor[key].cm.hasOwnProperty("refresh") ) {
-          editor[key].cm.refresh();
-        }
-      }
-    }
-
-  };
-
-  this.refreshCmById = function(i) {
-
-    editor[i].cm.setOption("mode", editor[i].mode);
-    if ( editor[i].cm.hasOwnProperty("refresh") ) {
-       editor[i].cm.refresh();
-    }
-
-  };
-
-  this.unrefreshCm = function() {
-
-    var key;
-
-    for ( key in editor ) {
-      editor[key].cm.setOption("mode", "text");
-      if ( editor[key].cm.hasOwnProperty("refresh") ) {
-        editor[key].cm.refresh();
-      }
-    }
-
-  };
-
   this.log = function(buffer) {
 
     console.log(buffer);
@@ -232,7 +195,6 @@ var args = window.gui.App.argv;
     tab.onmousedown = function(e) {
       e.preventDefault();
       bs.switchToEditor(i);
-      bs.refreshCmById(i);
     };
 
     elements.tabsEntryPoint.appendChild( tab );
