@@ -7,11 +7,30 @@
 </head>
 <body id="body-entrypoint">
 
+<div id="menu">
+	<ul>
+		<li data-rel="menu-parent">File
+			<ul class="submenu">
+				<li data-menu-trigger="createNewFile">New file</li>
+				<li data-menu-trigger="openFileDialogue">Open files</li>
+				<li class="space"></li>
+				<li data-menu-trigger="saveCurrentBuffer">Save</li>
+				<li>Save as...</li>
+				<li class="space"></li>
+				<li data-menu-trigger="closeCurrentTab">Close file</li>
+				<li data-menu-trigger="closeBoson">Exit</li>
+			</ul>
+		</li>
+		<li>Edit</li>
+		<li>Find</li>
+		<li>Preferences</li>
+		<li>Debug</li>
+		<li>Help</li>
+	</ul>
+</div>
+
 <aside id="sidebar-entrypoint">
 	<div id="module-project" class="module module-project">
-		<header>
-			
-		</header>
 		<ul id="project-root-list">
 		</ul>
 	</div>

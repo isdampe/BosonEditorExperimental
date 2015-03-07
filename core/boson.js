@@ -7,6 +7,7 @@ var gui = require('nw.gui');
 var menu = require(process.cwd() + '/core/modules/menu.js');
 var keybindings = require(process.cwd() + '/core/modules/keybindings.js');
 var livepreview = require(process.cwd() + '/core/modules/livepreview.js');
+var menubar = require(process.cwd() + '/core/modules/menubar.js');
 var fs = require('fs');
 var path = require('path');
 var args = window.gui.App.argv;
@@ -202,9 +203,6 @@ var args = window.gui.App.argv;
       buffer: "",
       name: "New document"
     }, i, true);
-
-    console.log("test");
-    
 
   };
 
@@ -653,6 +651,10 @@ var args = window.gui.App.argv;
   };
 
   this.saveCurrentBuffer = function(callback) {
+
+    if ( boson.current_editor === null || boson.current_editor === false ) {
+      return;
+    }
     
     if ( typeof callback === "function" ) {
       this.saveBuffer(boson.current_editor, callback);
@@ -705,10 +707,15 @@ var args = window.gui.App.argv;
     //Fetch window.
     win = gui.Window.get();
 
+    win.on("close", function(){
+      bs.closeBoson();
+    });
+
     //Build menus.
     menu.init(gui,win,this,boson,elements);
     keybindings.init(gui,win,this);
     livepreview.init(gui,win,this);
+    menubar.init(gui,win,this,boson,elements);
 
     //Show the window.
     win.show();
@@ -723,6 +730,16 @@ var args = window.gui.App.argv;
     }
 
     this.log("Boot complete, " + totalBootTime + " ms");
+
+  };
+
+  this.closeBoson = function() {
+
+    //Is there unsaved buffers?
+    //Ask to save, if not, callback.
+
+    //Else
+    process.exit(0);
 
   };
 

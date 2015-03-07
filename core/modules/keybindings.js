@@ -21,7 +21,7 @@ exports.init = function(gui,win,bs) {
 			break;
 			case 17:
 				//Ctrl + Q, Quit.
-				bs.debug();
+				bs.closeBoson();
 			break;
 			case 15:
 				//Ctrl + O, open files.
