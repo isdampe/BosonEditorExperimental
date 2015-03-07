@@ -12,12 +12,45 @@ exports.init = function(gui,win,bs,boson,elements) {
 			bs.bsError(err);
 		} else {
 
+			//Sort tabs.
+			files = menu.sortFiles( files, boson.working_dir );
+
 			//Add tabs.
 			menu.injectFilesToRoot( files, elements.projectRoot, boson.working_dir, bs );
 
 		}
 
 	} );
+
+};
+
+exports.sortFiles = function ( files, cwd ) {
+
+	//Sort folder to top, file to bottom.
+	var mainBuffer = [], folderBuffer = [], fileBuffer = [], key, fstat, uid;
+
+	for ( key in files ) {
+
+		uid = cwd + "/" + files[key];
+		fstat = fs.statSync( uid );
+
+		
+		if ( fstat.isFile() ) {
+			fileBuffer.push( files[key] );
+		} else {
+			folderBuffer.push( files[key] );
+		}
+
+	}
+
+	for ( key in folderBuffer ) {
+		mainBuffer.push( folderBuffer[key] );
+	}
+	for ( key in fileBuffer ) {
+		mainBuffer.push( fileBuffer[key] );
+	}
+
+	return mainBuffer;
 
 };
 
@@ -56,7 +89,7 @@ exports.handleSecondClick = function( uri, list_item ) {
 
 exports.createProjectItem = function( file, projectRoot, cwd, bs ) {
 
-	var list_item, list_span, uri;
+	var list_item, list_span, uri, fstat;
 
 	uri = cwd + "/" + file;
 
@@ -82,6 +115,23 @@ exports.createProjectItem = function( file, projectRoot, cwd, bs ) {
 		menu.handleClick( file, list_item, cwd, bs );
 
 	};
+
+	//Fix this.
+	//We shouldn't be checking stats more than once.
+	fs.stat( uri, function(err, file) {
+
+		if ( err ) {
+			bs.bsError(err);
+			return;
+		}
+
+		if ( file.isFile() ) {
+			list_item.setAttribute( "data-type", "file" );
+		} else {
+			list_item.setAttribute( "data-type", "folder" );
+		}
+
+	} );
 
 };
 

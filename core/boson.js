@@ -184,11 +184,19 @@ var args = window.gui.App.argv;
 
   this.createTab = function(object, i) {
 
-    var tab;
+    var tab, title, close;
 
     tab = document.createElement("li");
     tab.id = "tab-" + object.guid;
-    tab.innerHTML = object.name;
+
+    title = document.createElement("span");
+    title.innerHTML = object.name;
+
+    close = document.createElement("span");
+    close.className = "close";
+    
+    tab.appendChild(title);
+    tab.appendChild(close);
     tab.setAttribute("data-name", object.name);
 
     //Hook onclick.
@@ -197,18 +205,27 @@ var args = window.gui.App.argv;
       bs.switchToEditor(i);
     };
 
+    close.onmousedown = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      bs.closeTabById(i);
+    };
+
     elements.tabsEntryPoint.appendChild( tab );
 
-    tabs[i] = tab;
+    tabs[i] = {
+      tab: tab,
+      title: title
+    };
 
   };
 
 
   this.activateTab = function(i) {
     if ( boson.current_editor !== null && boson.current_editor !== false ) {
-      tabs[boson.current_editor].className = "";
+      tabs[boson.current_editor].tab.className = "";
     }
-    tabs[i].className =  "active";
+    tabs[i].tab.className =  "active";
   }
 
   this.createEditor = function(object, i, activateOnComplete) {
@@ -291,7 +308,7 @@ var args = window.gui.App.argv;
     editor[i].ta.parentElement.removeChild(editor[i].ta);
 
     //Remove the tab.
-    tabs[i].parentElement.removeChild(tabs[i]);
+    tabs[i].tab.parentElement.removeChild(tabs[i].tab);
 
 
     //Clear the editor object.
@@ -437,6 +454,40 @@ var args = window.gui.App.argv;
 
   };
 
+  this.closeTabById = function(i) {
+
+    var popup;
+
+    if ( editor[i].changed === true ) {
+
+      //Confirm save.
+      popup = this.warnSave(i, function(i){
+
+        //On save.
+        bs.saveBufferById(i, function(){
+          bs.closeEditor(i);
+          bs.suspendCancelEvent( "Save before closing?" );
+        });
+
+      }, function(i){
+
+        //On not save.
+        bs.closeEditor(i);
+        bs.suspendCancelEvent( "Save before closing?" );
+
+      });
+
+      bs.addCancelEvent( "Save before closing?", function(){
+        bs.removePopupDialogue( popup );
+        bs.suspendCancelEvent( "Save before closing?" );
+      });
+
+    } else {
+      this.closeEditor(i);
+    }
+
+  };
+
   this.closeCurrentTab = function() {
 
     var popup;
@@ -485,11 +536,11 @@ var args = window.gui.App.argv;
 
     if ( status === true ) {
       //Set both tab title and window title.
-      tabs[i].innerHTML = tabs[i].getAttribute("data-name") + "*";
+      tabs[i].title.innerHTML = tabs[i].tab.getAttribute("data-name") + "*";
       this.setTitle( editorData[i].cwd + "/" + editorData[i].name + " *" );
     } else {
       //Set both tab title and window title.
-      tabs[i].innerHTML = tabs[i].getAttribute("data-name");
+      tabs[i].title.innerHTML = tabs[i].tab.getAttribute("data-name");
       this.setTitle( editorData[i].cwd + "/" + editorData[i].name );
     }
 
@@ -519,6 +570,16 @@ var args = window.gui.App.argv;
       }
 
     });
+
+  };
+
+  this.saveBufferById = function(i, callback) {
+
+    if ( typeof callback === "function" ) {
+      this.saveBuffer(i, callback);
+    } else {
+      this.saveBuffer(i);
+    }
 
   };
 

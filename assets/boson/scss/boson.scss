@@ -81,6 +81,7 @@ body {
 	
 	li {
 		display: block;
+		position: relative;
 		float: left;
 		padding: 0 15px;
 		margin: 0;
@@ -100,6 +101,21 @@ body {
 		margin-top: 0;
 		color: #fff;
 		min-width: 150px;
+
+		.close {
+			background: url("../media/icons-inverted.png") center center no-repeat;
+		}
+	}
+	.close {
+		position: absolute;
+		top: 8px;
+		right: 6px;
+		display: block;
+		width: 16px;
+		height: 16px;
+		text-align: center;
+		line-height: 16px;
+		background: url("../media/icons.png") center center no-repeat;
 	}
 }
 
@@ -158,6 +174,10 @@ body {
 
 	li.current ul, li.current ul * {
 		background: #222;
+	}
+
+	li[data-type=folder] span {
+		//Folder icon
 	}
 
 	li ul {
