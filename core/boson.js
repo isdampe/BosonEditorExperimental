@@ -11,6 +11,7 @@ var menubar = require(process.cwd() + '/core/modules/menubar.js');
 var fs = require('fs');
 var path = require('path');
 var args = window.gui.App.argv;
+var child = require('child_process');
 
 (function(window,config) {
 
@@ -593,9 +594,9 @@ var args = window.gui.App.argv;
 
         });
 
-        this.removeEventListener("change", arguments.callee);
-
       }
+
+      this.removeEventListener("change", arguments.callee);
 
     }, false);
 
@@ -637,6 +638,42 @@ var args = window.gui.App.argv;
       }
 
     });
+
+  };
+
+  this.saveFileAs = function() {
+
+    var i, fn;
+
+    if ( boson.current_editor === null || boson.current_editor === false ) {
+      return;
+    }
+
+    i = boson.current_editor;
+
+    elements.saveFilesInput.addEventListener("change", function(res) {
+      
+      if ( this.value ) {
+
+        fn = path.basename( this.value )
+
+        //Do stuff here.
+        editorData[i].cwd = path.dirname( this.value );
+        editorData[i].name = fn;
+        
+        bs.saveCurrentBuffer();
+        tabs[i].tab.setAttribute("data-name", fn );
+        tabs[i].title.innerHTML = fn;
+        bs.setTitle( this.value );
+
+      }
+
+      this.removeEventListener("change", arguments.callee);
+
+    }, false);
+
+    elements.saveFilesInput.click();
+    return;
 
   };
 
@@ -686,12 +723,65 @@ var args = window.gui.App.argv;
     win.reload();
   };
 
+  this.forkBrowserView = function() {
+
+    var proc, execUri, uri, mode, popup, onSuccess, onFailure;
+
+    if ( boson.current_editor === null || boson.current_editor === false ) {
+      return;
+    }
+
+    mode = editor[boson.current_editor].mode;
+
+    onSuccess = function() {
+      uri = "file://" + editorData[boson.current_editor].cwd + "/" + editorData[boson.current_editor].name;
+      execUri = "./boson live-preview " + uri;
+      proc = child.exec( execUri );
+      bs.suspendCancelEvent( "Launch preview anyway?" );
+    };
+
+    onFailure = function() {
+      bs.suspendCancelEvent( "Launch preview anyway?" );
+    };
+
+    if ( mode !== "htmlmixed" ) {
+
+      popup = bs.createPopupDialogue("Unsupported file type", "The file type you're trying to preview is unsupported", "Launch anyway", "Don't launch", onSuccess, onFailure, boson.current_editor);
+
+      bs.addCancelEvent( "Open big file?", function() {
+        bs.removePopupDialogue( popup );
+        bs.suspendCancelEvent( "Open big file?" );
+      });
+
+      return;
+    }
+
+  };
+
+  this.initLivePreview = function ( url ) {
+
+    livepreview.init(gui,win,this);
+    bs.openLivePreviewWindow( url );
+    gui.Window.get().close(true);
+
+  };
+
   this.init = function() {
 
     var startupTime, bootUpTime, totalBootTime, i, fileCount;
 
     //Check command line args.
     if ( args.length > 0 ) {
+      if ( args[0] === "live-preview" ) {
+        //Launch live preview window.
+        if ( args.length > 1 ) {
+
+          bs.initLivePreview( args[1] );
+
+          return;
+        }
+      }
+
       boson.working_dir = args[0];
     };
 

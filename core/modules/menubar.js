@@ -44,7 +44,7 @@ exports.hookSubMenu = function( element ) {
 
 	element.onclick = function(e){
 		e.preventDefault();
-		
+
 		//Trigger submenu.
 		menubar.triggerSubmenu(i);
 

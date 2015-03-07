@@ -15,17 +15,21 @@
 				<li data-menu-trigger="openFileDialogue">Open files</li>
 				<li class="space"></li>
 				<li data-menu-trigger="saveCurrentBuffer">Save</li>
-				<li>Save as...</li>
+				<li data-menu-trigger="saveFileAs">Save as...</li>
 				<li class="space"></li>
 				<li data-menu-trigger="closeCurrentTab">Close file</li>
 				<li data-menu-trigger="closeBoson">Exit</li>
 			</ul>
 		</li>
 		<li>Edit</li>
-		<li>Find</li>
 		<li>Preferences</li>
-		<li>Debug</li>
-		<li>Help</li>
+		<li data-rel="menu-parent">Boson
+			<ul class="submenu">
+				<li data-menu-trigger="forkBrowserView">Live browser view</li>
+				<li class="space"></li>
+				<li data-menu-trigger="debug">Debug (WMT)</li>
+			</ul>
+		</li>
 	</ul>
 </div>
 

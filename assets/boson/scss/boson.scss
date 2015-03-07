@@ -41,12 +41,18 @@ body {
 		display: block;
 		padding: 1px 10px 0;
 	}
-
+	.hint {
+		float: right;
+		opacity: 0.75;
+		text-align: right;
+		margin-left: 20px;
+	}
 	li:first-of-type {
 		padding-left: 15px;
 
 		ul.submenu {
 			margin-left: -15px;
+			border-left: none;
 		}
 	}
 	ul.submenu {
@@ -57,6 +63,7 @@ body {
 		margin-top: -1px;
 		border-bottom: 1px solid #333;
 		border-right: 1px solid #333;
+		border-left: 1px solid #333;
 		display: none;
 
 		li {
