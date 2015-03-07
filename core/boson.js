@@ -463,7 +463,7 @@ var child = require('child_process');
   this.removePopupDialogue = function(popup) {
 
     popup.className = "popup prompt popOut";
-    setTimeout(function(){
+    setTimeout(function() {
       popup.parentElement.removeChild(popup);
     }, 150);
 
@@ -737,20 +737,20 @@ var child = require('child_process');
       uri = "file://" + editorData[boson.current_editor].cwd + "/" + editorData[boson.current_editor].name;
       execUri = "./boson live-preview " + uri;
       proc = child.exec( execUri );
-      bs.suspendCancelEvent( "Launch preview anyway?" );
+      bs.suspendCancelEvent( "Unsupported file type" );
     };
 
     onFailure = function() {
-      bs.suspendCancelEvent( "Launch preview anyway?" );
+      bs.suspendCancelEvent( "Unsupported file type" );
     };
 
     if ( mode !== "htmlmixed" ) {
 
       popup = bs.createPopupDialogue("Unsupported file type", "The file type you're trying to preview is unsupported", "Launch anyway", "Don't launch", onSuccess, onFailure, boson.current_editor);
 
-      bs.addCancelEvent( "Open big file?", function() {
+      bs.addCancelEvent( "Unsupported file type", function() {
         bs.removePopupDialogue( popup );
-        bs.suspendCancelEvent( "Open big file?" );
+        bs.suspendCancelEvent( "Unsupported file type" );
       });
 
       return;
