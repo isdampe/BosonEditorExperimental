@@ -27,6 +27,10 @@ exports.init = function(gui,win,bs) {
 				//Ctrl + O, open files.
 				bs.openFileDialogue();
 			break;
+			case 14:
+				//Ctrl + N
+				bs.createNewFile();
+			break;
 		}
 
 	};

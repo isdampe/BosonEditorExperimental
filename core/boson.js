@@ -27,11 +27,13 @@ var args = window.gui.App.argv;
     elements.selectFilesInput = document.getElementById("boson-select-files");
     elements.footerEntryPoint = document.getElementById("footer-entrypoint");
     elements.projectRoot = document.getElementById("project-root-list");
+    elements.saveFilesInput = document.getElementById("boson-save-file");
 
     //Hook on change selectFilesInput.
     elements.selectFilesInput.addEventListener("change", function(res){
       bs.attemptOpenFiles(this.value);
     }, false);
+
   };
 
   this.log = function(buffer) {
@@ -182,6 +184,30 @@ var args = window.gui.App.argv;
 
   };
 
+  this.createNewFile = function() {
+
+    var i;
+
+    editorData.push({
+      name: "New document",
+      guid: "new-document",
+      cwd: boson.working_dir,
+      buffer: ""
+    });
+
+    i = editorData.length - 1;
+
+    bs.createEditor({
+      guid: "",
+      buffer: "",
+      name: "New document"
+    }, i, true);
+
+    console.log("test");
+    
+
+  };
+
   this.createTab = function(object, i) {
 
     var tab, title, close;
@@ -250,14 +276,14 @@ var args = window.gui.App.argv;
         mode = info.mode;
         spec = info.mime;
       }
-    } else if (/\//.test(val)) {
+    } else if (/\//.test(editorData[i].name)) {
       var info = CodeMirror.findModeByMIME(val);
       if (info) {
         mode = info.mode;
-        spec = val;
+        spec = editorData[i].name;
       }
     } else {
-      mode = spec = val;
+      mode = spec = editorData[i].name;
     }
 
     if (! mode ) {
@@ -546,10 +572,50 @@ var args = window.gui.App.argv;
 
   };
 
-  this.saveBuffer = function(i, callback) {
+  this.saveFileAs = function(i, callback) {
+
+    var hook, fp;
+
+    elements.saveFilesInput.addEventListener("change", function(res) {
+      
+      if ( this.value ) {
+
+        fp = this.value;
+        editorData[i].guid = fp;
+        editorData[i].cwd = path.dirname( fp );
+        editorData[i].name = path.basename( fp );
+        
+        bs.saveBuffer(i, callback, function(){
+
+          //Update tab.
+          bs.closeCurrentTab();
+
+          //Reopen tab.
+          bs.openFileFromPath( fp );
+
+        });
+
+        this.removeEventListener("change", arguments.callee);
+
+      }
+
+    }, false);
+
+    elements.saveFilesInput.click();
+    return;
+
+  };
+
+  this.saveBuffer = function(i, callback, secondcallback) {
 
     //Save the specified buffer changes to buffer.
     var fh, fileBuffer;
+
+    if ( editorData[i].guid === "new-document" ) {
+      //We need a file name first.
+      bs.saveFileAs(i, callback);
+      return;
+    }
 
     //Sync Codemirror and editorData.
     editorData[i].buffer = editor[i].cm.getValue();
@@ -568,6 +634,9 @@ var args = window.gui.App.argv;
       if ( typeof callback === "function" ) {
         callback();
       }
+      if ( typeof secondcallback === "function" ) {
+        secondcallback();
+      }
 
     });
 
@@ -584,7 +653,6 @@ var args = window.gui.App.argv;
   };
 
   this.saveCurrentBuffer = function(callback) {
-
     
     if ( typeof callback === "function" ) {
       this.saveBuffer(boson.current_editor, callback);
