@@ -3,11 +3,8 @@ var fs = require("fs");
 var menu = this;
 var current_menu_item = false;
 var open_directory = {};
-var tcwd = null;
 
 exports.init = function(gui,win,bs,boson,elements) {
-
-	tcwd = boson.working_dir;
 
 	//Fetch directory listing.
 	fs.readdir( boson.working_dir, function(err, files) {
