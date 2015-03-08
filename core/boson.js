@@ -207,12 +207,26 @@ var child = require('child_process');
 
   };
 
+  this.registerDragDrop = function() {
+
+    nativesortable(elements.tabsEntryPoint, {
+      change: function(){
+        
+      },
+      childClass: "sortable-child",
+      draggingClass: "sortable-dragging",
+      overClass: "sortable-over"
+    });
+
+  };
+
   this.createTab = function(object, i) {
 
     var tab, title, close;
 
     tab = document.createElement("li");
     tab.id = "tab-" + object.guid;
+    tab.setAttribute("draggable", "true");
 
     title = document.createElement("span");
     title.innerHTML = object.name;
@@ -225,12 +239,12 @@ var child = require('child_process');
     tab.setAttribute("data-name", object.name);
 
     //Hook onclick.
-    tab.onmousedown = function(e) {
+    tab.onclick = function(e) {
       e.preventDefault();
       bs.switchToEditor(i);
     };
 
-    close.onmousedown = function(e) {
+    close.onclick = function(e) {
       e.preventDefault();
       e.stopPropagation();
       bs.closeTabById(i);
@@ -251,6 +265,7 @@ var child = require('child_process');
       tabs[boson.current_editor].tab.className = "";
     }
     tabs[i].tab.className =  "active";
+
   }
 
   this.createEditor = function(object, i, activateOnComplete) {
@@ -723,6 +738,7 @@ var child = require('child_process');
     win.reload();
   };
 
+
   this.forkBrowserView = function() {
 
     var proc, execUri, uri, mode, popup, onSuccess, onFailure;
@@ -846,6 +862,8 @@ var child = require('child_process');
     keybindings.init(gui,win,this);
     livepreview.init(gui,win,this);
     menubar.init(gui,win,this,boson,elements);
+
+    bs.registerDragDrop();
 
     //Show the window.
     win.show();
