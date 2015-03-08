@@ -21,7 +21,14 @@
 				<li data-menu-trigger="closeBoson">Exit</li>
 			</ul>
 		</li>
-		<li>Edit</li>
+		<li data-rel="menu-parent">Edit
+			<ul class="submenu">
+				<li data-menu-trigger="cmUndo">Undo</li>
+				<li data-menu-trigger="cmRedo">Redo</li>
+				<li class="space"></li>
+				<li data-menu-trigger="cmFind">Find</li>
+				<li data-menu-trigger="cmReplace">Replace</li>
+			</ul></li>
 		<li>Preferences</li>
 		<li data-rel="menu-parent">Boson
 			<ul class="submenu">

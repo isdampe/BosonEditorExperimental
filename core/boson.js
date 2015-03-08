@@ -766,6 +766,46 @@ var child = require('child_process');
 
   };
 
+  this.cmUndo = function() {
+
+    if ( boson.current_editor === null || boson.current_editor === false ) {
+      return;
+    }
+
+    editor[boson.current_editor].cm.undo();
+
+  };
+
+  this.cmRedo = function() {
+
+    if ( boson.current_editor === null || boson.current_editor === false ) {
+      return;
+    }
+
+    editor[boson.current_editor].cm.redo();
+
+  };
+
+  this.cmFind = function() {
+
+    if ( boson.current_editor === null || boson.current_editor === false ) {
+      return;
+    }
+
+    CodeMirror.commands.find(editor[boson.current_editor].cm);
+
+  };
+
+  this.cmReplace = function() {
+
+    if ( boson.current_editor === null || boson.current_editor === false ) {
+      return;
+    }
+
+    CodeMirror.commands.replace(editor[boson.current_editor].cm);
+
+  };
+
   this.init = function() {
 
     var startupTime, bootUpTime, totalBootTime, i, fileCount;
