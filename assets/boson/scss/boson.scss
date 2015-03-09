@@ -41,12 +41,7 @@ body {
 		display: block;
 		padding: 1px 10px 0;
 	}
-	.hint {
-		float: right;
-		opacity: 0.75;
-		text-align: right;
-		margin-left: 20px;
-	}
+
 	li:first-of-type {
 		padding-left: 15px;
 
@@ -232,9 +227,26 @@ body {
 		background: #222;
 	}
 
-	li[data-type=folder] span {
-		//Folder icon
+	li[data-type=folder] span:before {
+		margin-right: 10px;
+		display: inline-block;
+		width: 12px;
+		background: url("../media/folder.png") left bottom no-repeat;
+		height: 13px;
+		content: " ";
+		opacity: 0.25;
 	}
+
+	li[data-type=file] span:before {
+		margin-right: 10px;
+		display: inline-block;
+		width: 12px;
+		background: url("../media/file.png") left bottom no-repeat;
+		height: 13px;
+		content: " ";
+		opacity: 0.25;
+	}
+
 
 	li ul {
 		margin-left: -15px;
@@ -312,6 +324,19 @@ body {
 
 .popOut {
 	-webkit-animation: popOut 0.15s forwards!important;
+}
+
+#popup-about {
+	height: 400px;
+
+	.about-dialogue {
+		width: 90%;
+		height: 240px;
+		margin: 20px auto 0;
+		overflow-y: scroll;
+		text-align: left;
+		padding: 0 10px;
+	}
 }
 
 .popup {

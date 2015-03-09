@@ -19,7 +19,8 @@ var child = require('child_process');
     current_editor: null,
     title: "Boson Editor",
     working_dir: process.env.PWD,
-    maxFileSize: 102400
+    maxFileSize: 5242880,
+    version: "0.1"
   }, elements = {}, editor = [], tabs = [], dom, editorData = [], win, cancelEvents = {};
 
   this.preloadDom = function() {
@@ -819,6 +820,61 @@ var child = require('child_process');
     }
 
     CodeMirror.commands.replace(editor[boson.current_editor].cm);
+
+  };
+
+  this.about = function() {
+
+    var popup, popup_cancel_button, popup_logo, popup_title, popup_description, aboutTxt;
+
+    popup = document.createElement("div");
+    popup.className = "popup prompt about"
+    popup.id = "popup-about";
+
+    aboutTxt = "Boson Version " + boson.version + "<br /><br />";
+    aboutTxt += "Boson is an experimental editor built primarily for web development. It's written in NodeJS, and wrapped in  Nw.js as a runtime container for easy cross-platform integration.<br /><br />";
+    aboutTxt += "Boson is still very experimental and should not be considered even close to stable - it's just fun to poke around<br /><br />";
+    aboutTxt += "<strong>Credits</strong><br /><br />";
+    aboutTxt += "@isdampe - Main developer<br />";
+    aboutTxt += "@bgrins - Nativesortable.js library<br />";
+    aboutTxt += "Codemirror.net - JS source view library<br />";
+    aboutTxt += "Adobe.com - Source sans pro font<br />";
+    aboutTxt += "ionicons.com - MIT licensed icons<br />";
+
+    popup_cancel_button = document.createElement("div");
+    popup_cancel_button.className = "cancel";
+
+    popup_logo = document.createElement("div");
+    popup_logo.className = "logo";
+
+    popup_title = document.createElement("h4");
+    popup_title.innerHTML = "About Boson";
+
+    popup_description = document.createElement("div");
+    popup_description.className = "about-dialogue";
+    popup_description.innerHTML = aboutTxt;
+
+    bs.addCancelEvent( "About", function() {
+      bs.removePopupDialogue( popup );
+      bs.suspendCancelEvent( "About" );
+    });
+
+    popup_cancel_button.addEventListener("click", function(e){
+      e.preventDefault();
+      bs.removePopupDialogue( popup );
+      bs.suspendCancelEvent( "About" );
+    });
+
+    popup.appendChild(popup_cancel_button);
+    popup.appendChild(popup_logo);
+    popup.appendChild(popup_title);
+    popup.appendChild(popup_description);
+
+    elements.bodyEntryPoint.appendChild(popup);
+
+
+
+    return popup;
 
   };
 

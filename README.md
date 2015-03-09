@@ -14,3 +14,11 @@ my line of work, they also pack __too many__ features for me to feel comfortable
 ##Contributing
 Found a bug? Great - go ahead and open an issue, with clear instructions on how to re-produce.  
 Written a patch? Go ahead and send your pull request with clear instructions what and how your patch fixes something.
+
+###Thanks to
+* Adobe.com - Source sans pro font family
+* @bgrins - For the awesome native sortable js library, https://github.com/bgrins/nativesortable
+* http://ionicons.com/ - For the MIT licensed icons
+* Codemirror.net - For the awesome JS source view library
+
+> If your name is missing from this list, please let me know.
