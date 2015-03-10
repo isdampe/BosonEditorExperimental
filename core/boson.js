@@ -771,6 +771,8 @@ var child = require('child_process');
       });
 
       return;
+    } else {
+      onSuccess();
     }
 
   };
@@ -953,5 +955,6 @@ var child = require('child_process');
 })(window, {
   theme: "tomorrow-night-eighties",
   tabSize: 2,
-  indentWithTabs: true
+  indentWithTabs: true,
+  fontSize: 16
 });
