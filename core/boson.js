@@ -676,6 +676,7 @@ var child = require('child_process');
         //Do stuff here.
         editorData[i].cwd = path.dirname( this.value );
         editorData[i].name = fn;
+        editorData[i].guid = this.value;
         
         bs.saveCurrentBuffer();
         tabs[i].tab.setAttribute("data-name", fn );
