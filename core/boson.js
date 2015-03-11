@@ -20,7 +20,8 @@ var child = require('child_process');
     title: "Boson Editor",
     working_dir: process.env.PWD,
     maxFileSize: 5242880,
-    version: "0.1"
+    version: "0.1",
+    sidebarActive: true
   }, elements = {}, editor = [], tabs = [], dom, editorData = [], win, cancelEvents = {};
 
   this.preloadDom = function() {
@@ -31,11 +32,49 @@ var child = require('child_process');
     elements.footerEntryPoint = document.getElementById("footer-entrypoint");
     elements.projectRoot = document.getElementById("project-root-list");
     elements.saveFilesInput = document.getElementById("boson-save-file");
+    elements.sidebar = document.getElementById("sidebar-entrypoint");
+    elements.topbar = document.getElementById("topbar-entrypoint");
 
     //Hook on change selectFilesInput.
     elements.selectFilesInput.addEventListener("change", function(res){
       bs.attemptOpenFiles(this.value);
     }, false);
+
+  };
+
+  this.toggleSidebar = function() {
+
+    if ( boson.sidebarActive === true ) {
+      elements.sidebar.className = "sidebar-deactivated";
+      elements.editorEntryPoint.className = "editor-fullscreen";
+      elements.topbar.className = "topbar-fullscreen";
+      boson.sidebarActive = false;
+    } else {
+      elements.sidebar.className = "";
+      elements.editorEntryPoint.className = "";
+      elements.topbar.className = "";
+      boson.sidebarActive = true;
+    }
+
+  };
+
+  this.setFontSize = function( size ) {
+
+    elements.editorEntryPoint.style.fontSize = size + "px";
+
+  };
+
+  this.increaseFontSize = function() {
+
+    config.fontSize = config.fontSize + 1;
+    bs.setFontSize( config.fontSize );
+
+  };
+
+  this.decreaseFontSize = function() {
+
+    config.fontSize = config.fontSize - 1;
+    bs.setFontSize( config.fontSize );
 
   };
 
@@ -587,40 +626,6 @@ var child = require('child_process');
 
   };
 
-  this.saveFileAs = function(i, callback) {
-
-    var hook, fp;
-
-    elements.saveFilesInput.addEventListener("change", function(res) {
-      
-      if ( this.value ) {
-
-        fp = this.value;
-        editorData[i].guid = fp;
-        editorData[i].cwd = path.dirname( fp );
-        editorData[i].name = path.basename( fp );
-        
-        bs.saveBuffer(i, callback, function(){
-
-          //Update tab.
-          bs.closeCurrentTab();
-
-          //Reopen tab.
-          bs.openFileFromPath( fp );
-
-        });
-
-      }
-
-      this.removeEventListener("change", arguments.callee);
-
-    }, false);
-
-    elements.saveFilesInput.click();
-    return;
-
-  };
-
   this.saveBuffer = function(i, callback, secondcallback) {
 
     //Save the specified buffer changes to buffer.
@@ -659,7 +664,7 @@ var child = require('child_process');
 
   this.saveFileAs = function() {
 
-    var i, fn;
+    var i, fn, tm;
 
     if ( boson.current_editor === null || boson.current_editor === false ) {
       return;
@@ -671,12 +676,14 @@ var child = require('child_process');
       
       if ( this.value ) {
 
-        fn = path.basename( this.value )
+        fn = path.basename( this.value );
+
+        tm = (new Date).getTime();
 
         //Do stuff here.
         editorData[i].cwd = path.dirname( this.value );
         editorData[i].name = fn;
-        editorData[i].guid = this.value;
+        editorData[i].guid = this.value + "-" + tm;
         
         bs.saveCurrentBuffer();
         tabs[i].tab.setAttribute("data-name", fn );
@@ -909,6 +916,8 @@ var child = require('child_process');
     //Preload dom selection.
     this.preloadDom();
 
+    bs.setFontSize( config.fontSize );
+
     //Fetch window.
     win = gui.Window.get();
 
@@ -957,5 +966,5 @@ var child = require('child_process');
   theme: "tomorrow-night-eighties",
   tabSize: 2,
   indentWithTabs: true,
-  fontSize: 16
+  fontSize: 24
 });

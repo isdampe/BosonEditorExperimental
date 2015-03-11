@@ -11,7 +11,7 @@ exports.init = function(gui,win,bs) {
 
 	//Standard keys.
 	window.onkeypress = function(e) {
-
+		
 		switch( e.which ) {
 			case 19:
 				bs.saveCurrentBuffer();

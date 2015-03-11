@@ -96,6 +96,10 @@ body {
 	}
 }
 
+.sidebar-deactivated {
+	display: none;
+}
+
 #sidebar-entrypoint:before {
   content: " ";
   position: absolute;
@@ -104,6 +108,12 @@ body {
   left: 1px;
   right: 1px;
   bottom: 1px;
+}
+
+
+.topbar-fullscreen {
+	left: 0!important;
+	width: 100%!important;
 }
 
 #topbar-entrypoint {
@@ -170,10 +180,17 @@ body {
 	}
 }
 
+
+.editor-fullscreen {
+	left: 0!important;
+	width: 100%!important;
+}
+
 #editor-entrypoint {
 	position: fixed;
 	top: 61px;
 	left: 240px;
+	font-size: 24px;
 	width: calc(100% - 240px);
 	height: calc(100% - 61px);
 	background: url("../media/logo-256.png") center center no-repeat #292929;
@@ -195,7 +212,7 @@ body {
 	height: 100%;
 	font-family: Ubuntu mono, monospace;
 	font-weight: 400;
-	font-size: 24px!important;
+	
 	text-shadow: none;
 	line-height: 1!important;
 }
