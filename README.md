@@ -15,6 +15,11 @@ my line of work, they also pack __too many__ features for me to feel comfortable
 Found a bug? Great - go ahead and open an issue, with clear instructions on how to re-produce.  
 Written a patch? Go ahead and send your pull request with clear instructions what and how your patch fixes something.
 
+###To do
+Need to standardize modules / plugins, and provide various hooks.
+
+And lots more...
+
 ###Thanks to
 * Adobe.com - Source sans pro font family
 * @bgrins - For the awesome native sortable js library, https://github.com/bgrins/nativesortable
