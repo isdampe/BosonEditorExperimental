@@ -177,7 +177,7 @@ var child = require('child_process');
               //Open new tab.
               editorData.push({
                 name: path.basename(fp),
-                guid: fp,
+                guid: bs.bs.createUniqueGuid( fp ),
                 cwd: path.dirname(fp),
                 buffer: data
               });
@@ -232,7 +232,7 @@ var child = require('child_process');
 
     editorData.push({
       name: "New document",
-      guid: "new-document",
+      guid: bs.createUniqueGuid( "new-document" ),
       cwd: boson.working_dir,
       buffer: ""
     });
@@ -240,7 +240,7 @@ var child = require('child_process');
     i = editorData.length - 1;
 
     bs.createEditor({
-      guid: "",
+      guid: bs.createUniqueGuid("new-document"),
       buffer: "",
       name: "New document"
     }, i, true);
@@ -401,6 +401,66 @@ var child = require('child_process');
 
     //Find another editor to activate.
     bs.findAndActivateTab(i);
+
+  };
+
+  this.tabScroll = function() {
+
+    var i, newTab = false, max, x, start;
+
+    max = editorData.length - 1;
+    i = boson.current_editor;
+    start = i +1;
+
+    for ( x = start; x<=max; x++ ) {
+      if ( editorData[x].hasOwnProperty('name') && x !== i ) {
+        newTab = x;
+        break;
+      }
+    }
+
+    if ( newTab === false ) {
+      for ( x = 0; x<i; x++ ) {
+        if ( editorData[x].hasOwnProperty('name') && x !== i ) {
+          newTab = x;
+          break;
+        }
+      }
+    }
+
+    if ( newTab !== false ) {
+      bs.switchToEditor(x);
+    }
+
+  };
+
+  this.tabScrollBack = function() {
+
+    var i, newTab = false, max, x, start;
+
+    max = editorData.length - 1;
+    i = boson.current_editor;
+    start = i -1;
+
+    for ( x = start; x>= 0; x-- ) {
+      if ( editorData[x].hasOwnProperty('name') && x !== i ) {
+        newTab = x;
+        break;
+      }
+    }
+
+    if ( newTab === false ) {
+      for ( x = max; x>start; x-- ) {
+        if ( editorData[x].hasOwnProperty('name') && x !== i ) {
+          newTab = x;
+          break;
+        }
+      }
+    }
+
+    if ( newTab !== false ) {
+      bs.switchToEditor(x);
+    }
 
   };
 
@@ -631,7 +691,7 @@ var child = require('child_process');
     //Save the specified buffer changes to buffer.
     var fh, fileBuffer;
 
-    if ( editorData[i].guid === "new-document" ) {
+    if ( editorData[i].guid.substring(0,12) === "new-document" ) {
       //We need a file name first.
       bs.saveFileAs(i, callback);
       return;
@@ -664,7 +724,7 @@ var child = require('child_process');
 
   this.saveFileAs = function() {
 
-    var i, fn, tm;
+    var i, fn;
 
     if ( boson.current_editor === null || boson.current_editor === false ) {
       return;
@@ -678,12 +738,10 @@ var child = require('child_process');
 
         fn = path.basename( this.value );
 
-        tm = (new Date).getTime();
-
         //Do stuff here.
         editorData[i].cwd = path.dirname( this.value );
         editorData[i].name = fn;
-        editorData[i].guid = this.value + "-" + tm;
+        editorData[i].guid = bs.createUniqueGuid( this.value );
         
         bs.saveCurrentBuffer();
         tabs[i].tab.setAttribute("data-name", fn );
@@ -698,6 +756,16 @@ var child = require('child_process');
 
     elements.saveFilesInput.click();
     return;
+
+  };
+
+  this.createUniqueGuid = function( prep ) {
+
+    var tm;
+
+    tm = (new Date).getTime();
+
+    return prep + "-" + tm;
 
   };
 

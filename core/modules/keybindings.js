@@ -2,16 +2,23 @@ exports.init = function(gui,win,bs) {
 
 	//Global hotkeys.
 	window.onkeydown = function(e) {
-		//console.log(e.which);
 		if ( e.which === 27 ) {
 			//Escape.
 			bs.handleCancelEvents();
+		}
+		if ( e.which === 9 && e.ctrlKey === true ) {
+			if ( e.shiftKey === true ) {
+				//Backwards.
+				bs.tabScrollBack();
+			} else {
+				bs.tabScroll();
+			}
 		}
 	};
 
 	//Standard keys.
 	window.onkeypress = function(e) {
-		
+		//console.log(e.which);
 		switch( e.which ) {
 			case 19:
 				bs.saveCurrentBuffer();
