@@ -8,8 +8,7 @@ Boson is still very experimental and should not be considered even close to stab
 in.
 
 ##Why not use brackets or atom?
-While brackets and atom are __awesome__, they do have a few performance issues and tend to run slowly. In
-my line of work, they also pack __too many__ features for me to feel comfortable.
+While brackets and atom are __awesome__, they do have a few performance issues and tend to run a bit slower than I like. In my line of work, they also pack _too many_ features for what is essentially, a text editor.
 
 ##Contributing
 Found a bug? Great - go ahead and open an issue, with clear instructions on how to re-produce.  
