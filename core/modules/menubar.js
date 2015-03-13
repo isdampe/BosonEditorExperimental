@@ -54,6 +54,12 @@ exports.hookSubMenu = function( element ) {
 
 exports.triggerSubmenu = function( i ) {
 
+	if ( i !== subMenuActive && subMenuActive !== false ) {
+		//Close open menu.
+		menuParents[subMenuActive].submenu.style.display = "none";
+		menuParents[subMenuActive].active = false;
+	}
+
 	if ( menuParents[i].active === true ) {
 		//Deactivate.
 		menuParents[i].submenu.style.display = "none";

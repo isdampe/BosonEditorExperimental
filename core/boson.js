@@ -25,7 +25,7 @@ var modules = {};
   };
 
   this.preloadDom = function() {
-    
+
     elements.editorEntryPoint = document.getElementById("editor-entrypoint");
     elements.tabsEntryPoint = document.getElementById("tabs-entrypoint");
     elements.bodyEntryPoint = document.getElementById("body-entrypoint");
@@ -414,17 +414,21 @@ var modules = {};
     start = i +1;
 
     for ( x = start; x<=max; x++ ) {
-      if ( editorData[x].hasOwnProperty('name') && x !== i ) {
-        newTab = x;
-        break;
+      if ( editorData.hasOwnProperty(x) ) {
+        if ( editorData[x].hasOwnProperty('name') && x !== i ) {
+          newTab = x;
+          break;
+        }
       }
     }
 
     if ( newTab === false ) {
       for ( x = 0; x<i; x++ ) {
-        if ( editorData[x].hasOwnProperty('name') && x !== i ) {
-          newTab = x;
-          break;
+        if ( editorData.hasOwnProperty(x) ) {
+          if ( editorData[x].hasOwnProperty('name') && x !== i ) {
+            newTab = x;
+            break;
+          }
         }
       }
     }
@@ -856,7 +860,19 @@ var modules = {};
 
   this.initLivePreview = function ( url ) {
 
-    livepreview.init(gui,win,this);
+    var passObject, livepreview;
+
+    livepreview = require( process.cwd() + "/core/modules/livepreview.js" );
+
+    passObject = {
+      gui: gui,
+      win: win,
+      bs: this,
+      boson: boson,
+      elements: elements
+    };
+
+    livepreview.init( passObject );
     bs.openLivePreviewWindow( url );
     gui.Window.get().close(true);
 
