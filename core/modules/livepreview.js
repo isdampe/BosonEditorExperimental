@@ -1,8 +1,8 @@
-exports.init = function(gui,win,bs) {
+exports.init = function( core ) {
 
-	bs.openLivePreviewWindow = function( url ) {
+	core.bs.openLivePreviewWindow = function( url ) {
 
-		var newWin = gui.Window.open( url, {
+		var newWin = core.gui.Window.open( url, {
 			"icon": "assets/boson/media/logo.png",
 	    "toolbar": false,
 	    "frame": true,

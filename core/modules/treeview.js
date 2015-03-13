@@ -1,9 +1,9 @@
 var fs = require('fs');
 var treeView = [];
 
-exports.init = function(gui,win,boson,bs) {
+exports.init = function( core ) {
 
-	this.readTreeDir(boson.cwd, bs, function(buffer){
+	this.readTreeDir( core.boson.cwd, core.bs, function( buffer ){
 		//Callback.
 		console.log("SUCCESS " + buffer);
 	});

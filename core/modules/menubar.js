@@ -2,9 +2,9 @@ var menubar = this;
 var menuParents = [], subMenuActive = false;
 var bs;
 
-exports.init = function(gui,win,bsl,boson,elements) {
+exports.init = function( core ) {
 
-	bs = bsl;
+	bs = core.bs;
 	menubar.hookMenus();
 	menubar.hookActions();
 

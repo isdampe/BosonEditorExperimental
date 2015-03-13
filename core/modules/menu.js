@@ -4,19 +4,19 @@ var menu = this;
 var current_menu_item = false;
 var open_directory = {};
 
-exports.init = function(gui,win,bs,boson,elements) {
+exports.init = function( core ) {
 
 	//Fetch directory listing.
-	fs.readdir( boson.working_dir, function(err, files) {
+	fs.readdir( core.boson.working_dir, function(err, files) {
 		if ( err ) {
-			bs.bsError(err);
+			core.bs.bsError(err);
 		} else {
 
 			//Sort tabs.
-			files = menu.sortFiles( files, boson.working_dir );
+			files = menu.sortFiles( files, core.boson.working_dir );
 
 			//Add tabs.
-			menu.injectFilesToRoot( files, elements.projectRoot, boson.working_dir, bs );
+			menu.injectFilesToRoot( files, core.elements.projectRoot, core.boson.working_dir, core.bs );
 
 		}
 

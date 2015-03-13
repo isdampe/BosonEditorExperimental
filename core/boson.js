@@ -4,16 +4,16 @@
 */
 
 var gui = require('nw.gui');
-var menu = require(process.cwd() + '/core/modules/menu.js');
-var keybindings = require(process.cwd() + '/core/modules/keybindings.js');
-var livepreview = require(process.cwd() + '/core/modules/livepreview.js');
-var menubar = require(process.cwd() + '/core/modules/menubar.js');
 var fs = require('fs');
 var path = require('path');
 var args = window.gui.App.argv;
 var child = require('child_process');
 
+var modules = {};
+
 (function(window,config) {
+
+  var elements = {}, editor = [], tabs = [], dom, editorData = [], win, cancelEvents = {};
 
   var boson = {
     current_editor: null,
@@ -22,9 +22,10 @@ var child = require('child_process');
     maxFileSize: 5242880,
     version: "0.1",
     sidebarActive: true
-  }, elements = {}, editor = [], tabs = [], dom, editorData = [], win, cancelEvents = {};
+  };
 
   this.preloadDom = function() {
+    
     elements.editorEntryPoint = document.getElementById("editor-entrypoint");
     elements.tabsEntryPoint = document.getElementById("tabs-entrypoint");
     elements.bodyEntryPoint = document.getElementById("body-entrypoint");
@@ -956,6 +957,30 @@ var child = require('child_process');
 
   };
 
+  this.moduleInit = function() {
+
+    var passObject, key;
+
+    //Essential modules.
+    modules["menu"]        = require( process.cwd() + "/core/modules/menu.js" );
+    modules["keybindings"] = require( process.cwd() + "/core/modules/keybindings.js" );
+    modules["livepreview"] = require( process.cwd() + "/core/modules/livepreview.js" );
+    modules["menubar"]     = require( process.cwd() + "/core/modules/menubar.js" );
+
+    passObject = {
+      gui: gui,
+      win: win,
+      bs: this,
+      boson: boson,
+      elements: elements
+    };
+
+    for ( key in modules ) {
+      modules[key].init(passObject);
+    }
+
+  };
+
   this.init = function() {
 
     var startupTime, bootUpTime, totalBootTime, i, fileCount;
@@ -993,26 +1018,27 @@ var child = require('child_process');
       bs.closeBoson();
     });
 
-    //Build menus.
-    menu.init(gui,win,this,boson,elements);
-    keybindings.init(gui,win,this);
-    livepreview.init(gui,win,this);
-    menubar.init(gui,win,this,boson,elements);
+    //Load modules.
+    bs.moduleInit();
 
+    //Register Drag and drop tabs.
     bs.registerDragDrop();
 
     //Show the window.
     win.show();
 
+    //Calc boot time.
     bootUpTime = new Date().getTime();
     totalBootTime = bootUpTime - startupTime;
 
+    //Auto select editor.
     if ( boson.current_editor === null ) {
       if ( fileCount >= 1 ) {
         this.switchToEditor(fileCount -1);
       }
     }
 
+    //Log boot time.
     this.log("Boot complete, " + totalBootTime + " ms");
 
   };
@@ -1030,9 +1056,9 @@ var child = require('child_process');
   window.bs = this;
   this.init();
 
-})(window, {
+})( window, {
   theme: "tomorrow-night-eighties",
   tabSize: 2,
   indentWithTabs: true,
   fontSize: 24
-});
+} );

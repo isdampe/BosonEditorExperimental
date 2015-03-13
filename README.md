@@ -16,7 +16,8 @@ Found a bug? Great - go ahead and open an issue, with clear instructions on how 
 Written a patch? Go ahead and send your pull request with clear instructions what and how your patch fixes something.
 
 ###To do
-Need to standardize modules / plugins, and provide various hooks.
+~~Need to standardize modules / plugins, and provide various hooks.~~
+Need to autoscan and call init() on modules found.
 
 And lots more...
 

@@ -1,17 +1,17 @@
-exports.init = function(gui,win,bs) {
+exports.init = function( core ) {
 
 	//Global hotkeys.
 	window.onkeydown = function(e) {
 		if ( e.which === 27 ) {
 			//Escape.
-			bs.handleCancelEvents();
+			core.bs.handleCancelEvents();
 		}
 		if ( e.which === 9 && e.ctrlKey === true ) {
 			if ( e.shiftKey === true ) {
 				//Backwards.
-				bs.tabScrollBack();
+				core.bs.tabScrollBack();
 			} else {
-				bs.tabScroll();
+				core.bs.tabScroll();
 			}
 		}
 	};
@@ -21,22 +21,22 @@ exports.init = function(gui,win,bs) {
 		//console.log(e.which);
 		switch( e.which ) {
 			case 19:
-				bs.saveCurrentBuffer();
+				core.bs.saveCurrentBuffer();
 			break;
 			case 23:
-				bs.closeCurrentTab();
+				core.bs.closeCurrentTab();
 			break;
 			case 17:
 				//Ctrl + Q, Quit.
-				bs.closeBoson();
+				core.bs.closeBoson();
 			break;
 			case 15:
 				//Ctrl + O, open files.
-				bs.openFileDialogue();
+				core.bs.openFileDialogue();
 			break;
 			case 14:
 				//Ctrl + N
-				bs.createNewFile();
+				core.bs.createNewFile();
 			break;
 		}
 
