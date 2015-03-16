@@ -798,6 +798,45 @@ var modules = {};
 
   };
 
+  this.saveBufferByIdSync = function( i ) {
+
+    //Save the specified buffer changes to buffer.
+    var fh, fileBuffer;
+
+    if ( editorData[i].guid.substring(0,12) === "new-document" ) {
+      return;
+    }
+
+    //Sync Codemirror and editorData.
+    editorData[i].buffer = editor[i].cm.getValue();
+    fileBuffer = editorData[i];
+
+    fs.writeFileSync( fileBuffer.cwd + "/" + fileBuffer.name, fileBuffer.buffer );
+
+    bs.flagHasChanged(i, false);
+
+    return;
+
+  };
+
+  this.saveAllBuffers = function(callback) {
+
+    var key;
+
+    for ( key in editor ) {
+      if ( editor[key].changed === true ) {
+        bs.saveBufferByIdSync( key );
+      }
+    }
+    
+    if ( typeof callback === "function" ) {
+      callback();
+    }
+
+    return;
+
+  };
+
   this.setTitle = function(titleBuffer) {
 
     var proposedTitle;
@@ -1061,11 +1100,43 @@ var modules = {};
 
   this.closeBoson = function() {
 
-    //Is there unsaved buffers?
-    //Ask to save, if not, callback.
+    var key, allSaved = true, popup;
 
-    //Else
-    process.exit(0);
+    //Is there unsaved buffers?
+    for ( key in editorData ) {
+      if ( editor[key].changed === true ) {
+        allSaved = false;
+      }
+    }
+
+    if ( allSaved === false ) {
+
+      //Confirm save.
+      popup = this.warnSave(boson.current_editor, function(i){
+
+        //On save.
+        bs.saveAllBuffers(function(){
+          bs.suspendCancelEvent( "Save all before closing?" );
+          process.exit(0);
+        });
+
+      }, function(i){
+
+        //On not save.
+        bs.suspendCancelEvent( "Save all before closing?" );
+        process.exit(0);
+
+      });
+
+      bs.addCancelEvent( "Save all before closing?", function(){
+        bs.removePopupDialogue( popup );
+        bs.suspendCancelEvent( "Save all before closing?" );
+      });
+
+
+    } else {
+      process.exit(0);
+    }
 
   };
 
