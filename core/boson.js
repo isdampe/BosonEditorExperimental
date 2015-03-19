@@ -1038,7 +1038,7 @@ var modules = {};
 
   this.init = function() {
 
-    var startupTime, bootUpTime, totalBootTime, i, fileCount;
+    var startupTime, bootUpTime, totalBootTime, i, fileCount, argCountType;
 
     //Check command line args.
     if ( args.length > 0 ) {
@@ -1052,7 +1052,17 @@ var modules = {};
         }
       }
 
-      boson.working_dir = args[0];
+      //Is first arg file or directory?
+      argCountType = fs.lstatSync(args[0]);
+      if ( argCountType.isDirectory() ) {
+        boson.working_dir = args[0];
+      } else {
+        //Get the file's working directory.
+        if ( argCountType.isFile() ) {
+          boson.working_dir = path.dirname( args[0] );
+          bs.openFileFromPath( args[0] );
+        }
+      }
     };
 
     //Log the startup time.
