@@ -1144,7 +1144,7 @@ var modules = {};
   this.init();
 
 })( window, {
-  theme: "tomorrow-night-eighties",
+  theme: "base16-dark",
   tabSize: 2,
   indentWithTabs: true,
   fontSize: 24
