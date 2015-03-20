@@ -1,8 +1,8 @@
 {
+  "name": "Boson Editor",
   "main": "editor.html",
-  "name": "nw-demo",
   "single-instance": false,
-  "description": "Boson Editor",
+  "description": "Experimental editor",
   "version": "0.1.0",
   "window": {
     "title": "Boson Editor",

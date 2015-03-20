@@ -2,6 +2,7 @@ exports.init = function( core ) {
 
 	//Global hotkeys.
 	window.onkeydown = function(e) {
+		console.log(e);
 		if ( e.which === 27 ) {
 			//Escape.
 			core.bs.handleCancelEvents();
@@ -13,6 +14,17 @@ exports.init = function( core ) {
 			} else {
 				core.bs.tabScroll();
 			}
+		}
+		if ( e.which === 187 && e.ctrlKey === true ) {
+			//Increase font size.
+			core.bs.increaseFontSize();
+		}
+		if ( e.which === 189 && e.ctrlKey === true ) {
+			//Decrease font size.
+			core.bs.decreaseFontSize();
+		}
+		if ( e.which === 220 && e.ctrlKey === true ) {
+			core.bs.toggleSidebar();
 		}
 	};
 

@@ -64,7 +64,19 @@ body {
 		li {
 			display: block;
 			float: none;
-			padding: 0 60px 0 20px;
+			padding: 0 150px 0 20px;
+			position: relative;
+
+			aside {
+				position: absolute;
+				right: 20px;
+				top: 0;
+				color: #555;
+			}
+		}
+		li:hover aside {
+				color: #eee;
+				opacity: 0.25;
 		}
 		li.space {
 			line-height: auto;
