@@ -23,7 +23,10 @@ var modules = {};
     version: "0.1",
     sidebarActive: true
   };
-
+	
+	/*
+	 * Preloads commonly used UI elements into cache, and hooks file inputs required by Nw.js
+	 */
   this.preloadDom = function() {
 
     elements.editorEntryPoint = document.getElementById("editor-entrypoint");
@@ -42,7 +45,10 @@ var modules = {};
     }, false);
 
   };
-
+	
+	/*
+	 * Toggles the sidebar on and off.
+	 */
   this.toggleSidebar = function() {
 
     if ( boson.sidebarActive === true ) {
@@ -58,33 +64,53 @@ var modules = {};
     }
 
   };
-
+	
+	/*
+	 * Sets the Codemirror font size via CSS
+	 * It's done like this to ensure each editor instance is uniform.
+	 */
   this.setFontSize = function( size ) {
 
     elements.editorEntryPoint.style.fontSize = size + "px";
 
   };
-
+	
+	/*
+	 * Increases the font size from the current.
+	 */
   this.increaseFontSize = function() {
 
     config.fontSize = config.fontSize + 1;
     bs.setFontSize( config.fontSize );
 
   };
-
+	
+	/*
+	 * Decreases the font size from the current.
+	 */
   this.decreaseFontSize = function() {
 
     config.fontSize = config.fontSize - 1;
     bs.setFontSize( config.fontSize );
 
   };
-
+	
+	/*
+	 * Internal logging function.
+	 * Should probably write to a global buffer which would be visible via a virtual "console".
+	 */
   this.log = function(buffer) {
 
     console.log(buffer);
 
   };
-
+	
+	/*
+	 * This function is hooked using addCancelEvent.
+	 * If a cancel event is registered, and the user presses ESC (or the mapped cancel key)
+	 * all active cancel events will be executed.
+	 * Used for things like warning dialogues.
+	 */
   this.handleCancelEvents = function() {
 
     var key;
@@ -98,7 +124,10 @@ var modules = {};
     }
 
   };
-
+	
+	/*
+	 * Hooks a cancel event into the buffer for later callback.
+	 */
   this.addCancelEvent = function( name, callback ) {
 
     cancelEvents[name] = {
@@ -107,7 +136,10 @@ var modules = {};
     };
 
   };
-
+	
+	/*
+	 * Suspends a cancel event to prevent it executing on cancel callback.
+	 */
   this.suspendCancelEvent = function ( name ) {
 
     if ( cancelEvents.hasOwnProperty(name) ) {
@@ -115,7 +147,11 @@ var modules = {};
     }
 
   };
-
+	
+	/*
+	 * Attempts to open multiple files
+	 * Called from the Nw.js file open dialogue callback.
+	 */
   this.attemptOpenFiles = function( fp ) {
 
     var files;
@@ -128,7 +164,10 @@ var modules = {};
     }
 
   };
-
+	
+	/*
+	 * Opens a file from a filepath.
+	 */
   this.openFileFromPath = function( fp ) {
 
     var key, cfp, currentFileId, dialogueMessage, saveFunc;
@@ -220,13 +259,21 @@ var modules = {};
     });
 
   };
-
+	
+	/*
+	 * Nw.js requires HTML level file inputs to trigger native file select dialogues.
+	 * Focuses on the file select element to trigger this.
+	 */
   this.openFileDialogue = function() {
 
     elements.selectFilesInput.click();
 
   };
-
+	
+	/*
+	 * Opens a new tab, and creates a Codemirror instance.
+	 * Triggered by File -> File file, or Ctrl+N
+	 */
   this.createNewFile = function() {
 
     var i;
@@ -247,7 +294,10 @@ var modules = {};
     }, i, true);
 
   };
-
+	
+	/*
+	 * Hooks drag and drop for tabs.
+	 */
   this.registerDragDrop = function() {
 
     nativesortable(elements.tabsEntryPoint, {
@@ -260,7 +310,10 @@ var modules = {};
     });
 
   };
-
+	
+	/*
+	 * Creates a tab, and hooks everything necessary for complete use.
+	 */
   this.createTab = function(object, i) {
 
     var tab, title, close;
@@ -300,7 +353,9 @@ var modules = {};
 
   };
 
-
+	/*
+	 * Activates a tab if it's not currently active.
+	 */
   this.activateTab = function(i) {
     if ( boson.current_editor !== null && boson.current_editor !== false ) {
       tabs[boson.current_editor].tab.className = "";
@@ -308,7 +363,11 @@ var modules = {};
     tabs[i].tab.className =  "active";
 
   }
-
+	
+	/*
+	 * Creates a new editor / Codemirror instance.
+	 * Also hooks required Codemirror sections.
+	 */
   this.createEditor = function(object, i, activateOnComplete) {
 
     var textarea, cmMode, m, mode, spec;
@@ -379,7 +438,10 @@ var modules = {};
     CodeMirror.autoLoadMode(editor[i].cm, mode);
 
   };
-
+	
+	/*
+	 * Closes an editor, defined by i (editor id)
+	 */
   this.closeEditor = function(i) {
 
     //Remove the CM element.
@@ -404,7 +466,10 @@ var modules = {};
     bs.findAndActivateTab(i);
 
   };
-
+	
+	/*
+	 * Scrolls to the next tab, triggered by Ctrl + T
+	 */
   this.tabScroll = function() {
 
     var i, newTab = false, max, x, start;
@@ -438,7 +503,10 @@ var modules = {};
     }
 
   };
-
+	
+	/*
+	 * Scrolls to the previous tab, triggered by Ctrl + Shift + T
+	 */
   this.tabScrollBack = function() {
 
     var i, newTab = false, max, x, start;
@@ -468,7 +536,11 @@ var modules = {};
     }
 
   };
-
+	
+	/*
+	 * Finds another tab to activate.
+	 * Called after a tab is closed.
+	 */
   this.findAndActivateTab = function(i) {
 
     var newTab = false, max, x;
@@ -488,13 +560,19 @@ var modules = {};
 
   };
 
+	/*
+	 * Shows a hidden Codemirror instance
+	 */
   this.showEditor = function(i) {
 
     editor[i].cm.getWrapperElement().style.display = "block";
     editor[i].cm.focus();
 
   }
-
+	
+	/*
+	 * Hides a visible Codemirror instance
+	 */
   this.hideEditor = function(i) {
 
     if ( i !== false ) {
@@ -502,7 +580,11 @@ var modules = {};
     }
 
   }
-
+	
+	/*
+	 * Switches tabs to editor, as specified by i (editor id)
+	 * Triggered by clicking on an inactive tab.
+	 */
   this.switchToEditor = function(i) {
     if ( boson.current_editor !== i ) {
       if ( boson.current_editor !== null ) {
@@ -518,7 +600,10 @@ var modules = {};
       }
     }
   };
-
+	
+	/*
+	 * Creates a popup dialogue.
+	 */
   this.createPopupDialogue = function(title, message, accept, decline, onSuccess, onFailure, i) {
 
     var popup, popup_cancel_button, popup_logo, popup_title, popup_description, popup_accept_button, popup_decline_button;
@@ -579,7 +664,10 @@ var modules = {};
     return popup;
 
   };
-
+	
+	/*
+	 * Removes an active popup dialogue.
+	 */
   this.removePopupDialogue = function(popup) {
 
     popup.className = "popup prompt popOut";
@@ -588,7 +676,11 @@ var modules = {};
     }, 150);
 
   };
-
+	
+	/*
+	 * Warns the user that their file has changed, prompts to save or close.
+	 * Triggered when a user closes a tab that has changed, and hasn't been saved.
+	 */
   this.warnSave = function(i, onSuccess, onFailure) {
 
     var dialogueMessage;
@@ -598,7 +690,10 @@ var modules = {};
     return this.createPopupDialogue("Save before closing?", dialogueMessage, "Save", "Don't save", onSuccess, onFailure, i);
 
   };
-
+	
+	/*
+	 * Closes a tab defined by i (editor id)
+	 */
   this.closeTabById = function(i) {
 
     var popup;
@@ -632,7 +727,11 @@ var modules = {};
     }
 
   };
-
+	
+	/*
+	 * Closes the current active tab.
+	 * Triggered by Ctrl+W, or closing the current tab.
+	 */
   this.closeCurrentTab = function() {
 
     var popup;
@@ -670,11 +769,19 @@ var modules = {};
     }
 
   };
-
+	
+	/*
+	 * Handles boson errors.
+	 * This should do something with the virtual console down the track.
+	 */
   this.bsError = function(err) {
     console.log("BOSON ERROR: " + err);
   };
-
+	
+	/*
+	 * Flags an editor buffer as "changed".
+	 * Triggered by Codemirror callback when editing a file.
+	 */
   this.flagHasChanged = function(i, status) {
 
     editor[i].changed = status;
@@ -690,7 +797,10 @@ var modules = {};
     }
 
   };
-
+	
+	/*
+	 * Save an editor buffer as defined by i (editor id)
+	 */
   this.saveBuffer = function(i, callback, secondcallback) {
 
     //Save the specified buffer changes to buffer.
@@ -726,7 +836,10 @@ var modules = {};
     });
 
   };
-
+	
+	/*
+	 * Saves an existing file as something else.
+	 */
   this.saveFileAs = function() {
 
     var i, fn;
@@ -763,7 +876,10 @@ var modules = {};
     return;
 
   };
-
+	
+	/*
+	 * Generates a semi-unique identifier.
+	 */
   this.createUniqueGuid = function( prep ) {
 
     var tm;
@@ -773,7 +889,10 @@ var modules = {};
     return prep + "-" + tm;
 
   };
-
+	
+	/* 
+	 * Saves an editor buffer defined by i (editor id)
+	 */
   this.saveBufferById = function(i, callback) {
 
     if ( typeof callback === "function" ) {
@@ -783,7 +902,10 @@ var modules = {};
     }
 
   };
-
+	
+	/*
+	 * Saves the currently active editor buffer to disk.
+	 */
   this.saveCurrentBuffer = function(callback) {
 
     if ( boson.current_editor === null || boson.current_editor === false ) {
@@ -797,7 +919,10 @@ var modules = {};
     }
 
   };
-
+	
+	/*
+	 * Synchronously saves a editor buffer as defined by i (editor id)
+	 */
   this.saveBufferByIdSync = function( i ) {
 
     //Save the specified buffer changes to buffer.
@@ -818,7 +943,10 @@ var modules = {};
     return;
 
   };
-
+	
+	/*
+	 * Loops through all active file buffers, and save them in their current state to disk.
+	 */
   this.saveAllBuffers = function(callback) {
 
     var key;
@@ -836,7 +964,10 @@ var modules = {};
     return;
 
   };
-
+	
+	/*
+	 * Sets the window title.
+	 */
   this.setTitle = function(titleBuffer) {
 
     var proposedTitle;
@@ -850,16 +981,25 @@ var modules = {};
     }
 
   }
-
+	
+	/*
+	 * Launches Devtools.
+	 */
   this.debug = function() {
     win.showDevTools();
   };
-
+	
+	/*
+	 * Reloads the window.
+	 * Broken.
+	 */
   this.reinit = function() {
     win.reload();
   };
 
-
+	/*
+	 * Forks a new process and initializes the browser live preview window.
+	 */
   this.forkBrowserView = function() {
 
     var proc, execUri, uri, mode, popup, onSuccess, onFailure;
@@ -896,7 +1036,10 @@ var modules = {};
     }
 
   };
-
+	
+	/*
+	 * Initializes the live preview process.
+	 */
   this.initLivePreview = function ( url ) {
 
     var passObject, livepreview;
@@ -916,7 +1059,10 @@ var modules = {};
     gui.Window.get().close(true);
 
   };
-
+	
+	/*
+	 * Trigger Codemirror undo buffer on current document.
+	 */
   this.cmUndo = function() {
 
     if ( boson.current_editor === null || boson.current_editor === false ) {
@@ -926,7 +1072,10 @@ var modules = {};
     editor[boson.current_editor].cm.undo();
 
   };
-
+	
+	/*
+	 * Triggers Codemirror redo buffer on current document.
+	 */
   this.cmRedo = function() {
 
     if ( boson.current_editor === null || boson.current_editor === false ) {
@@ -936,7 +1085,10 @@ var modules = {};
     editor[boson.current_editor].cm.redo();
 
   };
-
+	
+	/*
+	 * Triggers the Codemirror find function.
+	 */
   this.cmFind = function() {
 
     if ( boson.current_editor === null || boson.current_editor === false ) {
@@ -946,7 +1098,10 @@ var modules = {};
     CodeMirror.commands.find(editor[boson.current_editor].cm);
 
   };
-
+	
+	/*
+	 * Triggers the Codemirror replace function.
+	 */
   this.cmReplace = function() {
 
     if ( boson.current_editor === null || boson.current_editor === false ) {
@@ -956,7 +1111,10 @@ var modules = {};
     CodeMirror.commands.replace(editor[boson.current_editor].cm);
 
   };
-
+	
+	/*
+	 * Creates the about dialogue, and hooks cancel events.
+	 */
   this.about = function() {
 
     var popup, popup_cancel_button, popup_logo, popup_title, popup_description, aboutTxt;
@@ -1011,7 +1169,10 @@ var modules = {};
     return popup;
 
   };
-
+	
+	/*
+	 * Initializes core modules.
+	 */
   this.moduleInit = function() {
 
     var passObject, key;
@@ -1035,7 +1196,11 @@ var modules = {};
     }
 
   };
-
+	
+	/*
+	 * Initialize function for the Boson core.
+	 * Bootstraps the entire app.
+	 */
   this.init = function() {
 
     var startupTime, bootUpTime, totalBootTime, i, fileCount, argCountType;
@@ -1107,7 +1272,10 @@ var modules = {};
     this.log("Boot complete, " + totalBootTime + " ms");
 
   };
-
+	
+	/* 
+	 * Closes the Boson app.
+	 */
   this.closeBoson = function() {
 
     var key, allSaved = true, popup;
