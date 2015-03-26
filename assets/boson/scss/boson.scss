@@ -1,12 +1,3 @@
-$themebodybg: #4d5052;
-$themebodyfg: #bbbbbb;
-$themeboxborder: #2f3233;
-$themeboxfadeborder: #505455;
-$themetopbarbg: #4a4b4b;
-$themeeditorbg: #393939;
-$tabactivebottom: #4f4f4f;
-$sidebarhighlight: #2b5a76;
-
 * {
 	box-sizing: border-box;
 }
@@ -15,8 +6,6 @@ body {
 	margin: 0;
 	font-family: Source Sans Pro;
 	font-size: 13px;
-	background: $themebodybg;
-	color: $themebodyfg;
 	cursor: default;
 }
 
@@ -26,7 +15,6 @@ body {
 	left: 0;
 	width: 100%;
 	height: 30px;
-	background: #181818;
 	font-size: 14px;
 	line-height: 30px;
 	-webkit-user-select: none;
@@ -52,13 +40,9 @@ body {
 	}
 	ul.submenu {
 		position: absolute;
-		background: #181818;
 		z-index: 99;
 		margin-left: -10px;
 		margin-top: -1px;
-		border-bottom: 1px solid #333;
-		border-right: 1px solid #333;
-		border-left: 1px solid #333;
 		display: none;
 
 		li {
@@ -71,23 +55,18 @@ body {
 				position: absolute;
 				right: 20px;
 				top: 0;
-				color: #555;
 			}
 		}
 		li:hover aside {
-				color: #eee;
 				opacity: 0.25;
 		}
 		li.space {
 			line-height: auto;
 			height: 1px;
-			background: #2c2c2c;
 			margin: 2px auto;
 			width: 80%;
 		}
 		li:hover {
-			background: $sidebarhighlight;
-			color: #eee;
 		}
 	}
 }
@@ -100,7 +79,6 @@ body {
 	height: calc( 100% - 30px);
 	width: 240px;
 	-webkit-user-select: none;
-	background: #222;
 	overflow-y: scroll;
 
 	.module {
@@ -134,7 +112,6 @@ body {
 	left: 240px;
 	height: 31px;
 	width: calc(100% - 240px);
-	background: #222;
 	-webkit-user-select: none;
 }
 
@@ -142,10 +119,8 @@ body {
 	margin: 0;
 	padding-left: 0;
 	height: 31px;
-	
 	-webkit-user-select: none;
 	font-size: 12px;
-	background: #222;
 
 	ul {
 		margin: 0;
@@ -162,17 +137,13 @@ body {
 		width: 100px;
 		list-style-type: none;
 		margin-top: 0;
-		background: #343434;
 		line-height: 31px;
-		border-right: 1px solid #222;
 		white-space: nowrap;
   	overflow: hidden;
   	text-overflow: ellipsis;
 	}
 	li.active {
-		background: #404040;
 		margin-top: 0;
-		color: #fff;
 		min-width: 150px;
 
 		.close {
@@ -236,7 +207,6 @@ body {
 	ul {
 		margin: 0;
 		padding: 5px 0 0 0;
-		color: #eee;
 	}
 
 	li {
@@ -253,11 +223,10 @@ body {
 	}
 
 	li.current {
-		background: $sidebarhighlight;
+		
 	}
 
 	li.current ul, li.current ul * {
-		background: #222;
 	}
 
 	li[data-type=folder] span:before {
@@ -381,8 +350,6 @@ body {
 	width: 380px;
 	height: 225px;
 	margin: auto;
-	border: 1px solid #111;
-	background: #393939;
 	text-align: center;
 	-webkit-user-select: none;
 	-webkit-animation: popIn 0.25s forwards;
@@ -420,11 +387,9 @@ body {
 	input.find {
 		display: block;
 		width: 80%;
-		background: #292929;
 		border-style: none;
 		margin: 20px auto 50px auto;
 		padding: 0.75em 1em;
-		color: #eee;
 		font-family: Source Sans Pro;
 		font-size: 16px;
 	}
@@ -455,14 +420,10 @@ body {
 	}
 
 	.btn-accept {
-		color: #eee;
-		background: $sidebarhighlight;
 		border-style: none;
 	}
 
 	.btn-decline {
-		color: #aaa;
-		background: #333;
 		border-style: none;
 	}
 

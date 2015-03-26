@@ -50,6 +50,22 @@ var modules = {};
   };
 
   /*
+   * Injects the current Boson theme CSS.
+   */
+  this.injectTheme = function() {
+
+    var theme, link;
+
+    theme = "assets/boson/css/themes/" + config.bosontheme + ".css";
+    link = document.createElement("link");
+    link.setAttribute("rel", "stylesheet");
+    link.setAttribute("href", theme);
+
+    document.head.appendChild(link);
+
+  };
+
+  /*
    * Toggles the sidebar on and off.
    */
   this.toggleSidebar = function() {
@@ -1244,6 +1260,7 @@ var modules = {};
 
     //Preload dom selection.
     this.preloadDom();
+    this.injectTheme();
 
     bs.setFontSize(config.fontSize);
 
@@ -1330,6 +1347,7 @@ var modules = {};
 
 })(window, {
   theme: "base16-dark",
+  bosontheme: "dark",
   tabSize: 2,
   indentWithTabs: true,
   fontSize: 24
