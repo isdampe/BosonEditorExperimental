@@ -1,22 +1,25 @@
 ![Boson logo](https://raw.githubusercontent.com/isdampe/BosonEditorExperimental/master/assets/boson/media/logo.png)
 
 #Boson - An experimental editor
-Boson is an experimental editor built primarily for web development. It's written in NodeJS, and wrapped in
+Boson is a minimalistic experimental source code editor. It's written in Node, and wrapped in
 Nw.js as a runtime container for easy cross-platform integration.
 
-Boson is still very experimental and should not be considered even close to stable - it's just fun to poke around
-in.
+It utilizes Codemirror in place for it's source view highlighting and editing.
 
-##Why not use brackets or atom?
-While brackets and atom are __awesome__, they do have a few performance issues and tend to run a bit slower than I like. In my line of work, they also pack _too many_ features for what is essentially, a text editor.
+##Keeping things simple
+Modern editors tend to be _full_ of features, most of which, we (well, myself anyway) rarely use. A side affect of
+this can be crippling performance, gigantic menus, and a slow learning curve.
+
+Boson was written with this in mind, and fundamentally, aims to be a minimal editor that has the bare essetentials
+only.
 
 ##Contributing
 Found a bug? Great - go ahead and open an issue, with clear instructions on how to re-produce.  
 Written a patch? Go ahead and send your pull request with clear instructions what and how your patch fixes something.
 
 ###To do
-~~Need to standardize modules / plugins, and provide various hooks.~~
-Need to autoscan and call init() on modules found.
+~~Standardize modules for core modules~~  
+Develop a "plugin" architecture for user written extensions  
 
 And lots more...
 
