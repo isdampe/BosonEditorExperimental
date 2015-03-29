@@ -1,0 +1,7 @@
+{
+	"theme": "base16-dark",
+	"bosontheme": "dark",
+	"tabSize": 2,
+	"indentWithTabs": true,
+  "fontSize": 24
+}
