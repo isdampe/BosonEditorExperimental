@@ -1,0 +1,119 @@
+$themebodybg: #4d5052;
+$themebodyfg: #bbbbbb;
+$themeboxborder: #2f3233;
+$themeboxfadeborder: #505455;
+$themetopbarbg: #4a4b4b;
+$themeeditorbg: #393939;
+$tabactivebottom: #4f4f4f;
+$sidebarhighlight: #2b5a76;
+
+body {
+	background: $themebodybg;
+	color: $themebodyfg;
+}
+
+#menu {
+	background: #181818;
+
+	ul.submenu {
+		background: #181818;
+		border-bottom: 1px solid #333;
+		border-right: 1px solid #333;
+		border-left: 1px solid #333;
+	
+		li {
+			aside {
+				color: #555;
+			}
+		}
+		li:hover aside {
+				color: #eee;
+				opacity: 0.25;
+		}
+		li.space {
+			background: #2c2c2c;
+		}
+		li:hover {
+			background: $sidebarhighlight;
+			color: #eee;
+		}
+	}
+}
+
+#sidebar-entrypoint {
+	background: #222;
+}
+
+#topbar-entrypoint {
+	background: #222;
+}
+
+#tabs-entrypoint {
+	background: #222;
+
+	li {
+		background: #343434;
+		border-right: 1px solid #222;
+	}
+	li.active {
+		background: #404040;
+		color: #fff;
+	}
+}
+
+#editor-entrypoint {
+	background: url("../../media/logo-256.png") center center no-repeat #292929;
+}
+
+#module-project {
+
+	ul {
+		color: #eee;
+	}
+	li.current {
+		background: $sidebarhighlight;
+	}
+
+	li.current ul, li.current ul * {
+		background: #222;
+	}
+
+	li[data-type=folder] span:before {
+		background: url("../../media/folder.png") left bottom no-repeat;
+		opacity: 0.25;
+	}
+
+	li[data-type=file] span:before {
+		background: url("../../media/file.png") left bottom no-repeat;
+		opacity: 0.25;
+	}
+}
+.popup {
+	border: 1px solid #111;
+	background: #393939;
+
+	.cancel {
+		background: url("../../media/icons.png") center center no-repeat;
+	}
+
+	.logo {
+		background: url("../../media/logo-64.png");
+	}
+	input.find {
+		background: #292929;
+		color: #eee;
+	}
+
+	.btn-accept {
+		color: #eee;
+		background: $sidebarhighlight;
+		border-style: none;
+	}
+
+	.btn-decline {
+		color: #aaa;
+		background: #333;
+		border-style: none;
+	}
+
+}

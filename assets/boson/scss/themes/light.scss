@@ -1,0 +1,156 @@
+$themebodybg: #B2AFAD;
+$themebodyfg: #444444;
+$themeboxborder: #D0CDCC;
+$themeboxfadeborder: #505455;
+$themetopbarbg: #4a4b4b;
+$themeeditorbg: #C6C6C6;
+$tabactivebottom: #B0B0B0;
+$sidebarhighlight: #ff5e5e;
+
+body {
+	background: $themebodybg;
+	color: $themebodyfg;
+}
+
+#menu {
+	background: #e7e7e7;
+
+	ul.submenu {
+		background: #e7e7e7;
+		border-bottom: 1px solid #ccc;
+		border-right: 1px solid #ccc;
+		border-left: 1px solid #ccc;
+	
+		li {
+			aside {
+				color: #aaa;
+			}
+		}
+		li:hover aside {
+				color: #111;
+				opacity: 0.25;
+		}
+		li.space {
+			background: #ccc;
+		}
+		li:hover {
+			background: $sidebarhighlight;
+			color: #111;
+		}
+	}
+}
+
+
+#editor-entrypoint {
+	background: #D6D6D6;
+}
+#editor-entrypoint::after {
+  content: "";
+  background: url("../media/logo-256.png") center center no-repeat #D6D6D6;
+  opacity: 0.75;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;   
+}
+
+#sidebar-entrypoint {
+	background: #ddd;
+}
+
+#topbar-entrypoint {
+	background: #ddd;
+}
+
+#tabs-entrypoint {
+	background: #ddd;
+
+	li {
+		background: #cbcbcb;
+		border-right: 1px solid transparent;
+	}
+	li.active {
+		background: #eee;
+		color: #000;
+	}
+}
+
+#editor-entrypoint {
+	background: url("../../media/logo-256.png") center center no-repeat #d6d6d6;
+}
+
+#module-project {
+
+	ul {
+		color: #111;
+	}
+	li.current {
+		background: $sidebarhighlight;
+	}
+
+	li.current ul, li.current ul * {
+		background: #ddd;
+	}
+
+	li[data-type=folder] span:before {
+		background: url("../../media/folder.png") left bottom no-repeat;
+		opacity: 0.25;
+	}
+
+	li[data-type=file] span:before {
+		background: url("../../media/file.png") left bottom no-repeat;
+		opacity: 0.25;
+	}
+}
+.popup {
+	border: 1px solid #666;
+	background: #ddd;
+
+	.cancel {
+		background: url("../../media/icons.png") center center no-repeat;
+	}
+
+	.logo {
+		background: url("../../media/logo-64.png");
+	}
+	input.find {
+		background: #d6d6d6;
+		color: #111;
+	}
+
+	.btn-accept {
+		color: #111;
+		background: $sidebarhighlight;
+		border-style: none;
+	}
+
+	.btn-decline {
+		color: #aaa;
+		background: #ccc;
+		border-style: none;
+	}
+
+}
+
+::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+ 
+::-webkit-scrollbar-track {
+	background: #E3E3E3;
+}
+ 
+::-webkit-scrollbar-thumb {
+	border-radius: 3px;
+	background: #999;
+}
+
+::-webkit-scrollbar-corner { 
+	display: none;
+	opacity: 0;
+	background: #dddddd;
+	
+}
