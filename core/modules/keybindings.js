@@ -2,7 +2,7 @@ exports.init = function( core ) {
 
 	//Global hotkeys.
 	window.onkeydown = function(e) {
-		console.log(e);
+		
 		if ( e.which === 27 ) {
 			//Escape.
 			core.bs.handleCancelEvents();
@@ -30,7 +30,7 @@ exports.init = function( core ) {
 
 	//Standard keys.
 	window.onkeypress = function(e) {
-		//console.log(e.which);
+		
 		switch( e.which ) {
 			case 19:
 				core.bs.saveCurrentBuffer();

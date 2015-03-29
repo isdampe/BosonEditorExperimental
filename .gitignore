@@ -5,3 +5,4 @@ libffmpegsumo.so
 nw
 nw.pak
 .sass-cache/*
+config.json

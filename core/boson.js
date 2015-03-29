@@ -50,6 +50,29 @@ var modules = {};
   };
 
   /*
+   * Loads the config from saved file.
+   */
+  this.loadConfig = function() {
+
+    var configJson, configObject, key;
+
+    configJson = fs.readFileSync("config.json", {
+      encoding: "utf-8"
+    });
+
+    try {
+      configObject = JSON.parse(configJson);
+    } catch (err) {
+      bs.error("Invalid config.json file.");
+    }
+
+    for ( key in configObject ) {
+      config[key] = configObject[key];
+    }
+
+  };
+
+  /*
    * Injects the current Boson theme CSS.
    */
   this.injectTheme = function() {
@@ -1043,7 +1066,7 @@ var modules = {};
       bs.suspendCancelEvent("Unsupported file type");
     };
 
-    if (mode !== "htmlmixed") {
+    if (mode !== "htmlmixed" || mode !== "markdown") {
 
       popup = bs.createPopupDialogue("Unsupported file type", "The file type you're trying to preview is unsupported", "Launch anyway", "Don't launch", onSuccess, onFailure, boson.current_editor);
 
@@ -1254,6 +1277,9 @@ var modules = {};
 
     //Log the startup time.
     startupTime = new Date().getTime();
+
+    //Load config.
+    bs.loadConfig();
 
     //Set Codemirror options.
     CodeMirror.modeURL = "assets/codemirror/mode/%N/%N.js";
