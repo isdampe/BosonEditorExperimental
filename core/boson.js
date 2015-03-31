@@ -108,12 +108,29 @@ var modules = {};
   };
 
   /*
+   * Updates a boson config property.
+   * Also writes the changes to disk to remember a preference.
+   */
+  this.updateConfig = function(property, value) {
+
+    var configBuffer;
+
+    config[property] = value;
+
+    configBuffer = JSON.stringify(config);
+
+    fs.writeFile("config.json", configBuffer);
+
+  };
+
+  /*
    * Sets the Codemirror font size via CSS
    * It's done like this to ensure each editor instance is uniform.
    */
   this.setFontSize = function(size) {
 
     elements.editorEntryPoint.style.fontSize = size + "px";
+    bs.updateConfig("fontSize", size);
 
   };
 
@@ -122,8 +139,12 @@ var modules = {};
    */
   this.increaseFontSize = function() {
 
-    config.fontSize = config.fontSize + 1;
-    bs.setFontSize(config.fontSize);
+    var size;
+
+    size = config.fontSize + 1;
+
+    bs.setFontSize(size);
+    bs.updateConfig("fontSize", size);
 
   };
 
@@ -132,8 +153,12 @@ var modules = {};
    */
   this.decreaseFontSize = function() {
 
-    config.fontSize = config.fontSize - 1;
-    bs.setFontSize(config.fontSize);
+    var size;
+
+    size = config.fontSize - 1;
+
+    bs.setFontSize(size);
+    bs.updateConfig("fontSize", size);
 
   };
 
