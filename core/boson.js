@@ -16,7 +16,10 @@ var modules = {};
     editor = [],
     tabs = [],
     dom, editorData = [],
-    win, cancelEvents = {};
+    win, cancelEvents = {},
+    cm = {
+      themes: []
+    };
 
   var boson = {
     current_editor: null,
@@ -24,7 +27,8 @@ var modules = {};
     working_dir: process.env.PWD,
     maxFileSize: 5242880,
     version: "0.1",
-    sidebarActive: true
+    sidebarActive: true,
+    app_dir: path.resolve(path.dirname())
   };
 
   /*
@@ -54,21 +58,55 @@ var modules = {};
    */
   this.loadConfig = function() {
 
-    var configJson, configObject, key;
-
-    configJson = fs.readFileSync("config.json", {
-      encoding: "utf-8"
-    });
+    var configJson, configObject, key, fileFound = true;
 
     try {
-      configObject = JSON.parse(configJson);
+      configJson = fs.readFileSync("config.json", {
+        encoding: "utf-8"
+      });
     } catch (err) {
-      bs.error("Invalid config.json file.");
+      bs.error("No config.json file found");
+      fileFound = false;
     }
 
-    for ( key in configObject ) {
-      config[key] = configObject[key];
+    if ( fileFound === true ) {
+      try {
+        configObject = JSON.parse(configJson);
+      } catch (err) {
+        bs.error("Invalid config.json file.");
+      }
+
+      for ( key in configObject ) {
+        config[key] = configObject[key];
+      }
     }
+
+  };
+
+  /*
+   * Loads CodeMirror themes into buffer.
+   */
+  this.loadCmThemes = function() {
+
+    var dir = boson.app_dir + "/assets/codemirror/theme", i = 0, max, name;
+
+    fs.readdir(dir, function(err,files){
+      if (err) {
+        bs.error(err);
+        return;
+      }
+
+      max = files.length;
+      for ( i=0; i<max; i = i +1 ) {
+        name = files[i].replace("-", " ").replace(".css","");
+        name = name.charAt(0).toUpperCase() + name.slice(1);
+        cm.themes.push({
+          uri: files[i],
+          name: name
+        });
+      }
+
+    });
 
   };
 
@@ -1331,16 +1369,19 @@ var modules = {};
     //Show the window.
     win.show();
 
-    //Calc boot time.
-    bootUpTime = new Date().getTime();
-    totalBootTime = bootUpTime - startupTime;
-
     //Auto select editor.
     if (boson.current_editor === null) {
       if (fileCount >= 1) {
         this.switchToEditor(fileCount - 1);
       }
     }
+
+    //Load themes.
+    bs.loadCmThemes();
+
+    //Calc boot time.
+    bootUpTime = new Date().getTime();
+    totalBootTime = bootUpTime - startupTime;
 
     //Log boot time.
     this.log("Boot complete, " + totalBootTime + " ms");
