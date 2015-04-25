@@ -5,7 +5,7 @@ $themeboxfadeborder: #505455;
 $themetopbarbg: #4a4b4b;
 $themeeditorbg: #C6C6C6;
 $tabactivebottom: #B0B0B0;
-$sidebarhighlight: #ff5e5e;
+$sidebarhighlight: #aaa;
 
 body {
 	background: $themebodybg;
@@ -20,7 +20,7 @@ body {
 		border-bottom: 1px solid #ccc;
 		border-right: 1px solid #ccc;
 		border-left: 1px solid #ccc;
-	
+
 		li {
 			aside {
 				color: #aaa;
@@ -53,7 +53,7 @@ body {
   bottom: 0;
   right: 0;
   position: absolute;
-  z-index: -1;   
+  z-index: -1;
 }
 
 #sidebar-entrypoint {
@@ -138,19 +138,19 @@ body {
 	width: 6px;
 	height: 6px;
 }
- 
+
 ::-webkit-scrollbar-track {
 	background: #E3E3E3;
 }
- 
+
 ::-webkit-scrollbar-thumb {
 	border-radius: 3px;
 	background: #999;
 }
 
-::-webkit-scrollbar-corner { 
+::-webkit-scrollbar-corner {
 	display: none;
 	opacity: 0;
 	background: #dddddd;
-	
+
 }
