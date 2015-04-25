@@ -998,7 +998,7 @@ var modules = {};
 
   };
 
-  /* 
+  /*
    * Saves an editor buffer defined by i (editor id)
    */
   this.saveBufferById = function(i, callback) {
@@ -1289,7 +1289,7 @@ var modules = {};
     modules["menu"] = require(process.cwd() + "/core/modules/menu.js");
     modules["keybindings"] = require(process.cwd() + "/core/modules/keybindings.js");
     modules["livepreview"] = require(process.cwd() + "/core/modules/livepreview.js");
-    modules["menubar"] = require(process.cwd() + "/core/modules/menubar.js");
+    modules["nativemenu"] = require(process.cwd() + "/core/modules/nativemenu.js");
 
     passObject = {
       gui: gui,
@@ -1388,7 +1388,7 @@ var modules = {};
 
   };
 
-  /* 
+  /*
    * Closes the Boson app.
    */
   this.closeBoson = function() {

@@ -1,8 +1,8 @@
-boson
-index.html
 icudtl.dat
 libffmpegsumo.so
-nw
 nw.pak
-.sass-cache/*
 config.json
+boson
+.gitignoreold
+!*assets/*
+.sass-cache/*
