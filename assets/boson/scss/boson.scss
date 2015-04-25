@@ -9,74 +9,11 @@ body {
 	cursor: default;
 }
 
-#menu {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 30px;
-	font-size: 14px;
-	line-height: 30px;
-	-webkit-user-select: none;
-
-	ul {
-		margin: 0;
-		padding: 0;
-	}
-	li {
-		float: left;
-		list-style-type: none;
-		display: block;
-		padding: 1px 10px 0;
-	}
-
-	li:first-of-type {
-		padding-left: 15px;
-
-		ul.submenu {
-			margin-left: -15px;
-			border-left: none;
-		}
-	}
-	ul.submenu {
-		position: absolute;
-		z-index: 99;
-		margin-left: -10px;
-		margin-top: -1px;
-		display: none;
-
-		li {
-			display: block;
-			float: none;
-			padding: 0 150px 0 20px;
-			position: relative;
-
-			aside {
-				position: absolute;
-				right: 20px;
-				top: 0;
-			}
-		}
-		li:hover aside {
-				opacity: 0.25;
-		}
-		li.space {
-			line-height: auto;
-			height: 1px;
-			margin: 2px auto;
-			width: 80%;
-		}
-		li:hover {
-		}
-	}
-}
-
-
 #sidebar-entrypoint {
 	position: fixed;
-	top: 30px;
+	top: 0;
 	left: 0;
-	height: calc( 100% - 30px);
+	height: calc( 100% );
 	width: 240px;
 	-webkit-user-select: none;
 	overflow-y: scroll;
@@ -108,7 +45,7 @@ body {
 
 #topbar-entrypoint {
 	position: fixed;
-	top: 30px;
+	top: 0;
 	left: 240px;
 	height: 31px;
 	width: calc(100% - 240px);
@@ -126,7 +63,7 @@ body {
 		margin: 0;
 		padding: 0;
 	}
-	
+
 	li {
 		display: block;
 		position: relative;
@@ -171,11 +108,11 @@ body {
 
 #editor-entrypoint {
 	position: fixed;
-	top: 61px;
+	top: 31px;
 	left: 240px;
 	font-size: 24px;
 	width: calc(100% - 240px);
-	height: calc(100% - 61px);
+	height: calc(100% - 31px);
 	background: url("../media/logo-256.png") center center no-repeat #292929;
 
 	textarea {
@@ -195,7 +132,7 @@ body {
 	height: 100%;
 	font-family: Ubuntu mono, monospace;
 	font-weight: 400;
-	
+
 	text-shadow: none;
 	line-height: 1!important;
 }
@@ -223,7 +160,7 @@ body {
 	}
 
 	li.current {
-		
+
 	}
 
 	li.current ul, li.current ul * {
@@ -259,7 +196,7 @@ body {
 
 	ul.hide-sub-menu {
 		max-height: 100%;
-		
+
 		span {
 			opacity: 1;
 			-webkit-animation: 0.1s fadeOut forwards!important;
