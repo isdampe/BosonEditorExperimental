@@ -1,7 +1,8 @@
 {
-	"theme": "base16-dark",
+	"theme": "tomorrow-night-eighties-port",
 	"bosontheme": "dark",
 	"tabSize": 2,
 	"indentWithTabs": true,
-  "fontSize": 24
+  "fontSize": 18,
+  "lineWrapping": true
 }
