@@ -516,7 +516,10 @@ var modules = {};
         theme: config.theme,
         autoCloseBrackets: true,
         tabSize: config.tabSize,
-        indentWithTabs: config.indentWithTabs
+        lineWrapping: config.lineWrapping,
+        indentWithTabs: config.indentWithTabs,
+        foldGutter: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
       }),
       ta: textarea,
       mode: mode,

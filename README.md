@@ -18,8 +18,10 @@ Found a bug? Great - go ahead and open an issue, with clear instructions on how 
 Written a patch? Go ahead and send your pull request with clear instructions what and how your patch fixes something.
 
 ###To do
-~~Standardize modules for core modules~~  
-Develop a "plugin" architecture for user written extensions  
+* Develop a "plugin" architecture for user written extensions  
+* Create a multi-pane engine for split view editing
+* Create a "preferences" window
+* Create a "theme" selector window. 
 
 And lots more...
 

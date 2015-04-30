@@ -1,0 +1,87 @@
+.cm-s-codepen.CodeMirror {
+	background: #1d1f20;
+	color: #fff;
+}
+/*
+  THEME
+*/
+
+/* default */
+.box pre       { color: white; } 
+
+/* e.g. var, function */
+.cm-keyword    { color: #ddca7e; }
+
+/* e.g. #id */
+.cm-atom       { color: #ddca7e; }
+
+/* e.g. 20 */
+.cm-number     { color: #d0782a; }
+
+/* e.g. px, em */
+.cm-unit       { color: #d0782a; }
+
+/* e.g. @include, [this] */
+.cm-def        { color: #809bbd; }
+
+/* e.g. $, i */ 
+.cm-variable   { color: #ddca7e; }
+
+/* e.g. for key in [this], Markdown li */ 
+.cm-variable-2 { color: #809bbd; }
+
+/* e.g. getElementbyId, CSS properties */ 
+.cm-property   { color: #9a8297; }
+
+/* e.g. CoffeeScript ->, CSS colons */ 
+.cm-operator   { color: #cccccc; }
+
+/* e.g. // comments */ 
+.cm-comment    { color: #666666; }
+
+/* e.g. "string" */ 
+.cm-string     { color: #96b38a; }
+
+/* e.g. some CSS values */ 
+.cm-string-2   { color: #FFFFFF; }
+
+/* e.g. @font-face */ 
+.cm-meta       { color: #9a8297; }
+
+/*  */ 
+.cm-header     { color: #ff6400; }
+
+/* e.g. HTML elements */ 
+.cm-tag        { color: #9a6e35; }
+
+/* e.g. class="" id="" */ 
+.cm-attribute  { color: #ddca7e; }
+
+/* not sure if used */ 
+.cm-strong     { color: #ddca7e; }
+
+/* not sure if used */ 
+.cm-em         { color: #ddca7e; }
+
+/* e.g. .box */ 
+.cm-qualifier  { color: #ddca7e; }
+
+/* not sure if used */ 
+.cm-builtin    { color: #ddca7e; }
+
+/* HTML SPECIFIC */
+/* e.g. markdown blockquote */
+.box-html .cm-atom { color: #96b38a; }
+
+/* CSS SPECIFIC */ 
+/* e.g. h1, h2 */
+.box-css .cm-tag { color: #ddca7e; }
+.cm-s-codepen .CodeMirror-gutters {background: #1d1f20; border-right: 0px;}
+.cm-s-codepen .CodeMirror-cursor {border-left: 2px solid #aaa !important;}
+
+.CodeMirror-linenumber {
+  color: #343434;
+  background: #1d1f20;
+  font-size: 16px;
+  padding: 0 10px;
+}
