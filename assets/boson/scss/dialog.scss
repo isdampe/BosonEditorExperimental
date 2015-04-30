@@ -7,7 +7,8 @@
   overflow: hidden;
   background: #292929;
   color: #bbbbbb;
-  font-size: 18px;
+  font-family: 'DejaVuSans', monospace;
+  font-size: 13px;
 }
 
 .CodeMirror-dialog-top {
@@ -24,10 +25,9 @@
   border: none;
   outline: none;
   background: transparent;
-  width: 20em;
   color: inherit;
-  font-family: Cantarell;
-  font-size: 18px;
+  font-family: 'DejaVuSans', monospace;
+  font-size: 13px;
 }
 
 .CodeMirror-dialog button {

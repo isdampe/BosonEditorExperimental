@@ -24,7 +24,7 @@ Develop a "plugin" architecture for user written extensions
 And lots more...
 
 ###Thanks to
-* Adobe.com - Source sans pro font family
+* Dejavu-fonts - http://dejavu-fonts.org/wiki/Main_Page
 * @bgrins - For the awesome native sortable js library, https://github.com/bgrins/nativesortable
 * http://ionicons.com/ - For the MIT licensed icons
 * Codemirror.net - For the awesome JS source view library
