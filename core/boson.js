@@ -1293,6 +1293,7 @@ var modules = {};
     modules["keybindings"] = require(process.cwd() + "/core/modules/keybindings.js");
     modules["livepreview"] = require(process.cwd() + "/core/modules/livepreview.js");
     modules["nativemenu"] = require(process.cwd() + "/core/modules/nativemenu.js");
+    modules["resize"] = require(process.cwd() + "/core/modules/resize.js");
 
     passObject = {
       gui: gui,
