@@ -122,14 +122,202 @@ body {
 	background: url("../media/logo-256.png") center center no-repeat #292929;
 
 	textarea {
-  		position: absolute;
-  		top: 0;
-  		left: 0;
-  		width: 1px;
-  		height: 1px;
-  		z-index: -55;
-  		opacity: 0;
-  	}
+  	position: absolute;
+  	top: 0;
+  	left: 0;
+  	width: 1px;
+  	height: 1px;
+  	z-index: -55;
+  	opacity: 0;
+  }
+
+}
+
+#editor-entrypoint {
+  
+	#viewport-1 {
+		display: block;
+		width: 100%;
+		height: 100%;
+		background: red;
+	}
+	#viewport-2 {
+		display: none;
+	}
+	#viewport-3 {
+		display: none;
+	}
+	#viewport-4 {
+		display: none;
+	}
+
+}
+
+#editor-entrypoint.two-column {
+  
+	#viewport-1 {
+		float: left;
+		display: block;
+		width: 50%;
+		height: 100%;
+		background: red;
+	}
+	#viewport-2 {
+		float: left;
+		display: block;
+		width: 50%;
+		height: 100%;
+		background: blue;
+	}
+	#viewport-3 {
+		display: none;
+	}
+	#viewport-4 {
+		display: none;
+	}
+
+}
+#editor-entrypoint.three-column {
+  
+	#viewport-1 {
+		float: left;
+		display: block;
+		width: 33.3333333332%;
+		height: 100%;
+		background: red;
+	}
+	#viewport-2 {
+		float: left;
+		display: block;
+		width: 33.3333333332%;
+		height: 100%;
+		background: blue;
+	}
+	#viewport-3 {
+		float: left;
+		display: block;
+		width: 33.3333333332%;
+		height: 100%;
+		background: green;
+	}
+	#viewport-4 {
+		display: none;
+	}
+
+}
+#editor-entrypoint.four-column {
+  
+	#viewport-1 {
+		float: left;
+		display: block;
+		width: 25%;
+		height: 100%;
+		background: red;
+	}
+	#viewport-2 {
+		float: left;
+		display: block;
+		width: 25%;
+		height: 100%;
+		background: blue;
+	}
+	#viewport-3 {
+		float: left;
+		display: block;
+		width: 25%;
+		height: 100%;
+		background: green;
+	}
+	#viewport-4 {
+		float: left;
+		display: block;
+		width: 25%;
+		height: 100%;
+		background: purple;
+	}
+
+}
+
+#editor-entrypoint.two-row {
+  
+	#viewport-1 {
+		display: block;
+		width: 100%;
+		height: 50%;
+		background: red;
+	}
+	#viewport-2 {
+		display: block;
+		width: 100%;
+		height: 50%;
+		background: blue;
+	}
+	#viewport-3 {
+		display: none;
+	}
+	#viewport-4 {
+		display: none;
+	}
+
+}
+
+#editor-entrypoint.three-row {
+  
+	#viewport-1 {
+		display: block;
+		width: 100%;
+		height: 33.333333332%;
+		background: red;
+	}
+	#viewport-2 {
+		display: block;
+		width: 100%;
+		height: 33.333333332%;
+		background: blue;
+	}
+	#viewport-3 {
+		display: block;
+		width: 100%;
+		height: 33.333333332%;
+		background: green;
+	}
+	#viewport-4 {
+		display: none;
+	}
+
+}
+
+#editor-entrypoint.grid {
+  
+	#viewport-1 {
+		float: left;
+		display: block;
+		width: 50%;
+		height: 50%;
+		background: red;
+	}
+	#viewport-2 {
+		float: left;
+		display: block;
+		width: 50%;
+		height: 50%;
+		background: blue;
+	}
+	#viewport-3 {
+		float: left;
+		display: block;
+		width: 50%;
+		height: 50%;
+		background: green;
+	}
+	#viewport-4 {
+		float: left;
+		display: block;
+		width: 50%;
+		height: 50%;
+		background: purple;
+	}
+
 }
 
 .CodeMirror {

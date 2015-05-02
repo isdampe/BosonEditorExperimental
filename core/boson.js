@@ -28,6 +28,7 @@ var modules = {};
     maxFileSize: 5242880,
     version: "0.1",
     sidebarActive: true,
+    currentViewport: 1,
     app_dir: path.resolve(path.dirname())
   };
 
@@ -45,6 +46,11 @@ var modules = {};
     elements.saveFilesInput = document.getElementById("boson-save-file");
     elements.sidebar = document.getElementById("sidebar-entrypoint");
     elements.topbar = document.getElementById("topbar-entrypoint");
+    elements.viewports = [];
+    elements.viewports[1] = document.getElementById("viewport-1");
+    elements.viewports[2] = document.getElementById("viewport-2");
+    elements.viewports[3] = document.getElementById("viewport-3");
+    elements.viewports[4] = document.getElementById("viewport-4");
 
     //Hook on change selectFilesInput.
     elements.selectFilesInput.addEventListener("change", function(res) {
@@ -470,6 +476,16 @@ var modules = {};
   }
 
   /*
+   * Injects a textarea editor into the active
+   * viewport / pane.
+   */
+  this.injectEditorToActivePane = function( element ) {
+
+    elements.viewports[boson.currentViewport].appendChild(element);
+
+  };
+
+  /*
    * Creates a new editor / Codemirror instance.
    * Also hooks required Codemirror sections.
    */
@@ -486,7 +502,8 @@ var modules = {};
     this.createTab(object, i);
 
     //Inject into DOM.
-    elements.editorEntryPoint.appendChild(textarea);
+    bs.injectEditorToActivePane(textarea);
+    //elements.editorEntryPoint.appendChild(textarea);
 
     //Try to find file type mode for CM.
     if (m = /.+\.([^.]+)$/.exec(editorData[i].name)) {
