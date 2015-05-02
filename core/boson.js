@@ -1172,14 +1172,15 @@ var modules = {};
     popup.id = "popup-about";
 
     aboutTxt = "Boson Version " + boson.version + "<br /><br />";
-    aboutTxt += "Boson is an experimental editor built primarily for web development. It's written in NodeJS, and wrapped in  Nw.js as a runtime container for easy cross-platform integration.<br /><br />";
-    aboutTxt += "Boson is still very experimental and should not be considered even close to stable - it's just fun to poke around<br /><br />";
+    aboutTxt += "Boson is an experimental source code editor. It's written in NodeJS, and wrapped in Nw.js as a runtime container for easy cross-platform integration.<br /><br />";
+    aboutTxt += "Follow or contribute to it at https://github.com/isdampe/BosonEditorExperimental<br /><br />";
     aboutTxt += "<strong>Credits</strong><br /><br />";
     aboutTxt += "@isdampe - Main developer<br />";
     aboutTxt += "@bgrins - Nativesortable.js library<br />";
     aboutTxt += "Codemirror.net - JS source view library<br />";
-    aboutTxt += "Adobe.com - Source sans pro font<br />";
+    aboutTxt += "Dejavu-fonts - Default font faces<br />";
     aboutTxt += "ionicons.com - MIT licensed icons<br />";
+    aboutTxt += "InteractJS - https://github.com/taye/interact.js<br />";
 
     popup_cancel_button = document.createElement("div");
     popup_cancel_button.className = "cancel";

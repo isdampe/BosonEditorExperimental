@@ -30,5 +30,6 @@ And lots more...
 * @bgrins - For the awesome native sortable js library, https://github.com/bgrins/nativesortable
 * http://ionicons.com/ - For the MIT licensed icons
 * Codemirror.net - For the awesome JS source view library
+* Interact.js - https://github.com/taye/interact.js
 
 > If your name is missing from this list, please let me know.

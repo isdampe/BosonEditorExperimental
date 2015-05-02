@@ -273,6 +273,7 @@ body {
 
 #popup-about {
 	height: 400px;
+	width: 440px;
 
 	.about-dialogue {
 		width: 90%;
@@ -290,7 +291,7 @@ body {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	width: 380px;
+	min-width: 380px;
 	height: 225px;
 	margin: auto;
 	text-align: center;
@@ -305,6 +306,10 @@ body {
 		margin-top: 5px;
 		margin-right: 5px;
 		background: url("../media/icons.png") center center no-repeat;
+		opacity: 0.25;
+	}
+	.cancel:hover {
+		opacity: 1;
 	}
 
 	.logo {
