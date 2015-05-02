@@ -176,17 +176,6 @@ exports.init = function( core ) {
     submenu: new core.gui.Menu()
   });
 
-  //Live browser view
-  bosonMenu.submenu.append(new core.gui.MenuItem({
-    label: 'Live browser view',
-    click: function () {
-      bs.forkBrowserView();
-    }
-  }));
-
-  //Spacer
-  bosonMenu.submenu.append(new core.gui.MenuItem({ type: 'separator' }));
-
   //About Boson
   bosonMenu.submenu.append(new core.gui.MenuItem({
     label: 'About Boson',

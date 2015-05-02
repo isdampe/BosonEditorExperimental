@@ -1109,69 +1109,6 @@ var modules = {};
   };
 
   /*
-   * Forks a new process and initializes the browser live preview window.
-   */
-  this.forkBrowserView = function() {
-
-    var proc, execUri, uri, mode, popup, onSuccess, onFailure;
-
-    if (boson.current_editor === null || boson.current_editor === false) {
-      return;
-    }
-
-    mode = editor[boson.current_editor].mode;
-
-    onSuccess = function() {
-      uri = "file://" + editorData[boson.current_editor].cwd + "/" + editorData[boson.current_editor].name;
-      execUri = "./boson live-preview " + uri;
-      proc = child.exec(execUri);
-      bs.suspendCancelEvent("Unsupported file type");
-    };
-
-    onFailure = function() {
-      bs.suspendCancelEvent("Unsupported file type");
-    };
-
-    if (mode !== "htmlmixed" || mode !== "markdown") {
-
-      popup = bs.createPopupDialogue("Unsupported file type", "The file type you're trying to preview is unsupported", "Launch anyway", "Don't launch", onSuccess, onFailure, boson.current_editor);
-
-      bs.addCancelEvent("Unsupported file type", function() {
-        bs.removePopupDialogue(popup);
-        bs.suspendCancelEvent("Unsupported file type");
-      });
-
-      return;
-    } else {
-      onSuccess();
-    }
-
-  };
-
-  /*
-   * Initializes the live preview process.
-   */
-  this.initLivePreview = function(url) {
-
-    var passObject, livepreview;
-
-    livepreview = require(process.cwd() + "/core/modules/livepreview.js");
-
-    passObject = {
-      gui: gui,
-      win: win,
-      bs: this,
-      boson: boson,
-      elements: elements
-    };
-
-    livepreview.init(passObject);
-    bs.openLivePreviewWindow(url);
-    gui.Window.get().close(true);
-
-  };
-
-  /*
    * Trigger Codemirror undo buffer on current document.
    */
   this.cmUndo = function() {
@@ -1291,7 +1228,6 @@ var modules = {};
     //Essential modules.
     modules["treeview"] = require(process.cwd() + "/core/modules/treeview.js");
     modules["keybindings"] = require(process.cwd() + "/core/modules/keybindings.js");
-    modules["livepreview"] = require(process.cwd() + "/core/modules/livepreview.js");
     modules["nativemenu"] = require(process.cwd() + "/core/modules/nativemenu.js");
     modules["resize"] = require(process.cwd() + "/core/modules/resize.js");
 
@@ -1320,15 +1256,6 @@ var modules = {};
 
     //Check command line args.
     if (args.length > 0) {
-      if (args[0] === "live-preview") {
-        //Launch live preview window.
-        if (args.length > 1) {
-
-          bs.initLivePreview(args[1]);
-
-          return;
-        }
-      }
 
       //Is first arg file or directory?
       argCountType = fs.lstatSync(args[0]);
@@ -1341,6 +1268,7 @@ var modules = {};
           bs.openFileFromPath(args[0]);
         }
       }
+
     };
 
     //Log the startup time.
