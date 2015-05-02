@@ -1,6 +1,6 @@
 var nativemenu = this;
 var primaryMenuBar;
-var fileMenu, editMenu, prefMenu, bosonMenu;
+var fileMenu, editMenu, viewMenu, prefMenu, bosonMenu;
 var bs;
 
 exports.init = function( core ) {
@@ -115,6 +115,70 @@ exports.init = function( core ) {
   }));
 
   /*
+   * View menu
+   */
+  viewMenu = new core.gui.MenuItem({
+    label: 'View',
+    submenu: new core.gui.Menu()
+  });
+
+  //Single
+  viewMenu.submenu.append(new core.gui.MenuItem({
+    label: 'Single: 1',
+    click: function () {
+      bs.switchPaneMode('single');
+    }
+  }));
+
+  //Two columns
+  viewMenu.submenu.append(new core.gui.MenuItem({
+    label: 'Columns: 2',
+    click: function () {
+      bs.switchPaneMode('two-column');
+    }
+  }));
+
+  //Three columns
+  viewMenu.submenu.append(new core.gui.MenuItem({
+    label: 'Columns: 3',
+    click: function () {
+      bs.switchPaneMode('three-column');
+    }
+  }));
+
+  //Four columns
+  viewMenu.submenu.append(new core.gui.MenuItem({
+    label: 'Columns: 4',
+    click: function () {
+      bs.switchPaneMode('four-column');
+    }
+  }));
+
+  //Two rows
+  viewMenu.submenu.append(new core.gui.MenuItem({
+    label: 'Rows: 2',
+    click: function () {
+      bs.switchPaneMode('two-row');
+    }
+  }));
+
+  //Three rows
+  viewMenu.submenu.append(new core.gui.MenuItem({
+    label: 'Rows: 3',
+    click: function () {
+      bs.switchPaneMode('three-row');
+    }
+  }));
+
+  //Grid
+  viewMenu.submenu.append(new core.gui.MenuItem({
+    label: 'Grid: 4',
+    click: function () {
+      bs.switchPaneMode('grid');
+    }
+  }));
+
+  /*
    * Preferences menu
    */
   prefMenu = new core.gui.MenuItem({
@@ -195,6 +259,7 @@ exports.init = function( core ) {
   //Append it all.
   primaryMenuBar.append( fileMenu );
   primaryMenuBar.append( editMenu );
+  primaryMenuBar.append( viewMenu );
   primaryMenuBar.append( prefMenu );
   primaryMenuBar.append( bosonMenu );
   core.win.menu = primaryMenuBar;

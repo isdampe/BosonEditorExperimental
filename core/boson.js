@@ -476,6 +476,15 @@ var modules = {};
   }
 
   /*
+   * Switches the pane mode as specified.
+   */
+  this.switchPaneMode = function( mode ) {
+
+    elements.editorEntryPoint.className = mode;
+
+  };
+
+  /*
    * Injects a textarea editor into the active
    * viewport / pane.
    */
