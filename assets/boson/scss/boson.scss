@@ -6,7 +6,6 @@ body {
 	margin: 0;
 	font-family: 'DejaVuSans', Open Sans, sans-serif;
 	font-size: 13px;
-	cursor: default;
 	font-weight: 500;
 }
 
@@ -15,11 +14,11 @@ body {
 	top: 0;
 	left: 0;
 	height: calc( 100% );
-	width: 240px;
+	width: 190px;
 	font-size: 11px;
 	-webkit-user-select: none;
 	overflow-y: scroll;
-	padding: 20px;
+	padding: 0 20px 0 0;
 
 	.module {
 
@@ -49,18 +48,19 @@ body {
 #topbar-entrypoint {
 	position: fixed;
 	top: 0;
-	left: 240px;
-	height: 31px;
-	width: calc(100% - 240px);
+	left: 190px;
+	height: 40px;
+	width: calc(100% - 190px);
 	-webkit-user-select: none;
 }
 
 #tabs-entrypoint {
 	margin: 0;
 	padding-left: 0;
-	height: 31px;
+	height: 40px;
 	-webkit-user-select: none;
 	font-size: 11px;
+	margin-top: 5px;
 
 	ul {
 		margin: 0;
@@ -71,16 +71,19 @@ body {
 		display: block;
 		position: relative;
 		float: left;
-		padding: 0 15px;
+		padding: 0 25px 0 15px;
 		margin: 0;
 		height: 31px;
 		width: 100px;
+		min-width: 150px;
 		list-style-type: none;
 		margin-top: 0;
 		line-height: 31px;
 		white-space: nowrap;
   	overflow: hidden;
   	text-overflow: ellipsis;
+  	border-top-left-radius: 3px;
+  	border-top-right-radius: 3px;
 	}
 	li.active {
 		margin-top: 0;
@@ -111,11 +114,11 @@ body {
 
 #editor-entrypoint {
 	position: fixed;
-	top: 31px;
-	left: 240px;
+	top: 38px;
+	left: 190px;
 	font-size: 24px;
-	width: calc(100% - 240px);
-	height: calc(100% - 31px);
+	width: calc(100% - 190px);
+	height: calc(100% - 38px);
 	background: url("../media/logo-256.png") center center no-repeat #292929;
 
 	textarea {
@@ -144,16 +147,17 @@ body {
 
 	ul {
 		margin: 0;
-		padding: 0;
+		padding: 5px 0 0 0;
 	}
 
 	li {
-		line-height: 25px;
+		line-height: 20px;
 		list-style-type: none;
+		cursor: default;
 
 		span {
 			display: block;
-			padding: 0 10px 0 10px;
+			padding: 0 10px 0 15px;
 			overflow: hidden;
   		text-overflow: ellipsis;
 			white-space: nowrap;
@@ -172,7 +176,7 @@ body {
 		display: inline-block;
 		width: 12px;
 		background: url("../media/folder.png") left bottom no-repeat;
-		height: 13px;
+		height: 16px;
 		content: " ";
 		opacity: 0.25;
 	}
@@ -182,7 +186,7 @@ body {
 		display: inline-block;
 		width: 12px;
 		background: url("../media/file.png") left bottom no-repeat;
-		height: 13px;
+		height: 16px;
 		content: " ";
 		opacity: 0.25;
 	}

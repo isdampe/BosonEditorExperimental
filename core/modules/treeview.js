@@ -32,7 +32,11 @@ exports.sortFiles = function ( files, cwd ) {
 	for ( key in files ) {
 
 		uid = cwd + "/" + files[key];
-		fstat = fs.statSync( uid );
+		try {
+			fstat = fs.statSync( uid );
+		} catch (err) {
+			
+		}
 
 		
 		if ( fstat.isFile() ) {

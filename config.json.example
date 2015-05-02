@@ -4,5 +4,6 @@
 	"tabSize": 2,
 	"indentWithTabs": true,
   "fontSize": 18,
-  "lineWrapping": true
+  "lineWrapping": true,
+  "sidebarWidth": 160
 }

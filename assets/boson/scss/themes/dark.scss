@@ -12,36 +12,8 @@ body {
 	color: $themebodyfg;
 }
 
-#menu {
-	background: #181818;
-
-	ul.submenu {
-		background: #181818;
-		border-bottom: 1px solid #333;
-		border-right: 1px solid #333;
-		border-left: 1px solid #333;
-	
-		li {
-			aside {
-				color: #555;
-			}
-		}
-		li:hover aside {
-				color: #eee;
-				opacity: 0.25;
-		}
-		li.space {
-			background: #2c2c2c;
-		}
-		li:hover {
-			background: $sidebarhighlight;
-			color: #eee;
-		}
-	}
-}
-
 #sidebar-entrypoint {
-	background: #222;
+	background: #d9d9d9;
 }
 
 #topbar-entrypoint {
@@ -52,12 +24,29 @@ body {
 	background: #222;
 
 	li {
-		background: #343434;
-		border-right: 1px solid #222;
+		background: #222;
+		border-left: 2px solid #222;
+		border-top: 1px solid transparent;
+		border-right: 1px solid transparent;
+
+		.close {
+			opacity: 0.25;
+		}
+		.close:hover {
+			opacity: 1;
+		}
+
 	}
 	li.active {
-		background: #404040;
-		color: #fff;
+		background: #313131;
+		border-left: 2px solid $sidebarhighlight;
+		border-top: 1px solid #111;
+		border-right: 1px solid #111;
+		color: #eee;
+
+		.close {
+			background: url("../../media/icons.png") center center no-repeat;
+		}
 	}
 }
 
@@ -68,14 +57,15 @@ body {
 #module-project {
 
 	ul {
-		color: #eee;
+		color: #111;
 	}
 	li.current {
 		background: $sidebarhighlight;
+		color: #fff;
 	}
 
 	li.current ul, li.current ul * {
-		background: #222;
+		background: #d9d9d9;
 	}
 
 	li[data-type=folder] span:before {

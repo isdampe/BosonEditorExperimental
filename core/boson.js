@@ -1289,7 +1289,7 @@ var modules = {};
     var passObject, key;
 
     //Essential modules.
-    modules["menu"] = require(process.cwd() + "/core/modules/menu.js");
+    modules["treeview"] = require(process.cwd() + "/core/modules/treeview.js");
     modules["keybindings"] = require(process.cwd() + "/core/modules/keybindings.js");
     modules["livepreview"] = require(process.cwd() + "/core/modules/livepreview.js");
     modules["nativemenu"] = require(process.cwd() + "/core/modules/nativemenu.js");
@@ -1300,7 +1300,8 @@ var modules = {};
       win: win,
       bs: this,
       boson: boson,
-      elements: elements
+      elements: elements,
+      config: config
     };
 
     for (key in modules) {
@@ -1446,5 +1447,7 @@ var modules = {};
   bosontheme: "dark",
   tabSize: 2,
   indentWithTabs: true,
-  fontSize: 24
+  fontSize: 18,
+	lineWrapping: true,
+	sidebarWidth: 190
 });
