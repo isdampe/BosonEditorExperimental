@@ -29,8 +29,14 @@ var modules = {};
     version: "0.1",
     sidebarActive: true,
     currentViewport: 1,
+    currentSubView: [],
     app_dir: path.resolve(path.dirname())
   };
+
+  boson.currentSubView[1] = null;
+  boson.currentSubView[2] = null;
+  boson.currentSubView[3] = null;
+  boson.currentSubView[4] = null;
 
   /*
    * Preloads commonly used UI elements into cache, and hooks file inputs required by Nw.js
@@ -56,6 +62,20 @@ var modules = {};
     elements.selectFilesInput.addEventListener("change", function(res) {
       bs.attemptOpenFiles(this.value);
     }, false);
+
+    //Hook on viewport focus.
+    elements.viewports[1].addEventListener("click", function(e){
+      bs.activateViewport(1);
+    });
+    elements.viewports[2].addEventListener("click", function(e){
+      bs.activateViewport(2);
+    });
+    elements.viewports[3].addEventListener("click", function(e){
+      bs.activateViewport(3);
+    });
+    elements.viewports[4].addEventListener("click", function(e){
+      bs.activateViewport(4);
+    });
 
   };
 
@@ -468,9 +488,11 @@ var modules = {};
    * Activates a tab if it's not currently active.
    */
   this.activateTab = function(i) {
+
     if (boson.current_editor !== null && boson.current_editor !== false) {
       tabs[boson.current_editor].tab.className = "";
     }
+
     tabs[i].tab.className = "active";
 
   }
@@ -481,6 +503,15 @@ var modules = {};
   this.switchPaneMode = function( mode ) {
 
     elements.editorEntryPoint.className = mode;
+
+  };
+
+  /*
+   * Activates specified viewport for focus.
+   */
+  this.activateViewport = function( viewport ) {
+
+    boson.currentViewport = viewport;
 
   };
 
@@ -549,7 +580,8 @@ var modules = {};
       }),
       ta: textarea,
       mode: mode,
-      changed: false
+      changed: false,
+      currentViewport: boson.currentViewport
     };
 
     //Hide the editor.
@@ -560,6 +592,9 @@ var modules = {};
       if (editor[i].changed === false) {
         this.flagHasChanged(i, true);
       }
+    });
+    editor[i].cm.on("focus", function(cm){
+      boson.currentViewport = editor[i].currentViewport;
     });
 
     if (typeof activateOnComplete !== "undefined") {
@@ -713,7 +748,9 @@ var modules = {};
   this.hideEditor = function(i) {
 
     if (i !== false) {
-      editor[i].cm.getWrapperElement().style.display = "none";
+      if ( editor[i].hasOwnProperty("cm") ) {
+        editor[i].cm.getWrapperElement().style.display = "none";
+      }
     }
 
   }
@@ -723,13 +760,25 @@ var modules = {};
    * Triggered by clicking on an inactive tab.
    */
   this.switchToEditor = function(i) {
-    if (boson.current_editor !== i) {
-      if (boson.current_editor !== null) {
-        this.hideEditor(boson.current_editor)
+
+    var newViewPort;
+
+    newViewPort = editor[i].currentViewport;
+
+    if (boson.current_editor !== i) { 
+      if ( boson.currentSubView[newViewPort] !== null ) {
+
+        if ( i !== boson.currentSubView[newViewPort] ) {
+          this.hideEditor(boson.currentSubView[newViewPort]);
+        }
       }
+
       this.showEditor(i);
       this.activateTab(i);
       boson.current_editor = i;
+      boson.currentSubView[newViewPort] = i;
+      boson.currentViewport = newViewPort;
+
       if (editor[i].changed === true) {
         this.setTitle(editorData[i].cwd + "/" + editorData[i].name + " *");
       } else {

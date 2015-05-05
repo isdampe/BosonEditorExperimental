@@ -139,7 +139,6 @@ body {
 		display: block;
 		width: 100%;
 		height: 100%;
-		background: red;
 	}
 	#viewport-2 {
 		display: none;
@@ -160,14 +159,14 @@ body {
 		display: block;
 		width: 50%;
 		height: 100%;
-		background: red;
+		border-right: 1px solid #333;
 	}
 	#viewport-2 {
 		float: left;
 		display: block;
 		width: 50%;
 		height: 100%;
-		background: blue;
+		border-left: 1px solid #000;	
 	}
 	#viewport-3 {
 		display: none;
@@ -184,21 +183,22 @@ body {
 		display: block;
 		width: 33.3333333332%;
 		height: 100%;
-		background: red;
+		border-right: 1px solid #333;
 	}
 	#viewport-2 {
 		float: left;
 		display: block;
 		width: 33.3333333332%;
 		height: 100%;
-		background: blue;
+		border-left: 1px solid #000;
+		border-right: 1px solid #333;
 	}
 	#viewport-3 {
 		float: left;
 		display: block;
 		width: 33.3333333332%;
 		height: 100%;
-		background: green;
+		border-left: 1px solid #000;
 	}
 	#viewport-4 {
 		display: none;
@@ -212,28 +212,30 @@ body {
 		display: block;
 		width: 25%;
 		height: 100%;
-		background: red;
+		border-right: 1px solid #333;
 	}
 	#viewport-2 {
 		float: left;
 		display: block;
 		width: 25%;
 		height: 100%;
-		background: blue;
+		border-left: 1px solid #000;
+		border-right: 1px solid #333;
 	}
 	#viewport-3 {
 		float: left;
 		display: block;
 		width: 25%;
 		height: 100%;
-		background: green;
+		border-left: 1px solid #000;
+		border-right: 1px solid #333;
 	}
 	#viewport-4 {
 		float: left;
 		display: block;
 		width: 25%;
 		height: 100%;
-		background: purple;
+		border-left: 1px solid #000;
 	}
 
 }
@@ -244,13 +246,13 @@ body {
 		display: block;
 		width: 100%;
 		height: 50%;
-		background: red;
+		border-bottom: 1px solid #000;
 	}
 	#viewport-2 {
 		display: block;
 		width: 100%;
 		height: 50%;
-		background: blue;
+		border-top: 1px solid #333;
 	}
 	#viewport-3 {
 		display: none;
@@ -267,19 +269,20 @@ body {
 		display: block;
 		width: 100%;
 		height: 33.333333332%;
-		background: red;
+		border-bottom: 1px solid #000;
 	}
 	#viewport-2 {
 		display: block;
 		width: 100%;
 		height: 33.333333332%;
-		background: blue;
+		border-bottom: 1px solid #000;
+		border-top: 1px solid #333;
 	}
 	#viewport-3 {
 		display: block;
 		width: 100%;
 		height: 33.333333332%;
-		background: green;
+		border-top: 1px solid #333;
 	}
 	#viewport-4 {
 		display: none;
@@ -294,28 +297,32 @@ body {
 		display: block;
 		width: 50%;
 		height: 50%;
-		background: red;
+		border-bottom: 1px solid #000;
+		border-right: 1px solid #000;
 	}
 	#viewport-2 {
 		float: left;
 		display: block;
 		width: 50%;
 		height: 50%;
-		background: blue;
+		border-left: 1px solid #333;
+		border-bottom: 1px solid #000;
 	}
 	#viewport-3 {
 		float: left;
 		display: block;
 		width: 50%;
 		height: 50%;
-		background: green;
+		border-top: 1px solid #333;	
+		border-right: 1px solid #000;
 	}
 	#viewport-4 {
 		float: left;
 		display: block;
 		width: 50%;
 		height: 50%;
-		background: purple;
+		border-top: 1px solid #333;	
+		border-left: 1px solid #333;
 	}
 
 }
@@ -471,6 +478,10 @@ body {
 		text-align: left;
 		padding: 0 10px;
 	}
+}
+
+.prompt {
+	max-width: 500px;
 }
 
 .popup {
