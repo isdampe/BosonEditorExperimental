@@ -595,6 +595,7 @@ var modules = {};
     });
     editor[i].cm.on("focus", function(cm){
       boson.currentViewport = editor[i].currentViewport;
+      bs.switchToEditor(i);
     });
 
     if (typeof activateOnComplete !== "undefined") {
