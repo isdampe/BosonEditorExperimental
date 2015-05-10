@@ -19,7 +19,7 @@ Written a patch? Go ahead and send your pull request with clear instructions wha
 
 ###To do
 * Develop a "plugin" architecture for user written extensions  
-* Create a multi-pane engine for split view editing
+* ~~Create a multi-pane engine for split view editing~~
 * Create a "preferences" window
 * Create a "theme" selector window. 
 
