@@ -126,7 +126,7 @@ exports.init = function( core ) {
   viewMenu.submenu.append(new core.gui.MenuItem({
     label: 'Single: 1',
     click: function () {
-      bs.switchPaneMode('single');
+      bs.switchPaneMode('single',1);
     }
   }));
 
@@ -134,7 +134,7 @@ exports.init = function( core ) {
   viewMenu.submenu.append(new core.gui.MenuItem({
     label: 'Columns: 2',
     click: function () {
-      bs.switchPaneMode('two-column');
+      bs.switchPaneMode('two-column',2);
     }
   }));
 
@@ -142,7 +142,7 @@ exports.init = function( core ) {
   viewMenu.submenu.append(new core.gui.MenuItem({
     label: 'Columns: 3',
     click: function () {
-      bs.switchPaneMode('three-column');
+      bs.switchPaneMode('three-column',3);
     }
   }));
 
@@ -150,7 +150,7 @@ exports.init = function( core ) {
   viewMenu.submenu.append(new core.gui.MenuItem({
     label: 'Columns: 4',
     click: function () {
-      bs.switchPaneMode('four-column');
+      bs.switchPaneMode('four-column',4);
     }
   }));
 
@@ -158,7 +158,7 @@ exports.init = function( core ) {
   viewMenu.submenu.append(new core.gui.MenuItem({
     label: 'Rows: 2',
     click: function () {
-      bs.switchPaneMode('two-row');
+      bs.switchPaneMode('two-row',2);
     }
   }));
 
@@ -166,7 +166,7 @@ exports.init = function( core ) {
   viewMenu.submenu.append(new core.gui.MenuItem({
     label: 'Rows: 3',
     click: function () {
-      bs.switchPaneMode('three-row');
+      bs.switchPaneMode('three-row',3);
     }
   }));
 
@@ -174,7 +174,7 @@ exports.init = function( core ) {
   viewMenu.submenu.append(new core.gui.MenuItem({
     label: 'Grid: 4',
     click: function () {
-      bs.switchPaneMode('grid');
+      bs.switchPaneMode('grid',4);
     }
   }));
 

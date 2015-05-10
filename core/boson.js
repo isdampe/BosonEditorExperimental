@@ -500,9 +500,46 @@ var modules = {};
   /*
    * Switches the pane mode as specified.
    */
-  this.switchPaneMode = function( mode ) {
+  this.switchPaneMode = function( mode, colNumber ) {
 
     elements.editorEntryPoint.className = mode;
+    bs.rerouteOverflowingPanes( mode, colNumber );
+
+  };
+
+  /*
+   * Moves editors out of inactive viewports, into the closest active viewport.
+   */
+  this.rerouteOverflowingPanes = function( mode, colNumber ) {
+
+    var i, max, currentViewport, futureViewport;
+
+    max = editor.length;
+
+    for ( i = 0; i<max; i++ ) {
+      currentViewport = editor[i].currentViewport;
+      if ( currentViewport > colNumber ) {
+
+        futureViewport = colNumber;
+
+        bs.moveEditorToViewport(i,futureViewport)
+
+      }
+    }
+
+  };
+
+  /*
+   * Moves a specified editor to a new viewport via DOM.
+   */
+  this.moveEditorToViewport = function( i, futureViewport ) {
+
+    //Append to new viewport.
+    elements.viewports[futureViewport].appendChild( editor[i].ta );
+    elements.viewports[futureViewport].appendChild( editor[i].cm.getWrapperElement() );
+
+    //Update editor.
+    editor[i].currentViewport = futureViewport;
 
   };
 
@@ -543,7 +580,6 @@ var modules = {};
 
     //Inject into DOM.
     bs.injectEditorToActivePane(textarea);
-    //elements.editorEntryPoint.appendChild(textarea);
 
     //Try to find file type mode for CM.
     if (m = /.+\.([^.]+)$/.exec(editorData[i].name)) {
