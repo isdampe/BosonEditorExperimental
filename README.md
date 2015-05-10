@@ -10,8 +10,7 @@ It utilizes Codemirror in place for it's source view highlighting and editing.
 Modern editors tend to be _full_ of features, most of which, we (well, myself anyway) rarely use. A side affect of
 this can be crippling performance, gigantic menus, and a slow learning curve.
 
-Boson was written with this in mind, and fundamentally, aims to be a minimal editor that has the bare essetentials
-only.
+Boson was written with this in mind, and fundamentally, aims to be a minimal editor that has the bare essentials only.
 
 ##Contributing
 Found a bug? Great - go ahead and open an issue, with clear instructions on how to re-produce.  
