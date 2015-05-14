@@ -30,6 +30,7 @@ var modules = {};
     sidebarActive: true,
     currentViewport: 1,
     currentSubView: [],
+    currentPaneMode: "single",
     app_dir: path.resolve(path.dirname())
   };
 
@@ -44,6 +45,7 @@ var modules = {};
   this.preloadDom = function() {
 
     elements.editorEntryPoint = document.getElementById("editor-entrypoint");
+    elements.editorWrapper = document.getElementById("editor-wrapper");
     elements.tabsEntryPoint = document.getElementById("tabs-entrypoint");
     elements.bodyEntryPoint = document.getElementById("body-entrypoint");
     elements.selectFilesInput = document.getElementById("boson-select-files");
@@ -159,12 +161,12 @@ var modules = {};
 
     if (boson.sidebarActive === true) {
       elements.sidebar.className = "sidebar-deactivated";
-      elements.editorEntryPoint.className = "editor-fullscreen";
+      elements.editorWrapper.className = "editor-fullscreen";
       elements.topbar.className = "topbar-fullscreen";
       boson.sidebarActive = false;
     } else {
       elements.sidebar.className = "";
-      elements.editorEntryPoint.className = "";
+      elements.editorWrapper.className = "";
       elements.topbar.className = "";
       boson.sidebarActive = true;
     }
@@ -447,7 +449,7 @@ var modules = {};
    */
   this.createTab = function(object, i) {
 
-    var tab, title, close;
+    var tab, title, close, contextMenu;
 
     tab = document.createElement("li");
     tab.id = "tab-" + object.guid;
@@ -475,10 +477,18 @@ var modules = {};
       bs.closeTabById(i);
     };
 
+    //Hook native menu.
+    if ( typeof bs.createTabMenu === "function" ) {
+      contextMenu = bs.createTabMenu(tab,i);
+    } else {
+      contextMenu = null;
+    }
+
     elements.tabsEntryPoint.appendChild(tab);
 
     tabs[i] = {
       tab: tab,
+      menu: contextMenu,
       title: title
     };
 
@@ -503,6 +513,7 @@ var modules = {};
   this.switchPaneMode = function( mode, colNumber ) {
 
     elements.editorEntryPoint.className = mode;
+    boson.currentPaneMode = mode;
     bs.rerouteOverflowingPanes( mode, colNumber );
 
   };
@@ -659,6 +670,11 @@ var modules = {};
     //Remove the tab.
     tabs[i].tab.parentElement.removeChild(tabs[i].tab);
 
+    //Remove the context menu.
+    if ( typeof bs.deleteTabMenu === "function" ) {
+      bs.deleteTabMenu(tabs[i].menu);
+    }
+
 
     //Clear the editor object.
     editor[i] = {};
@@ -802,7 +818,7 @@ var modules = {};
 
     newViewPort = editor[i].currentViewport;
 
-    if (boson.current_editor !== i) { 
+    if (boson.current_editor !== i) {
       if ( boson.currentSubView[newViewPort] !== null ) {
 
         if ( i !== boson.currentSubView[newViewPort] ) {
@@ -1271,6 +1287,76 @@ var modules = {};
     CodeMirror.commands.replace(editor[boson.current_editor].cm);
 
   };
+
+  /*
+   * Creates a dialogue to pick a new pane for a specified editor.
+   */
+  this.selectNewPane = function(xi) {
+
+    if (boson.currentPaneMode === "single") {
+      bs.log("There's no other active pane to use in single mode.");
+      return;
+    }
+
+    var popup, popup_cancel_button, paneWrapper, paneHandles = [];
+
+    popup = document.createElement("div");
+    popup.className = "popup prompt selectpane"
+    popup.id = "popup-selectpane";
+
+    popup_cancel_button = document.createElement("div");
+    popup_cancel_button.className = "cancel";
+
+    //Add the panes.
+    paneWrapper = document.createElement("div");
+    paneWrapper.id = "panewrapper";
+    paneWrapper.className = boson.currentPaneMode;
+
+    for ( i=1; i<5; i++ ) {
+      paneHandles[i] = document.createElement("div");
+      paneHandles[i].id = "viewport-" + i;
+      if ( editor[xi].currentViewport === i ) {
+        paneHandles[i].className = "viewport active viewport-" + i;
+      } else {
+        paneHandles[i].className = "viewport viewport-" + i;
+      }
+
+      //Need to preserve anonymous scope for i.
+      (function(i){
+        paneHandles[i].addEventListener("click", function(e){
+          e.preventDefault();
+          bs.moveEditorToViewport(xi,i);
+          bs.removePopupDialogue(popup);
+          bs.suspendCancelEvent("SelectPane");
+        });
+      })(i);
+
+    }
+
+    bs.addCancelEvent("SelectPane", function() {
+      bs.removePopupDialogue(popup);
+      bs.suspendCancelEvent("SelectPane");
+    });
+
+    popup_cancel_button.addEventListener("click", function(e) {
+      e.preventDefault();
+      bs.removePopupDialogue(popup);
+      bs.suspendCancelEvent("SelectPane");
+    });
+
+    for ( i=1; i<5; i++ ) {
+      paneWrapper.appendChild(paneHandles[i]);
+    }
+
+    popup.appendChild(popup_cancel_button);
+    popup.appendChild(paneWrapper);
+
+    elements.bodyEntryPoint.appendChild(popup);
+
+    return popup;
+
+  };
+
 
   /*
    * Creates the about dialogue, and hooks cancel events.

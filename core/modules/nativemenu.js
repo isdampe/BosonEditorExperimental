@@ -1,11 +1,12 @@
 var nativemenu = this;
 var primaryMenuBar;
 var fileMenu, editMenu, viewMenu, prefMenu, bosonMenu;
-var bs;
+var bs, coreGl;
 
 exports.init = function( core ) {
 
   bs = core.bs;
+  coreGl = core;
   primaryMenuBar = new core.gui.Menu({ type: 'menubar' });
 
   /*
@@ -263,5 +264,66 @@ exports.init = function( core ) {
   primaryMenuBar.append( prefMenu );
   primaryMenuBar.append( bosonMenu );
   core.win.menu = primaryMenuBar;
+
+  //Hook functions into core.
+  bs.createTabMenu = nativemenu.createTabMenu;
+  bs.deleteTabMenu = nativemenu.deleteTabMenu;
+
+};
+
+exports.createTabMenu = function( element, i ) {
+
+  var contextMenu;
+
+  contextMenu = new coreGl.gui.Menu();
+
+  //Close tab.
+  contextMenu.append(new coreGl.gui.MenuItem({
+    label: 'Close tab',
+    click: function() {
+      bs.closeTabById(i);
+    }
+  }));
+
+  //Move to pane.
+  contextMenu.append(new coreGl.gui.MenuItem({
+    label: 'Move to pane...',
+    click: function() {
+      bs.selectNewPane(i);
+    }
+  }));
+
+  contextMenu.append(new coreGl.gui.MenuItem({ type: 'separator' }));
+
+  //New file.
+  contextMenu.append(new coreGl.gui.MenuItem({
+    label: 'New file',
+    click: function() {
+      bs.createNewFile();
+    }
+  }));
+
+  //Open file.
+  contextMenu.append(new coreGl.gui.MenuItem({
+    label: 'Open files',
+    click: function() {
+      bs.openFileDialogue();
+    }
+  }));
+
+  element.addEventListener('contextmenu', function(e){
+    e.preventDefault();
+    contextMenu.popup(e.x,e.y);
+    return false;
+  })
+
+  return contextMenu;
+
+};
+
+exports.deleteTabMenu = function( contextMenu ) {
+
+  contextMenu = null;
+  delete contextMenu;
 
 };
