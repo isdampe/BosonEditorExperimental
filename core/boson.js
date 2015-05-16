@@ -226,6 +226,10 @@ var modules = {};
 
     var size;
 
+    if (! bs.procHooks("increase-font-size") ) {
+      return;
+    }
+
     size = config.fontSize + 1;
 
     bs.setFontSize(size);
@@ -240,6 +244,10 @@ var modules = {};
 
     var size;
 
+    if (! bs.procHooks("decrease-font-size") ) {
+      return;
+    }
+
     size = config.fontSize - 1;
 
     bs.setFontSize(size);
@@ -252,6 +260,12 @@ var modules = {};
    * Should probably write to a global buffer which would be visible via a virtual "console".
    */
   this.log = function(buffer) {
+
+    if (! bs.procHooks("bs-log", {
+      buffer: buffer
+    } ) ) {
+      return;
+    }
 
     console.log(buffer);
 
@@ -384,6 +398,12 @@ var modules = {};
    */
   this.attemptOpenFiles = function(fp) {
 
+    if (! bs.procHooks("attempt-open-files", {
+      fp: fp
+    } ) ) {
+      return;
+    }
+
     var files;
 
     //Split the string, check if multiple files have been selected.
@@ -399,6 +419,12 @@ var modules = {};
    * Opens a file from a filepath.
    */
   this.openFileFromPath = function(fp) {
+
+    if (! bs.procHooks("open-file-from-path", {
+      fp: fp
+    } ) ) {
+      return;
+    }
 
     var key, cfp, currentFileId, dialogueMessage, saveFunc;
 
@@ -496,6 +522,10 @@ var modules = {};
    */
   this.openFileDialogue = function() {
 
+    if (! bs.procHooks("open-file-dialogue") ) {
+      return;
+    }
+
     elements.selectFilesInput.click();
 
   };
@@ -505,6 +535,10 @@ var modules = {};
    * Triggered by File -> File file, or Ctrl+N
    */
   this.createNewFile = function() {
+
+    if (! bs.procHooks("create-new-file") ) {
+      return;
+    }
 
     var i;
 
@@ -545,6 +579,13 @@ var modules = {};
    * Creates a tab, and hooks everything necessary for complete use.
    */
   this.createTab = function(object, i) {
+
+    if (! bs.procHooks("create-tab", {
+      object: object,
+      i: i
+    } ) ) {
+      return;
+    }
 
     var tab, title, close, contextMenu;
 
@@ -596,6 +637,12 @@ var modules = {};
    */
   this.activateTab = function(i) {
 
+    if (! bs.procHooks("activate-tab", {
+      i: i
+    } ) ) {
+      return;
+    }
+
     if (boson.current_editor !== null && boson.current_editor !== false) {
       tabs[boson.current_editor].tab.className = "";
     }
@@ -609,6 +656,13 @@ var modules = {};
    */
   this.switchPaneMode = function( mode, colNumber ) {
 
+    if (! bs.procHooks("switch-pane-mode", {
+      mode: mode,
+      colNumber: colNumber
+    } ) ) {
+      return;
+    }
+
     elements.editorEntryPoint.className = mode;
     boson.currentPaneMode = mode;
     bs.rerouteOverflowingPanes( mode, colNumber );
@@ -619,6 +673,13 @@ var modules = {};
    * Moves editors out of inactive viewports, into the closest active viewport.
    */
   this.rerouteOverflowingPanes = function( mode, colNumber ) {
+
+    if (! bs.procHooks("reroute-overflowing-panes", {
+      mode: mode,
+      colNumber: colNumber
+    } ) ) {
+      return;
+    }
 
     var i, max, currentViewport, futureViewport;
 
@@ -642,6 +703,13 @@ var modules = {};
    */
   this.moveEditorToViewport = function( i, futureViewport ) {
 
+    if (! bs.procHooks("move-editor-to-viewport", {
+      i: i,
+      futureViewport: futureViewport
+    } ) ) {
+      return;
+    }
+
     //Append to new viewport.
     elements.viewports[futureViewport].appendChild( editor[i].ta );
     elements.viewports[futureViewport].appendChild( editor[i].cm.getWrapperElement() );
@@ -656,6 +724,12 @@ var modules = {};
    */
   this.activateViewport = function( viewport ) {
 
+    if (! bs.procHooks("activate-viewport", {
+      viewport: viewport
+    } ) ) {
+      return;
+    }
+
     boson.currentViewport = viewport;
 
   };
@@ -666,6 +740,12 @@ var modules = {};
    */
   this.injectEditorToActivePane = function( element ) {
 
+    if (! bs.procHooks("inject-editor-to-active-pane", {
+      element: element
+    } ) ) {
+      return;
+    }
+
     elements.viewports[boson.currentViewport].appendChild(element);
 
   };
@@ -675,6 +755,14 @@ var modules = {};
    * Also hooks required Codemirror sections.
    */
   this.createEditor = function(object, i, activateOnComplete) {
+
+    if (! bs.procHooks("create-editor", {
+      object: object,
+      i: i,
+      activateOnComplete: activateOnComplete
+    } ) ) {
+      return;
+    }
 
     var textarea, cmMode, m, mode, spec;
 
@@ -757,6 +845,12 @@ var modules = {};
    * Closes an editor, defined by i (editor id)
    */
   this.closeEditor = function(i) {
+
+    if (! bs.procHooks("close-editor", {
+      i: i
+    } ) ) {
+      return;
+    }
 
     //Remove the CM element.
     editor[i].cm.toTextArea();

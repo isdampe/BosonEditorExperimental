@@ -63,3 +63,51 @@ _Args: property, value_
 
 ####set-font-size
 _Args: size (Font size in pixels)_
+
+####increase-font-size
+_Args: none_
+
+####decrease-font-size
+_Args: none_
+
+####bs-log
+_Args: buffer_
+
+####attempt-open-files
+_Args: fp_
+
+####open-file-from-path
+_Args: fp_
+
+####open-file-dialogue
+_Args: none_
+
+####create-new-file
+_Args: none_
+
+####create-tab
+_Args: object, i_
+
+####activate-tab
+_Args: i_
+
+####switch-pane-mode
+_Args: mode, colNumber_
+
+####reroute-overflowing-panes
+_Args: mode, colNumber_
+
+####move-editor-to-viewport
+_Args: i, futureViewport_
+
+####activate-viewport
+_Args: viewport_
+
+####inject-editor-to-active-pane
+_Args: element_
+
+####create-editor
+_Args: object, i, activateOnComplete_
+
+####close-editor
+_Args: i_
