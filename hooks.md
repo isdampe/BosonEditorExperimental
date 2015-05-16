@@ -20,7 +20,7 @@ this.init = function() {
 
 ```
 
-Depending on the function you hook, the content of args will differ. If it's not currently document, you can debug this by checking the source code, or viewing the contents of args with the console.log function.
+Depending on the function you hook, the content of args will differ. If it's not currently documented, you can debug this by checking the source code, or viewing the contents of args with the console.log function.
 
 ###Overriding core code
 If you want to override the core functionality of a hooked function, you should always ensure you return a false value in your callback function. If you fail to return a value, the core will continue to execute its function.
@@ -34,7 +34,7 @@ this.init = function() {
     return false;
   }, "my-module-toggle-sidebar");
 
-}
+};
 
 ```
 
@@ -62,4 +62,4 @@ _Args: none_
 _Args: property, value_
 
 ####set-font-size
-_Args: size (Font size in pixels)
+_Args: size (Font size in pixels)_
