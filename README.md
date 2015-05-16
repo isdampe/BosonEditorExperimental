@@ -16,11 +16,15 @@ Boson was written with this in mind, and fundamentally, aims to be a minimal edi
 Found a bug? Great - go ahead and open an issue, with clear instructions on how to re-produce.  
 Written a patch? Go ahead and send your pull request with clear instructions what and how your patch fixes something.
 
+##Hooks
+Read about hooks over on [hooks.md](hooks.md).
+
 ###To do
 * Develop a "plugin" architecture for user written extensions  
 * ~~Create a multi-pane engine for split view editing~~
+* ~~Create a hook engine for extensions~~
 * Create a "preferences" window
-* Create a "theme" selector window. 
+* Create a "theme" selector window.
 
 And lots more...
 

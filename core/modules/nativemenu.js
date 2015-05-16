@@ -7,6 +7,7 @@ exports.init = function( core ) {
 
   bs = core.bs;
   coreGl = core;
+
   primaryMenuBar = new core.gui.Menu({ type: 'menubar' });
 
   /*

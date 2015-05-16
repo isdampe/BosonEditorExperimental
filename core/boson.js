@@ -34,6 +34,8 @@ var modules = {};
     app_dir: path.resolve(path.dirname())
   };
 
+  var hooks = [];
+
   boson.currentSubView[1] = null;
   boson.currentSubView[2] = null;
   boson.currentSubView[3] = null;
@@ -159,6 +161,10 @@ var modules = {};
    */
   this.toggleSidebar = function() {
 
+    if (! bs.procHooks("toggle-sidebar") ) {
+      return;
+    }
+
     if (boson.sidebarActive === true) {
       elements.sidebar.className = "sidebar-deactivated";
       elements.editorWrapper.className = "editor-fullscreen";
@@ -181,6 +187,13 @@ var modules = {};
 
     var configBuffer;
 
+    if (! bs.procHooks("update-config", {
+      property: property,
+      value: value
+    }) ) {
+      return;
+    }
+
     config[property] = value;
 
     configBuffer = JSON.stringify(config);
@@ -194,6 +207,12 @@ var modules = {};
    * It's done like this to ensure each editor instance is uniform.
    */
   this.setFontSize = function(size) {
+
+    if (! bs.procHooks("set-font-size", {
+      size: size
+    }) ) {
+      return;
+    }
 
     elements.editorEntryPoint.style.fontSize = size + "px";
     bs.updateConfig("fontSize", size);
@@ -237,6 +256,84 @@ var modules = {};
     console.log(buffer);
 
   };
+
+  /*
+   * Registers a hook by hook_name
+   * Handles a later callback from a hooked point.
+   */
+  this.addHook = function(hook_name,callback,guid) {
+
+    var newHook = {};
+
+    if ( typeof guid === "undefined" ) {
+      guid = bs.createUniqueGuid(hook_name);
+    }
+
+    if (! hooks.hasOwnProperty(hook_name) ) {
+      hooks[hook_name] = [];
+    }
+
+    newHook = {
+      guid: guid,
+      func: callback
+    };
+
+    hooks[hook_name].push(newHook);
+
+  };
+
+  /*
+   * Executes a hook / hooks by hook_name.
+   */
+  this.procHooks = function(hook_name,args){
+
+    var i, max, executed = [], result;
+
+    if ( typeof args === "undefined" ) {
+      args = {};
+    }
+
+    if ( hooks.hasOwnProperty(hook_name) ) {
+
+      max = hooks[hook_name].length;
+      for ( i=0; i<max; i++ ) {
+        executed.push(hooks[hook_name][i].func(args));
+      }
+    }
+
+    max = executed.length - 1;
+    if ( typeof executed[max] === "undefined" ) {
+      result = true;
+    } else {
+      result = executed[max];
+    }
+
+    return result;
+
+  };
+
+  /*
+   * Remove a hook by hook_name and hook_guid.
+   */
+  this.removeHook = function(hook_name,guid) {
+
+    var i, max;
+
+    if ( typeof hook_name === "undefined" || typeof guid === "undefined" ) {
+      return;
+    }
+
+    if ( hooks.hasOwnProperty(hook_name) ) {
+      max = hooks[hook_name].length;
+      for ( i=0; i<max; i++ ) {
+        if ( hooks[hook_name][i].guid === guid ) {
+          hooks[hook_name].splice(i,1);
+          return;
+        }
+      }
+    }
+
+  }
 
   /*
    * This function is hooked using addCancelEvent.
