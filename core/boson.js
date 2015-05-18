@@ -885,6 +885,10 @@ var modules = {};
    */
   this.tabScroll = function() {
 
+    if (! bs.procHooks("tab-scroll") ) {
+      return;
+    }
+
     var i, newTab = false,
       max, x, start;
 
@@ -923,6 +927,10 @@ var modules = {};
    */
   this.tabScrollBack = function() {
 
+    if (! bs.procHooks("tab-scroll-back") ) {
+      return;
+    }
+
     var i, newTab = false,
       max, x, start;
 
@@ -958,6 +966,12 @@ var modules = {};
    */
   this.findAndActivateTab = function(i) {
 
+    if (! bs.procHooks("find-activate-tab", {
+      i: i
+    } ) ) {
+      return;
+    }
+
     var newTab = false,
       max, x;
 
@@ -981,6 +995,12 @@ var modules = {};
    */
   this.showEditor = function(i) {
 
+    if (! bs.procHooks("show-editor", {
+      i: i
+    } ) ) {
+      return;
+    }
+
     editor[i].cm.getWrapperElement().style.display = "block";
     editor[i].cm.focus();
 
@@ -990,6 +1010,12 @@ var modules = {};
    * Hides a visible Codemirror instance
    */
   this.hideEditor = function(i) {
+
+    if (! bs.procHooks("hide-editor", {
+      i: i
+    } ) ) {
+      return;
+    }
 
     if (i !== false) {
       if ( editor[i].hasOwnProperty("cm") ) {
@@ -1004,6 +1030,12 @@ var modules = {};
    * Triggered by clicking on an inactive tab.
    */
   this.switchToEditor = function(i) {
+
+    if (! bs.procHooks("switch-to-editor", {
+      i: i
+    } ) ) {
+      return;
+    }
 
     var newViewPort;
 
@@ -1035,6 +1067,18 @@ var modules = {};
    * Creates a popup dialogue.
    */
   this.createPopupDialogue = function(title, message, accept, decline, onSuccess, onFailure, i) {
+
+    if (! bs.procHooks("create-popup-dialogue", {
+      title: title,
+      message: message,
+      accept: accept,
+      decline: decline,
+      onSuccess: onSuccess,
+      onFailure: onFailure,
+      i: i
+    } ) ) {
+      return;
+    }
 
     var popup, popup_cancel_button, popup_logo, popup_title, popup_description, popup_accept_button, popup_decline_button;
 
@@ -1100,6 +1144,12 @@ var modules = {};
    */
   this.removePopupDialogue = function(popup) {
 
+    if (! bs.procHooks("remove-popup-dialogue", {
+      popup: popup
+    } ) ) {
+      return;
+    }
+
     popup.className = "popup prompt popOut";
     setTimeout(function() {
       popup.parentElement.removeChild(popup);
@@ -1113,6 +1163,14 @@ var modules = {};
    */
   this.warnSave = function(i, onSuccess, onFailure) {
 
+    if (! bs.procHooks("warn-save", {
+      i: i,
+      onSuccess: onSuccess,
+      onFailure: onFailure
+    } ) ) {
+      return;
+    }
+
     var dialogueMessage;
 
     dialogueMessage = "Do you want to save " + editorData[i].name + " before closing it?";
@@ -1125,6 +1183,12 @@ var modules = {};
    * Closes a tab defined by i (editor id)
    */
   this.closeTabById = function(i) {
+
+    if (! bs.procHooks("close-tab-by-id", {
+      i: i
+    } ) ) {
+      return;
+    }
 
     var popup;
 
@@ -1164,6 +1228,10 @@ var modules = {};
    */
   this.closeCurrentTab = function() {
 
+    if (! bs.procHooks("close-current-tab") ) {
+      return;
+    }
+
     var popup;
 
     if (boson.current_editor === null || boson.current_editor === false) {
@@ -1202,10 +1270,18 @@ var modules = {};
 
   /*
    * Handles boson errors.
-   * This should do something with the virtual console down the track.
+   * This should do something with a virtual console down the track.
    */
   this.bsError = function(err) {
+
+    if (! bs.procHooks("bs-error", {
+      err: err
+    } ) ) {
+      return;
+    }
+
     console.log("BOSON ERROR: " + err);
+
   };
 
   /*
@@ -1213,6 +1289,13 @@ var modules = {};
    * Triggered by Codemirror callback when editing a file.
    */
   this.flagHasChanged = function(i, status) {
+
+    if (! bs.procHooks("flag-has-changed", {
+      i: i,
+      status: status
+    } ) ) {
+      return;
+    }
 
     editor[i].changed = status;
 
@@ -1232,6 +1315,14 @@ var modules = {};
    * Save an editor buffer as defined by i (editor id)
    */
   this.saveBuffer = function(i, callback, secondcallback) {
+
+    if (! bs.procHooks("save-buffer", {
+      i: i,
+      callback: callback,
+      secondcallback: secondcallback
+    } ) ) {
+      return;
+    }
 
     //Save the specified buffer changes to buffer.
     var fh, fileBuffer;
@@ -1271,6 +1362,10 @@ var modules = {};
    * Saves an existing file as something else.
    */
   this.saveFileAs = function() {
+
+    if (! bs.procHooks("save-file-as") ) {
+      return;
+    }
 
     var i, fn;
 
@@ -1325,6 +1420,14 @@ var modules = {};
    */
   this.saveBufferById = function(i, callback) {
 
+
+    if (! bs.procHooks("save-buffer-by-id", {
+      i: i,
+      callback: callback
+    } ) ) {
+      return;
+    }
+
     if (typeof callback === "function") {
       this.saveBuffer(i, callback);
     } else {
@@ -1337,6 +1440,12 @@ var modules = {};
    * Saves the currently active editor buffer to disk.
    */
   this.saveCurrentBuffer = function(callback) {
+
+    if (! bs.procHooks("save-current-buffer", {
+      callback: callback
+    } ) ) {
+      return;
+    }
 
     if (boson.current_editor === null || boson.current_editor === false) {
       return;

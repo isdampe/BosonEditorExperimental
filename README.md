@@ -23,7 +23,7 @@ Read about hooks over on [hooks.md](hooks.md).
 * Develop a "plugin" architecture for user written extensions  
 * ~~Create a multi-pane engine for split view editing~~
 * ~~Create a hook engine for extensions~~
-* Create a "preferences" window
+* Create a "preferences" window 
 * Create a "theme" selector window.
 
 And lots more...

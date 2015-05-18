@@ -111,3 +111,54 @@ _Args: object, i, activateOnComplete_
 
 ####close-editor
 _Args: i_
+
+####tab-scroll
+_Args: none_
+
+####tab-scroll-back
+_Args: none_
+
+####find-activate-tab
+_Args: i_
+
+####show-editor
+_Args: i_
+
+####hide-editor
+_Args: i_
+
+####switch-to-editor
+_Args: i_
+
+####create-popup-dialogue
+_Args: title, message, accept, decline, onSuccess, onFailure, i_
+
+####remove-popup-dialogue
+_Args: popup_
+
+####warn-save
+_Args: i, onSuccess, onFailure_
+
+####close-tab-by-id
+_Args: i_
+
+####close-current-tab
+_Args: none_
+
+####bs-error
+_Args: err_
+
+####flag-has-changed
+_Args: i, status_
+
+####save-buffer
+_Args: i, callback, secondcallback_
+
+####save-file-as
+_Args: none_
+
+####save-buffer-by-id
+_Args: i, callback_
+
+####save-current-buffer
+_Args: callback_
