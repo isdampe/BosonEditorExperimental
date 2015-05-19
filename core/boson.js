@@ -9,6 +9,7 @@ var args = window.gui.App.argv;
 var child = require('child_process');
 
 var modules = {};
+var plugins = {};
 
 (function(window, config) {
 
@@ -95,7 +96,7 @@ var modules = {};
         encoding: "utf-8"
       });
     } catch (err) {
-      bs.error("No config.json file found");
+      bs.bsError("No config.json file found");
       fileFound = false;
     }
 
@@ -103,7 +104,7 @@ var modules = {};
       try {
         configObject = JSON.parse(configJson);
       } catch (err) {
-        bs.error("Invalid config.json file.");
+        bs.bsError("Invalid config.json file.");
       }
 
       for ( key in configObject ) {
@@ -122,7 +123,7 @@ var modules = {};
 
     fs.readdir(dir, function(err,files){
       if (err) {
-        bs.error(err);
+        bs.bsError(err);
         return;
       }
 
@@ -313,6 +314,7 @@ var modules = {};
       for ( i=0; i<max; i++ ) {
         executed.push(hooks[hook_name][i].func(args));
       }
+
     }
 
     max = executed.length - 1;
@@ -1774,6 +1776,159 @@ var modules = {};
   };
 
   /*
+   * Initialzes plugins.
+   */
+  this.pluginInit = function() {
+
+    //Scan plugins directory.
+    fs.readdir(process.cwd() + "/plugins", function(err, files){
+
+      var i = 0, max = files.length, stat, cwd = process.cwd(), uid, currentPlugin;
+
+      for ( i; i<max; i++ ) {
+
+        uid = cwd + "/plugins/" + files[i];
+        currentPlugin = files[i];
+
+        //Protect the scope while in the loop.
+        (function(uid,currentPlugin){
+
+          fs.stat(uid, function(err, stats) {
+
+            var fuid;
+
+            if (! err ) {
+              if(! stats.isFile() ) {
+
+                //Plugin folder found.
+                //Check it for a package.json.
+                fuid = uid + "/package.json";
+                fs.exists(fuid, function(exists){
+                  if ( exists ) {
+                    //Add it to plugin list.
+                    bs.insertPlugin( currentPlugin );
+                  } else {
+                    bs.log("Plugin " + currentPlugin + " is missing package.json, therefor, it was not activated.");
+                  }
+                });
+
+
+              }
+            }
+          });
+
+        })(uid,currentPlugin);
+
+      }
+
+    });
+
+  };
+
+  /*
+   * Inserts a verified plugin into the plugins object.
+   */
+  this.insertPlugin = function( plugin ) {
+
+    var uid;
+
+    uid = process.cwd() + "/plugins/" + plugin + "/";
+    fs.readFile(uid + "package.json", {
+      encoding: "utf-8"
+    }, function(err, data){
+
+      var jsonP;
+
+      if (! err ) {
+
+        try {
+          jsonP = JSON.parse(data);
+        } catch( e ) {
+          bs.bsError("Invalid package.json on plugin " + plugin);
+          return;
+        }
+
+        if ( jsonP.hasOwnProperty("name") && jsonP.hasOwnProperty("description") && jsonP.hasOwnProperty("version") && jsonP.hasOwnProperty("main") ) {
+
+          //Inject the plugin.
+          if (! plugins.hasOwnProperty(jsonP.name) ) {
+
+            plugins[jsonP.name] = jsonP;
+
+            //Is the plugin active?
+            if ( bs.isPluginActive( jsonP.name ) ) {
+              bs.bootPluginByName( jsonP.name );
+            } else {
+              config.plugins[jsonP.name] = {
+                active: false
+              };
+              bs.log("Plugin is not yet active: " + plugin);
+            }
+
+          } else {
+
+            bs.bsError("A plugin with the same name already exists");
+            return;
+          }
+
+        } else {
+          bs.bsError("Invalid manifest format on plugins package.json, " + plugin);
+          return;
+        }
+
+      } else {
+        bs.log("There was an error reading package.json from " + plugin);
+        return;
+      }
+
+    });
+
+  };
+
+  /*
+   * Checks to see if a plugin is active in config.
+   */
+  this.isPluginActive = function( plugin ) {
+
+    if ( config.plugins.hasOwnProperty(plugin) ) {
+      if ( config.plugins[plugin].hasOwnProperty("active") ) {
+        if ( config.plugins[plugin].active === true ) {
+          return true;
+        }
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+
+  };
+
+  /*
+   * Properly requires the plugin and calls the plugins init() function.
+   */
+  this.bootPluginByName = function( plugin ) {
+
+    var passObject;
+
+    plugins[plugin].entryPoint = require( process.cwd() + "/plugins/" + plugin + "/" + plugins[plugin].main );
+
+    passObject = {
+      gui: gui,
+      win: win,
+      bs: this,
+      boson: boson,
+      elements: elements,
+      config: config
+    };
+
+    if ( typeof plugins[plugin].entryPoint.init === "function" ) {
+      plugins[plugin].entryPoint.init(passObject);
+    }
+
+  };
+
+  /*
    * Initializes core modules.
    */
   this.moduleInit = function() {
@@ -1871,6 +2026,9 @@ var modules = {};
     bootUpTime = new Date().getTime();
     totalBootTime = bootUpTime - startupTime;
 
+    //Scan for plugins later to keep startup speed down.
+    bs.pluginInit();
+
     //Log boot time.
     this.log("Boot complete, " + totalBootTime + " ms");
 
@@ -1936,5 +2094,8 @@ var modules = {};
   indentWithTabs: true,
   fontSize: 18,
 	lineWrapping: true,
-	sidebarWidth: 190
+	sidebarWidth: 190,
+  plugins: {
+
+  }
 });

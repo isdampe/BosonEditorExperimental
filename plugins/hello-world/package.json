@@ -1,0 +1,6 @@
+{
+  "name": "hello-world",
+  "description": "Says hello world at boot.",
+  "version": "1.0",
+  "main": "hello-world.js"
+}
