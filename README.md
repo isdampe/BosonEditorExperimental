@@ -20,11 +20,12 @@ Written a patch? Go ahead and send your pull request with clear instructions wha
 Read about hooks over on [hooks.md](hooks.md).
 
 ###To do
-* Develop a "plugin" architecture for user written extensions  
+* ~~Develop a "plugin" architecture for user written extensions~~
 * ~~Create a multi-pane engine for split view editing~~
 * ~~Create a hook engine for extensions~~
-* Create a "preferences" window 
+* Create a "preferences" window
 * Create a "theme" selector window.
+* Create a plugin management window.
 
 And lots more...
 

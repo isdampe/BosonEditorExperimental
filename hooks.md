@@ -8,7 +8,11 @@ When writing a module for boson, hooks are best added in the modules init() func
 
 ```javascript
 
-this.init = function() {
+var bs;
+
+this.init = function(core) {
+
+  bs = core.bs;
 
   //Add a function that will be executed when a user creates a new file.
   bs.addHook("create-new-file",function(args){
@@ -27,7 +31,11 @@ If you want to override the core functionality of a hooked function, you should 
 
 ```javascript
 
-this.init = function() {
+var bs;
+
+this.init = function(core) {
+
+  bs = core.bs;
 
   bs.addHook("toggle-sidebar",function(args){
     console.log("User just tried to toggle the sidebar. We're going to force prevent them by returning false.");
@@ -43,7 +51,11 @@ For modules that may interrupt traditional features or crash with another module
 
 ```javascript
 
-this.init = function() {
+var bs;
+
+this.init = function(core) {
+
+  bs = core.bs;
 
   //Remove the hook we added earlier.
   bs.removeHook("create-new-file", "my-module-new-file-guid");
