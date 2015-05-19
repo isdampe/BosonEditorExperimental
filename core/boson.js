@@ -1464,6 +1464,12 @@ var modules = {};
    */
   this.saveBufferByIdSync = function(i) {
 
+    if (! bs.procHooks("save-buffer-by-id-sync", {
+      i: i
+    } ) ) {
+      return;
+    }
+
     //Save the specified buffer changes to buffer.
     var fh, fileBuffer;
 
@@ -1488,6 +1494,12 @@ var modules = {};
    */
   this.saveAllBuffers = function(callback) {
 
+    if (! bs.procHooks("save-all-buffers", {
+      callback: callback
+    } ) ) {
+      return;
+    }
+
     var key;
 
     for (key in editor) {
@@ -1509,6 +1521,12 @@ var modules = {};
    */
   this.setTitle = function(titleBuffer) {
 
+    if (! bs.procHooks("set-title", {
+      titleBuffer: titleBuffer
+    } ) ) {
+      return;
+    }
+
     var proposedTitle;
 
     proposedTitle = titleBuffer + " - Boson Editor";
@@ -1525,7 +1543,13 @@ var modules = {};
    * Launches Devtools.
    */
   this.debug = function() {
+
+    if (! bs.procHooks("debug") ) {
+      return;
+    }
+
     win.showDevTools();
+
   };
 
   /*
@@ -1533,13 +1557,23 @@ var modules = {};
    * Broken.
    */
   this.reinit = function() {
+
+    if (! bs.procHooks("reinit") ) {
+      return;
+    }
+
     win.reload();
+
   };
 
   /*
    * Trigger Codemirror undo buffer on current document.
    */
   this.cmUndo = function() {
+
+    if (! bs.procHooks("cm-undo") ) {
+      return;
+    }
 
     if (boson.current_editor === null || boson.current_editor === false) {
       return;
@@ -1554,6 +1588,10 @@ var modules = {};
    */
   this.cmRedo = function() {
 
+    if (! bs.procHooks("cm-redo") ) {
+      return;
+    }
+
     if (boson.current_editor === null || boson.current_editor === false) {
       return;
     }
@@ -1566,6 +1604,10 @@ var modules = {};
    * Triggers the Codemirror find function.
    */
   this.cmFind = function() {
+
+    if (! bs.procHooks("cm-find") ) {
+      return;
+    }
 
     if (boson.current_editor === null || boson.current_editor === false) {
       return;
@@ -1580,6 +1622,10 @@ var modules = {};
    */
   this.cmReplace = function() {
 
+    if (! bs.procHooks("cm-replace") ) {
+      return;
+    }
+
     if (boson.current_editor === null || boson.current_editor === false) {
       return;
     }
@@ -1592,6 +1638,12 @@ var modules = {};
    * Creates a dialogue to pick a new pane for a specified editor.
    */
   this.selectNewPane = function(xi) {
+
+    if (! bs.procHooks("select-new-pane", {
+      xi: xi
+    } ) ) {
+      return;
+    }
 
     if (boson.currentPaneMode === "single") {
       bs.log("There's no other active pane to use in single mode.");
@@ -1662,6 +1714,10 @@ var modules = {};
    * Creates the about dialogue, and hooks cancel events.
    */
   this.about = function() {
+
+    if (! bs.procHooks("about") ) {
+      return;
+    }
 
     var popup, popup_cancel_button, popup_logo, popup_title, popup_description, aboutTxt;
 
@@ -1824,6 +1880,10 @@ var modules = {};
    * Closes the Boson app.
    */
   this.closeBoson = function() {
+
+    if (! bs.procHooks("close-boson") ) {
+      return;
+    }
 
     var key, allSaved = true,
       popup;

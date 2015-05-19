@@ -162,3 +162,39 @@ _Args: i, callback_
 
 ####save-current-buffer
 _Args: callback_
+
+####save-buffer-by-id-sync
+_Args: i_
+
+####save-all-buffers
+_Args: callback_
+
+####set-title
+_Args: titleBuffer_
+
+####debug
+_Args: none_
+
+####reinit
+_Args: none_
+
+####cm-undo
+_Args: none_
+
+####cm-redo
+_Args: none_
+
+####cm-find
+_Args: none_
+
+####cm-replace
+_Args: none_
+
+####select-new-pane
+_Args: xi_
+
+####about
+_Args: none_
+
+####close-boson
+_Args: none_
