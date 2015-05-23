@@ -25,7 +25,7 @@ Read about hooks over on [hooks.md](hooks.md).
 * ~~Create a hook engine for extensions~~
 * Create a "preferences" window
 * Create a "theme" selector window.
-* Create a plugin management window.
+* ~~Create a plugin management window~~.
 
 And lots more...
 

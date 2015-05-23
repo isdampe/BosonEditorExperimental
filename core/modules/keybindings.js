@@ -30,7 +30,7 @@ exports.init = function( core ) {
 
 	//Standard keys.
 	window.onkeypress = function(e) {
-		
+
 		switch( e.which ) {
 			case 19:
 				core.bs.saveCurrentBuffer();
