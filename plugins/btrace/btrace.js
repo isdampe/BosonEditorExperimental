@@ -12,3 +12,9 @@ exports.init = function( core ) {
   },"btrace-toggle-sidebar");
 
 };
+
+exports.shutdown = function() {
+
+  bs.removeHook("toggle-sidebar", "btrace-toggle-sidebar");
+
+};

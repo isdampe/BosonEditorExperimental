@@ -2,5 +2,7 @@
   "name": "hello-world",
   "description": "Says hello world at boot.",
   "version": "1.0",
-  "main": "hello-world.js"
+  "main": "hello-world.js",
+  "author": "@isdampe",
+  "url": "https://github.com/isdampe"
 }

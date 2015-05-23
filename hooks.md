@@ -64,6 +64,19 @@ this.init = function(core) {
 
 ```
 
+##Removing hooks for a clean shutdown.
+You should always create a method on your plugin for shutdown, that registeres your hooks when a user disables your plugin.
+
+```javascript
+
+this.shutdown = function() {
+
+  bs.removeHook("create-new-file", "my-module-new-file-guid");
+
+};
+
+```
+
 ##List of hooks
 This list needs to be finished.
 
@@ -209,4 +222,7 @@ _Args: xi_
 _Args: none_
 
 ####close-boson
+_Args: none_
+
+####plugin-window
 _Args: none_

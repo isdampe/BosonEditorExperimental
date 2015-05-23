@@ -2,5 +2,7 @@
   "name": "btrace",
   "description": "Traces all callbacks in boson and outputs their calls to the console.",
   "version": "0.1",
-  "main": "btrace.js"
+  "main": "btrace.js",
+  "author": "@isdampe",
+  "url": "https://github.com/isdampe"
 }

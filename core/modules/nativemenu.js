@@ -204,6 +204,14 @@ exports.init = function( core ) {
   	}
   }));
 
+  //Plugins
+  prefMenu.submenu.append(new core.gui.MenuItem({
+  	label: 'Plugins',
+  	click: function () {
+      bs.pluginWindow();
+  	}
+  }));
+
   //Spacer
   prefMenu.submenu.append(new core.gui.MenuItem({ type: 'separator' }));
 

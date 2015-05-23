@@ -8,5 +8,12 @@ exports.init = function( core ) {
 
   console.log("Hello, world!");
 
+};
+
+exports.shutdown = function() {
+
+  //Called when plugin is disabled.
+  //You should also unregister hooks here.
+  console.log("Goodbye, world!");
 
 };

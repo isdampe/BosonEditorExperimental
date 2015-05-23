@@ -197,6 +197,14 @@ var plugins = {};
 
     config[property] = value;
 
+    bs.fsWriteConfigAsync();
+
+  };
+
+  this.fsWriteConfigAsync = function() {
+
+    var configBuffer;
+
     configBuffer = JSON.stringify(config);
 
     fs.writeFile("config.json", configBuffer);
@@ -1711,6 +1719,185 @@ var plugins = {};
 
   };
 
+  /*
+   * Creates the plugin dialogue, and hooks cancel events.
+   */
+  this.pluginWindow = function() {
+
+    if (! bs.procHooks("plugin-window") ) {
+      return;
+    }
+
+    var popup, popup_cancel_button, popup_logo, popup_title, popup_list, key, list_items, name, des, version, link, btn;
+
+    popup = document.createElement("div");
+    popup.className = "popup prompt plugin-window"
+    popup.id = "popup-plugin-window";
+
+    popup_cancel_button = document.createElement("div");
+    popup_cancel_button.className = "cancel";
+
+    popup_logo = document.createElement("div");
+    popup_logo.className = "logo";
+
+    popup_title = document.createElement("div");
+    popup_title.className = "title";
+    popup_title.innerHTML = "Plugin manager";
+
+    popup_list = document.createElement("ul");
+
+    for ( key in plugins ) {
+
+      list_items = document.createElement("li");
+      if ( plugins[key].active === true ) {
+        list_items.className = "active";
+      } else {
+        list_items.className = "inactive";
+      }
+
+      btn = document.createElement("div");
+      if ( plugins[key].active === true ) {
+        btn.innerHTML = "Enabled";
+        btn.className = "btn btn-active";
+        btn.setAttribute("data-active", "true");
+      } else {
+        btn.innerHTML = "Disabled";
+        btn.className = "btn btn-inactive";
+        btn.setAttribute("data-active", "false");
+      }
+
+      (function(btn,list_items,plugin){
+
+        //Hook on click of btn.
+        btn.addEventListener("click", function(e){
+          e.preventDefault();
+          bs.togglePlugin( plugin, function(enabled) {
+            if ( enabled === true ) {
+              btn.innerHTML = "Enabled";
+              btn.className = "btn btn-active";
+              list_items.className = "active";
+            } else {
+              btn.innerHTML = "Disabled";
+              btn.className = "btn btn-inactive";
+              list_items.className = "inactive";
+            }
+          } );
+        });
+
+      })(btn,list_items,plugins[key]);
+
+      name = document.createElement("div");
+      name.className = "name";
+      name.innerHTML = plugins[key].name;
+
+      version = document.createElement("div");
+      version.className = "version";
+      version.innerHTML = "Version: " + plugins[key].version + ", Author: ";
+
+      link = document.createElement("a");
+      link.href = plugins[key].url;
+      link.innerHTML = plugins[key].author;
+
+      (function(link,key){
+
+        link.addEventListener("click", function(e){
+          e.preventDefault();
+          console.log(plugins[key].name);
+          console.log(plugins[key].url)
+          gui.Shell.openExternal(plugins[key].url);
+        });
+
+      })(link,key);
+
+      des = document.createElement("div");
+      des.className = "description";
+      des.innerHTML = plugins[key].description;
+
+      version.appendChild(link);
+
+      list_items.appendChild(btn);
+      list_items.appendChild(name);
+      list_items.appendChild(version);
+      list_items.appendChild(des);
+
+      popup_list.appendChild(list_items);
+
+
+    }
+
+    bs.addCancelEvent("PluginWindow", function() {
+      bs.removePopupDialogue(popup);
+      bs.suspendCancelEvent("PluginWindow");
+    });
+
+    popup_cancel_button.addEventListener("click", function(e) {
+      e.preventDefault();
+      bs.removePopupDialogue(popup);
+      bs.suspendCancelEvent("PluginWindow");
+    });
+
+    popup.appendChild(popup_cancel_button);
+    popup.appendChild(popup_logo);
+    popup.appendChild(popup_title);
+    popup.appendChild(popup_list);
+
+
+    elements.bodyEntryPoint.appendChild(popup);
+
+    return popup;
+
+  };
+
+  /*
+   * Toggles a plugin either active or inactive.
+   */
+  this.togglePlugin = function( plugin, callback ) {
+
+    var pluginRef = plugin.name, result = false;
+
+    if ( plugin.active === true ) {
+      //Disable plugin.
+      bs.disablePlugin(plugin.name);
+      result = false;
+    } else {
+      //Enable plugin.
+      bs.enablePlugin(plugin.name);
+      result = true;
+    }
+
+    if ( typeof callback === "function" ) {
+      callback(result);
+    }
+
+  };
+
+  /*
+   * Enables a plugin as specified by name.
+   */
+  this.enablePlugin = function( ref ) {
+
+    config.plugins[ref].active = true;
+    plugins[ref].active = true;
+    bs.bootPluginByName( ref );
+
+    //Update these changes to the config.json file.
+    bs.fsWriteConfigAsync();
+
+  };
+
+  /*
+   * Disables a plugin as specified by name.
+   */
+  this.disablePlugin = function( ref ) {
+
+    config.plugins[ref].active = false;
+    plugins[ref].active = false;
+    bs.shutdownPluginByName( ref );
+
+    //Update these changes to the config.json file.
+    bs.fsWriteConfigAsync();
+
+  };
 
   /*
    * Creates the about dialogue, and hooks cancel events.
@@ -1857,8 +2044,10 @@ var plugins = {};
 
             //Is the plugin active?
             if ( bs.isPluginActive( jsonP.name ) ) {
+              plugins[jsonP.name].active = true;
               bs.bootPluginByName( jsonP.name );
             } else {
+              plugins[jsonP.name].active = false;
               config.plugins[jsonP.name] = {
                 active: false
               };
@@ -1924,6 +2113,19 @@ var plugins = {};
 
     if ( typeof plugins[plugin].entryPoint.init === "function" ) {
       plugins[plugin].entryPoint.init(passObject);
+    }
+
+  };
+
+  /*
+   * Calls the shutdown method on a plugin.
+   */
+  this.shutdownPluginByName = function( plugin ) {
+
+    if ( typeof plugins[plugin].entryPoint.shutdown === "function" ) {
+      plugins[plugin].entryPoint.shutdown();
+    } else {
+      bs.bsError("Plugin " + plugin + " has no method 'shutdown'");
     }
 
   };

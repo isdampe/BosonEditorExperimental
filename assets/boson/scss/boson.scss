@@ -697,8 +697,88 @@ body {
 	}
 }
 
+#popup-plugin-window {
+	height: 440px;
+
+	.title {
+		margin: 5px 0 10px;
+		text-align: center;
+		font-size: 16px;
+	}
+
+
+	ul {
+		background: #2a2a2a;
+		border: 1px solid #3c3c3c;
+		margin: 0;
+		padding: 0;
+		height: 290px;
+		overflow-y: scroll;
+		width: 95%;
+		margin-left: 2.5%;
+		margin-top: 20px;
+
+		li {
+			list-style-type: none;
+			display: block;
+			width: 100%;
+			padding: 15px;
+			min-height: 60px;
+			text-align: left;
+			font-size: 12px;
+			background: #2f2f2f;
+			cursor: default;
+		}
+		.version {
+			font-size: 9px;
+			color: #999;
+			font-style: italic;
+			margin: 0 0 7px 0;
+
+			a {
+				color: #bbb;
+			}
+			a:hover {
+				color: #fff;
+			}
+		}
+		.description {
+			font-size: 9px;
+			padding-right: 90px;
+		}
+		li.active {
+			opacity: 1;
+		}
+		li.inactive {
+			opacity: 0.5;
+		}
+
+		li:nth-child(even) {
+			background: #333;
+		}
+
+		.btn {
+			float: right;
+			display: block;
+			width: 80px;
+			background: #191919;
+			text-transform: uppercase;
+			padding: 10px;
+			font-size: 9px;
+			text-align: center;
+			transition: 0.2s all;
+			cursor: default;
+		}
+
+		li.inactive .btn:hover {
+			background: #000;
+			color: #eee;
+		}
+	}
+}
+
 .prompt {
-	max-width: 500px;
+	max-width: 450px;
 }
 
 .popup {
