@@ -32,7 +32,8 @@ var plugins = {};
     currentViewport: 1,
     currentSubView: [],
     currentPaneMode: "single",
-    app_dir: path.resolve(path.dirname())
+    app_dir: path.resolve(path.dirname()),
+    cmTheme: false
   };
 
   var hooks = [];
@@ -154,6 +155,31 @@ var plugins = {};
     link.setAttribute("href", theme);
 
     document.head.appendChild(link);
+
+  };
+
+  this.injectCmTheme = function( uri ) {
+
+    var i, max;
+
+    if ( boson.cmTheme === false ) {
+      //Create the element and inject it.
+      boson.cmTheme = document.createElement("link");
+      document.head.appendChild(boson.cmTheme);
+    } else {
+      document.head.removeChild(boson.cmTheme);
+      boson.cmTheme = document.createElement("link");
+      document.head.appendChild(boson.cmTheme);
+    }
+
+    boson.cmTheme.setAttribute("rel", "stylesheet");
+    boson.cmTheme.setAttribute("href", "assets/codemirror/theme/" + uri);
+
+    max = editor.length;
+    i = 0;
+    for ( i; i<max; i++ ) {
+      editor[i].cm.setOption("theme", uri.replace(".css","") );
+    }
 
   };
 
@@ -1719,6 +1745,132 @@ var plugins = {};
 
   };
 
+  this.activateCmTheme = function(i) {
+
+    if ( cm.themes[i].uri === config.theme + ".css" ) {
+      bs.bsError("Theme is already active");
+      return false;
+    }
+
+    //Inject the theme.
+    bs.injectCmTheme(cm.themes[i].uri);
+
+    //Update the config.
+    bs.updateConfig("theme", cm.themes[i].uri.replace(".css", ""));
+
+    return true;
+
+  };
+
+  /*
+   * Creates a theme selection window.
+   */
+  this.themeWindow = function() {
+
+    var popup, popup_cancel_button, popup_logo, popup_title, popup_list, list_items, i = 0, max, active = false;
+
+    popup = document.createElement("div");
+    popup.className = "popup prompt plugin-window theme-window"
+    popup.id = "popup-plugin-window";
+
+    popup_cancel_button = document.createElement("div");
+    popup_cancel_button.className = "cancel";
+
+    popup_logo = document.createElement("div");
+    popup_logo.className = "logo";
+
+    popup_title = document.createElement("div");
+    popup_title.className = "title";
+    popup_title.innerHTML = "Source view themes";
+
+    popup_list = document.createElement("ul");
+    popup_list.className = "theme-list";
+
+    max = cm.themes.length;
+    for ( i; i<max; i++ ) {
+
+      if ( cm.themes[i].uri === config.theme + ".css" ) {
+        active = true;
+      } else {
+        active = false;
+      }
+
+      list_items = document.createElement("li");
+      if ( active === true ) {
+        list_items.className = "active";
+      } else {
+        list_items.className = "inactive";
+      }
+
+      btn = document.createElement("div");
+      if ( active === true ) {
+        btn.innerHTML = "Enabled";
+        btn.className = "btn btn-active";
+        btn.setAttribute("data-active", "true");
+      } else {
+        btn.innerHTML = "Disabled";
+        btn.className = "btn btn-inactive";
+        btn.setAttribute("data-active", "false");
+      }
+
+      (function(btn,list_items,i){
+
+        var qs, qsb;
+
+        //Hook on click of btn.
+        btn.addEventListener("click", function(e){
+          e.preventDefault();
+          if ( bs.activateCmTheme(i) === true ) {
+
+            qs = document.querySelector("ul.theme-list li.active");
+            qsb = document.querySelector("ul.theme-list li.active .btn-active");
+
+            if ( qs ) {
+              qs.className = "inactive";
+            }
+            if ( qsb ) {
+              qsb.className = "btn btn-inactive";
+            }
+
+            list_items.className = "active";
+            btn.className = "btn btn-active";
+            btn.innerHTML = "Enabled";
+          }
+        });
+
+      })(btn,list_items,i);
+
+      sname = document.createElement("div");
+      sname.className = "name";
+      sname.innerHTML = cm.themes[i].name;
+
+      list_items.appendChild(btn);
+      list_items.appendChild(sname);
+
+      popup_list.appendChild(list_items);
+
+    }
+
+    bs.addCancelEvent("ThemeWindow", function() {
+      bs.removePopupDialogue(popup);
+      bs.suspendCancelEvent("ThemeWindow");
+    });
+
+    popup_cancel_button.addEventListener("click", function(e) {
+      e.preventDefault();
+      bs.removePopupDialogue(popup);
+      bs.suspendCancelEvent("ThemeWindow");
+    });
+
+    popup.appendChild(popup_cancel_button);
+    popup.appendChild(popup_logo);
+    popup.appendChild(popup_title);
+    popup.appendChild(popup_list);
+
+    elements.bodyEntryPoint.appendChild(popup);
+
+  };
+
   /*
    * Creates the plugin dialogue, and hooks cancel events.
    */
@@ -2193,8 +2345,9 @@ var plugins = {};
     CodeMirror.modeURL = "assets/codemirror/mode/%N/%N.js";
 
     //Preload dom selection.
-    this.preloadDom();
-    this.injectTheme();
+    bs.preloadDom();
+    bs.injectTheme();
+    bs.injectCmTheme(config.theme + ".css");
 
     bs.setFontSize(config.fontSize);
 

@@ -200,7 +200,7 @@ exports.init = function( core ) {
   prefMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Themes',
   	click: function () {
-
+      bs.themeWindow();
   	}
   }));
 
