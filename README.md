@@ -7,24 +7,27 @@ Nw.js as a runtime container for easy cross-platform integration.
 It utilizes Codemirror in place for it's source view highlighting and editing.
 
 ##Keeping things simple
-Modern editors tend to be _full_ of features, most of which, we (well, myself anyway) rarely use. A side affect of
-this can be crippling performance, gigantic menus, and a slow learning curve.
-
-Boson was written with this in mind, and fundamentally, aims to be a minimal editor that has the bare essentials only.
+Boson aims to give you a minimal core. Further functionality can be added with
+user level plugins.
 
 ##Contributing
 Found a bug? Great - go ahead and open an issue, with clear instructions on how to re-produce.  
+
 Written a patch? Go ahead and send your pull request with clear instructions what and how your patch fixes something.
 
 ##Hooks
 Read about hooks over on [hooks.md](hooks.md).
+
+##Plugins
+Read about plugins over on [plugins.md](plugins.md).
 
 ###To do
 * ~~Develop a "plugin" architecture for user written extensions~~
 * ~~Create a multi-pane engine for split view editing~~
 * ~~Create a hook engine for extensions~~
 * Create a "preferences" window
-* Create a "theme" selector window.
+* ~~Create a "theme" selector window.~~
+* Add a boson theme selection list to the main theme selector window
 * ~~Create a plugin management window~~.
 
 And lots more...
