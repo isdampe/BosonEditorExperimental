@@ -2347,12 +2347,10 @@ var plugins = {};
       argCountType = fs.lstatSync(args[0]);
       if (argCountType.isDirectory()) {
         boson.working_dir = args[0];
-      } else {
+      } else if (argCountType.isFile()) {
         //Get the file's working directory.
-        if (argCountType.isFile()) {
-          boson.working_dir = path.dirname(args[0]);
-          bs.openFileFromPath(args[0]);
-        }
+        boson.working_dir = path.dirname(args[0]);
+        bs.openFileFromPath(args[0]);
       }
 
     };

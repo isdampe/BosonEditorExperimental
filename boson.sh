@@ -9,7 +9,7 @@ fi
 cd $SCRIPTPATH
 if [ "$DIR" ]
 	then
-		./boson "$DIR" > /dev/null 2>&1 &
+		./boson "$DIR" > /dev/null &
 else
-	./boson "$CWD" > /dev/null 2>&1 &
+	./boson "$CWD" > /dev/null &
 fi
