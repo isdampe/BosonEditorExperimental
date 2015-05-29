@@ -1,6 +1,6 @@
 var nativemenu = this;
 var primaryMenuBar;
-var fileMenu, editMenu, viewMenu, prefMenu, bosonMenu;
+var menus = {};
 var bs, coreGl;
 
 exports.init = function( core ) {
@@ -13,13 +13,13 @@ exports.init = function( core ) {
   /*
    * File menu
    */
-  fileMenu = new core.gui.MenuItem({
+  menus.fileMenu = new core.gui.MenuItem({
   	label: 'File',
   	submenu: new core.gui.Menu()
   });
 
   //New file
-  fileMenu.submenu.append(new core.gui.MenuItem({
+  menus.fileMenu.submenu.append(new core.gui.MenuItem({
   	label: 'New file',
     tooltip: "Ctrl + N",
   	click: function () {
@@ -28,7 +28,7 @@ exports.init = function( core ) {
   }));
 
   //Open files
-  fileMenu.submenu.append(new core.gui.MenuItem({
+  menus.fileMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Open files',
   	click: function () {
       bs.openFileDialogue();
@@ -36,10 +36,10 @@ exports.init = function( core ) {
   }));
 
   //Spacer
-  fileMenu.submenu.append(new core.gui.MenuItem({ type: 'separator' }));
+  menus.fileMenu.submenu.append(new core.gui.MenuItem({ type: 'separator' }));
 
   //Save
-  fileMenu.submenu.append(new core.gui.MenuItem({
+  menus.fileMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Save',
   	click: function () {
       bs.saveCurrentBuffer();
@@ -47,7 +47,7 @@ exports.init = function( core ) {
   }));
 
   //Save as
-  fileMenu.submenu.append(new core.gui.MenuItem({
+  menus.fileMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Save as...',
   	click: function () {
       bs.saveFileAs();
@@ -55,10 +55,10 @@ exports.init = function( core ) {
   }));
 
   //Spacer
-  fileMenu.submenu.append(new core.gui.MenuItem({ type: 'separator' }));
+  menus.fileMenu.submenu.append(new core.gui.MenuItem({ type: 'separator' }));
 
   //Close file
-  fileMenu.submenu.append(new core.gui.MenuItem({
+  menus.fileMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Close file',
   	click: function () {
       bs.closeCurrentTab();
@@ -66,7 +66,7 @@ exports.init = function( core ) {
   }));
 
   //Close boson
-  fileMenu.submenu.append(new core.gui.MenuItem({
+  menus.fileMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Exit',
   	click: function () {
       bs.closeBoson();
@@ -76,13 +76,13 @@ exports.init = function( core ) {
   /*
    * Edit menu
    */
-  editMenu = new core.gui.MenuItem({
+  menus.editMenu = new core.gui.MenuItem({
   	label: 'Edit',
   	submenu: new core.gui.Menu()
   });
 
   //Undo
-  editMenu.submenu.append(new core.gui.MenuItem({
+  menus.editMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Undo',
   	click: function () {
       bs.cmUndo();
@@ -90,7 +90,7 @@ exports.init = function( core ) {
   }));
 
   //Redo
-  editMenu.submenu.append(new core.gui.MenuItem({
+  menus.editMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Redo',
   	click: function () {
       bs.cmRedo();
@@ -98,10 +98,10 @@ exports.init = function( core ) {
   }));
 
   //Spacer
-  editMenu.submenu.append(new core.gui.MenuItem({ type: 'separator' }));
+  menus.editMenu.submenu.append(new core.gui.MenuItem({ type: 'separator' }));
 
   //Find
-  editMenu.submenu.append(new core.gui.MenuItem({
+  menus.editMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Find',
   	click: function () {
       bs.cmFind();
@@ -109,7 +109,7 @@ exports.init = function( core ) {
   }));
 
   //Replace
-  editMenu.submenu.append(new core.gui.MenuItem({
+  menus.editMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Replace',
   	click: function () {
       bs.cmReplace();
@@ -119,13 +119,13 @@ exports.init = function( core ) {
   /*
    * View menu
    */
-  viewMenu = new core.gui.MenuItem({
+  menus.viewMenu = new core.gui.MenuItem({
     label: 'View',
     submenu: new core.gui.Menu()
   });
 
   //Single
-  viewMenu.submenu.append(new core.gui.MenuItem({
+  menus.viewMenu.submenu.append(new core.gui.MenuItem({
     label: 'Single: 1',
     click: function () {
       bs.switchPaneMode('single',1);
@@ -133,7 +133,7 @@ exports.init = function( core ) {
   }));
 
   //Two columns
-  viewMenu.submenu.append(new core.gui.MenuItem({
+  menus.viewMenu.submenu.append(new core.gui.MenuItem({
     label: 'Columns: 2',
     click: function () {
       bs.switchPaneMode('two-column',2);
@@ -141,7 +141,7 @@ exports.init = function( core ) {
   }));
 
   //Three columns
-  viewMenu.submenu.append(new core.gui.MenuItem({
+  menus.viewMenu.submenu.append(new core.gui.MenuItem({
     label: 'Columns: 3',
     click: function () {
       bs.switchPaneMode('three-column',3);
@@ -149,7 +149,7 @@ exports.init = function( core ) {
   }));
 
   //Four columns
-  viewMenu.submenu.append(new core.gui.MenuItem({
+  menus.viewMenu.submenu.append(new core.gui.MenuItem({
     label: 'Columns: 4',
     click: function () {
       bs.switchPaneMode('four-column',4);
@@ -157,7 +157,7 @@ exports.init = function( core ) {
   }));
 
   //Two rows
-  viewMenu.submenu.append(new core.gui.MenuItem({
+  menus.viewMenu.submenu.append(new core.gui.MenuItem({
     label: 'Rows: 2',
     click: function () {
       bs.switchPaneMode('two-row',2);
@@ -165,7 +165,7 @@ exports.init = function( core ) {
   }));
 
   //Three rows
-  viewMenu.submenu.append(new core.gui.MenuItem({
+  menus.viewMenu.submenu.append(new core.gui.MenuItem({
     label: 'Rows: 3',
     click: function () {
       bs.switchPaneMode('three-row',3);
@@ -173,7 +173,7 @@ exports.init = function( core ) {
   }));
 
   //Grid
-  viewMenu.submenu.append(new core.gui.MenuItem({
+  menus.viewMenu.submenu.append(new core.gui.MenuItem({
     label: 'Grid: 4',
     click: function () {
       bs.switchPaneMode('grid',4);
@@ -183,21 +183,30 @@ exports.init = function( core ) {
   /*
    * Preferences menu
    */
-  prefMenu = new core.gui.MenuItem({
+  menus.prefMenu = new core.gui.MenuItem({
   	label: 'Preferences',
   	submenu: new core.gui.Menu()
   });
 
   //Configuration
-  prefMenu.submenu.append(new core.gui.MenuItem({
+  //To be added to next release.
+  /*menus.prefMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Configuration',
   	click: function () {
 
   	}
+  }));*/
+
+  //Toggle UI themes.
+  menus.prefMenu.submenu.append(new core.gui.MenuItem({
+    label: 'Toggle UI theme',
+    click: function () {
+      bs.toggleUITheme();
+    }
   }));
 
   //Themes
-  prefMenu.submenu.append(new core.gui.MenuItem({
+  menus.prefMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Themes',
   	click: function () {
       bs.themeWindow();
@@ -205,7 +214,7 @@ exports.init = function( core ) {
   }));
 
   //Plugins
-  prefMenu.submenu.append(new core.gui.MenuItem({
+  menus.prefMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Plugins',
   	click: function () {
       bs.pluginWindow();
@@ -213,10 +222,10 @@ exports.init = function( core ) {
   }));
 
   //Spacer
-  prefMenu.submenu.append(new core.gui.MenuItem({ type: 'separator' }));
+  menus.prefMenu.submenu.append(new core.gui.MenuItem({ type: 'separator' }));
 
   //Increase font size
-  prefMenu.submenu.append(new core.gui.MenuItem({
+  menus.prefMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Increase font size +',
   	click: function () {
       bs.increaseFontSize();
@@ -224,7 +233,7 @@ exports.init = function( core ) {
   }));
 
   //Decrease font size
-  prefMenu.submenu.append(new core.gui.MenuItem({
+  menus.prefMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Decrease font size +',
   	click: function () {
       bs.decreaseFontSize();
@@ -232,10 +241,10 @@ exports.init = function( core ) {
   }));
 
   //Spacer
-  prefMenu.submenu.append(new core.gui.MenuItem({ type: 'separator' }));
+  menus.prefMenu.submenu.append(new core.gui.MenuItem({ type: 'separator' }));
 
   //Toggle sidebar
-  prefMenu.submenu.append(new core.gui.MenuItem({
+  menus.prefMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Toggle sidebar',
   	click: function () {
       bs.toggleSidebar();
@@ -245,13 +254,13 @@ exports.init = function( core ) {
   /*
    * Boson menu
    */
-  bosonMenu = new core.gui.MenuItem({
+  menus.bosonMenu = new core.gui.MenuItem({
     label: 'Boson',
     submenu: new core.gui.Menu()
   });
 
   //About Boson
-  bosonMenu.submenu.append(new core.gui.MenuItem({
+  menus.bosonMenu.submenu.append(new core.gui.MenuItem({
     label: 'About Boson',
     click: function () {
       bs.about();
@@ -259,7 +268,7 @@ exports.init = function( core ) {
   }));
 
   //Debug (WMT)
-  bosonMenu.submenu.append(new core.gui.MenuItem({
+  menus.bosonMenu.submenu.append(new core.gui.MenuItem({
     label: 'Debug (WMT)',
     click: function () {
       bs.debug();
@@ -267,16 +276,18 @@ exports.init = function( core ) {
   }));
 
   //Append it all.
-  primaryMenuBar.append( fileMenu );
-  primaryMenuBar.append( editMenu );
-  primaryMenuBar.append( viewMenu );
-  primaryMenuBar.append( prefMenu );
-  primaryMenuBar.append( bosonMenu );
+  primaryMenuBar.append( menus.fileMenu );
+  primaryMenuBar.append( menus.editMenu );
+  primaryMenuBar.append( menus.viewMenu );
+  primaryMenuBar.append( menus.prefMenu );
+  primaryMenuBar.append( menus.bosonMenu );
   core.win.menu = primaryMenuBar;
 
   //Hook functions into core.
   bs.createTabMenu = nativemenu.createTabMenu;
   bs.deleteTabMenu = nativemenu.deleteTabMenu;
+  bs.insertMenuItem = nativemenu.insertMenuItem;
+  bs.removeMenuItem = nativemenu.removeMenuItem;
 
 };
 
@@ -334,5 +345,23 @@ exports.deleteTabMenu = function( contextMenu ) {
 
   contextMenu = null;
   delete contextMenu;
+
+};
+
+exports.insertMenuItem = function (menu, opts) {
+
+  var nMenu;
+
+  nMenu = new coreGl.gui.MenuItem(opts);
+
+  menus[menu].submenu.append(nMenu);
+
+  return nMenu;
+
+};
+
+exports.removeMenuItem = function(name,menu) {
+
+  menus[name].submenu.remove(menu);
 
 };

@@ -83,3 +83,36 @@ Under most circumstances, hooks should be declared inside the init() function,
 and cancelled in the shutdown() function.
 
 See [hooks.md](hooks.md) for more info on hooks.
+
+####Inserting menu items.
+Menu items can be inserted by calling bs.insertMenuItem().
+They should be removed again in your shutdown() function by calling bs.removeMenuItem.
+
+```javascript
+
+var bs, menuHookGl;
+
+exports.init = function( core ) {
+
+  var menuHook;
+
+  bs = core.bs;
+
+  menuHook = bs.insertMenuItem("bosonMenu", {
+    label: 'Hello world',
+    click: function () {
+      console.log("Hello, world!");
+    }
+  });
+
+  menuHookGl = menuHook;
+
+};
+
+exports.shutdown = function() {
+
+  bs.removeMenuItem("bosonMenu",menuHookGl);
+
+};
+
+```

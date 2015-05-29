@@ -27,13 +27,14 @@ var plugins = {};
     title: "Boson Editor",
     working_dir: process.env.PWD,
     maxFileSize: 5242880,
-    version: "0.1",
+    version: "0.1.0",
     sidebarActive: true,
     currentViewport: 1,
     currentSubView: [],
     currentPaneMode: "single",
     app_dir: path.resolve(path.dirname()),
-    cmTheme: false
+    cmTheme: false,
+    ui_theme_element: false
   };
 
   var hooks = [];
@@ -153,8 +154,9 @@ var plugins = {};
     link = document.createElement("link");
     link.setAttribute("rel", "stylesheet");
     link.setAttribute("href", theme);
+    boson.ui_theme_element = link;
 
-    document.head.appendChild(link);
+    document.head.appendChild(boson.ui_theme_element);
 
   };
 
@@ -1763,6 +1765,26 @@ var plugins = {};
   };
 
   /*
+   * Toggle UI theme.
+   */
+  this.toggleUITheme = function() {
+
+    var current_theme = config.bosontheme;
+    var future_theme;
+
+    if ( current_theme === "dark" ) {
+      future_theme = "light";
+    } else {
+      future_theme = "dark";
+    }
+
+    boson.ui_theme_element.setAttribute("href","assets/boson/css/themes/" + future_theme + ".css");
+
+    bs.updateConfig("bosontheme", future_theme);
+
+  };
+
+  /*
    * Creates a theme selection window.
    */
   this.themeWindow = function() {
@@ -2443,14 +2465,12 @@ var plugins = {};
   this.init();
 
 })(window, {
-  theme: "base16-dark",
-  bosontheme: "dark",
+  theme: "mdn-like",
+  bosontheme: "light",
   tabSize: 2,
   indentWithTabs: true,
-  fontSize: 18,
+  fontSize: 14,
 	lineWrapping: true,
 	sidebarWidth: 190,
-  plugins: {
-
-  }
+  plugins: {}
 });

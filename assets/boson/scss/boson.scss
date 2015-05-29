@@ -478,16 +478,6 @@ body {
 		margin: 40px auto;
 		position: relative;
 
-		.viewport {
-			background: #444;
-			transition: 0.2s all;
-		}
-		.viewport:hover {
-			background: #666;
-		}
-		.active, .active:hover {
-			background: #2a2a2a!important;
-		}
 	}
 
 	#panewrapper.two-column {
@@ -708,8 +698,6 @@ body {
 
 
 	ul {
-		background: #2a2a2a;
-		border: 1px solid #3c3c3c;
 		margin: 0;
 		padding: 0;
 		height: 290px;
@@ -726,42 +714,23 @@ body {
 			min-height: 60px;
 			text-align: left;
 			font-size: 12px;
-			background: #2f2f2f;
 			cursor: default;
 		}
 		.version {
 			font-size: 9px;
-			color: #999;
 			font-style: italic;
 			margin: 0 0 7px 0;
 
-			a {
-				color: #bbb;
-			}
-			a:hover {
-				color: #fff;
-			}
 		}
 		.description {
 			font-size: 9px;
 			padding-right: 90px;
-		}
-		li.active {
-			opacity: 1;
-		}
-		li.inactive {
-			opacity: 0.5;
-		}
-
-		li:nth-child(even) {
-			background: #333;
 		}
 
 		.btn {
 			float: right;
 			display: block;
 			width: 80px;
-			background: #191919;
 			text-transform: uppercase;
 			padding: 10px;
 			font-size: 9px;
@@ -770,10 +739,6 @@ body {
 			cursor: default;
 		}
 
-		li.inactive .btn:hover {
-			background: #000;
-			color: #eee;
-		}
 	}
 }
 
@@ -801,18 +766,11 @@ body {
 		height: 24px;
 		margin-top: 5px;
 		margin-right: 5px;
-		background: url("../media/icons.png") center center no-repeat;
-		opacity: 0.25;
 	}
-	.cancel:hover {
-		opacity: 1;
-	}
-
 	.logo {
 		margin: 20px auto 10px auto;
 		width: 64px;
 		height: 64px;
-		background: url("../media/logo-64.png");
 		-webkit-animation: rotate 1.5s infinite;
 	}
 
@@ -857,10 +815,6 @@ body {
 
 	button:focus {
 		outline: none;
-	}
-
-	button:active {
-		opacity: 0.8;
 	}
 
 	.btn-accept {

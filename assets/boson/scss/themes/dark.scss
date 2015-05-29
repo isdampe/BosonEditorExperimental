@@ -107,3 +107,84 @@ body {
 	}
 
 }
+
+
+#popup-selectpane {
+
+	#panewrapper {
+		.viewport {
+			background: #444;
+			transition: 0.2s all;
+		}
+		.viewport:hover {
+			background: #666;
+		}
+		.active, .active:hover {
+			background: #2a2a2a!important;
+		}
+	}
+
+}
+
+
+#popup-plugin-window {
+
+	ul {
+		background: #2a2a2a;
+		border: 1px solid #3c3c3c;
+
+		li {
+			background: #2f2f2f;
+		}
+		.version {
+			color: #999;
+
+			a {
+				color: #bbb;
+			}
+			a:hover {
+				color: #fff;
+			}
+		}
+		li.active {
+			opacity: 1;
+		}
+		li.inactive {
+			opacity: 0.5;
+		}
+
+		li:nth-child(even) {
+			background: #333;
+		}
+
+		.btn {
+			background: #191919;
+		}
+
+		li.inactive .btn:hover {
+			background: #000;
+			color: #eee;
+		}
+	}
+}
+
+.popup {
+
+	.cancel {
+		background: url("../../media/icons.png") center center no-repeat;
+		opacity: 0.25;
+	}
+	.cancel:hover {
+		opacity: 1;
+	}
+
+	.logo {
+		background: url("../../media/logo-64.png");
+		-webkit-animation: rotate 1.5s infinite;
+	}
+
+	button:active {
+		opacity: 0.8;
+	}
+
+}
