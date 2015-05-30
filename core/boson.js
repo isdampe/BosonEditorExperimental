@@ -34,7 +34,8 @@ var plugins = {};
     currentPaneMode: "single",
     app_dir: path.resolve(path.dirname()),
     cmTheme: false,
-    ui_theme_element: false
+    ui_theme_element: false,
+    platform: process.platform
   };
 
   var hooks = [];
@@ -2372,7 +2373,11 @@ var plugins = {};
       }
 
     } else {
-      boson.working_dir = process.env.PWD;
+      if ( process.platform === "win32" ) {
+        boson.working_dir = process.env['USERPROFILE'];
+      } else {
+        boson.working_dir = process.env.PWD;
+      }
     }
 
     //Log the startup time.
