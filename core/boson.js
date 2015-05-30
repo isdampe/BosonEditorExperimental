@@ -2343,17 +2343,37 @@ var plugins = {};
     //Check command line args.
     if (args.length > 0) {
 
-      //Is first arg file or directory?
-      argCountType = fs.lstatSync(args[0]);
-      if (argCountType.isDirectory()) {
-        boson.working_dir = args[0];
-      } else if (argCountType.isFile()) {
-        //Get the file's working directory.
-        boson.working_dir = path.dirname(args[0]);
-        bs.openFileFromPath(args[0]);
+      switch ( args.length ) {
+        case 1:
+
+          //Is first arg file or directory?
+          try {
+            argCountType = fs.lstatSync(args[0]);
+            if (argCountType.isDirectory()) {
+              boson.working_dir = args[0];
+            } else if (argCountType.isFile()) {
+              //Get the file's working directory.
+              boson.working_dir = path.dirname(args[0]);
+              bs.openFileFromPath(args[0]);
+            }
+          } catch(err) {
+            boson_working_dir = process.env.PWD;
+            bs.openFileFromPath(process.env.PWD + "/" + args[0]);
+          }
+
+        break;
+        case 2:
+
+          //Open file and directory.
+          boson.working_dir = args[0];
+          bs.openFileFromPath(args[0] + "/" + args[1]);
+
+        break;
       }
 
-    };
+    } else {
+      boson.working_dir = process.env.PWD;
+    }
 
     //Log the startup time.
     startupTime = new Date().getTime();
