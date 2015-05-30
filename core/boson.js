@@ -239,7 +239,7 @@ var plugins = {};
 
     var configBuffer;
 
-    configBuffer = JSON.stringify(config);
+    configBuffer = JSON.stringify(config, null, 2);
 
     fs.writeFile("config.json", configBuffer);
 
@@ -297,6 +297,15 @@ var plugins = {};
     bs.updateConfig("fontSize", size);
 
   };
+
+  /*
+   * Let's the user fine tune settings.
+   */
+  this.configuration = function() {
+
+    bs.openFileFromPath("config.json");
+
+  }
 
   /*
    * Internal logging function.
@@ -1895,6 +1904,7 @@ var plugins = {};
             }
             if ( qsb ) {
               qsb.className = "btn btn-inactive";
+              qsb.innerHTML = "Disabled";
             }
 
             list_items.className = "active";

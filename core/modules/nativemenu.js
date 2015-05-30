@@ -209,12 +209,12 @@ exports.init = function( core ) {
 
   //Configuration
   //To be added to next release.
-  /*menus.prefMenu.submenu.append(new core.gui.MenuItem({
+  menus.prefMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Configuration',
   	click: function () {
-
+      bs.configuration();
   	}
-  }));*/
+  }));
 
   //Toggle UI themes.
   menus.prefMenu.submenu.append(new core.gui.MenuItem({
