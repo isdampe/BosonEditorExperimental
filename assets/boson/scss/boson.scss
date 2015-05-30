@@ -7,6 +7,19 @@ body {
 	font-family: 'DejaVuSans', Open Sans, sans-serif;
 	font-size: 13px;
 	font-weight: 500;
+	-webkit-user-select: none;
+}
+
+.resize-element {
+	position: fixed;
+	width: 10px;
+	z-index: 9999px;
+	background: transparent;
+	height: 100%;
+	top: 0;
+	left: 0;
+	opacity: 0.25;
+	cursor: ew-resize;
 }
 
 #sidebar-entrypoint {
@@ -18,7 +31,7 @@ body {
 	font-size: 11px;
 	-webkit-user-select: none;
 	overflow-y: scroll;
-	padding: 0 20px 0 0;
+	padding: 0;
 
 	.module {
 

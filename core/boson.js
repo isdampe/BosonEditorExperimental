@@ -50,6 +50,7 @@ var plugins = {};
    */
   this.preloadDom = function() {
 
+    elements.body = document.body;
     elements.editorEntryPoint = document.getElementById("editor-entrypoint");
     elements.editorWrapper = document.getElementById("editor-wrapper");
     elements.tabsEntryPoint = document.getElementById("tabs-entrypoint");
@@ -2139,7 +2140,6 @@ var plugins = {};
     aboutTxt += "Codemirror.net - JS source view library<br />";
     aboutTxt += "Dejavu-fonts - Default font faces<br />";
     aboutTxt += "ionicons.com - MIT licensed icons<br />";
-    aboutTxt += "InteractJS - https://github.com/taye/interact.js<br />";
 
     popup_cancel_button = document.createElement("div");
     popup_cancel_button.className = "cancel";
