@@ -55,6 +55,7 @@ var plugins = {};
     elements.tabsEntryPoint = document.getElementById("tabs-entrypoint");
     elements.bodyEntryPoint = document.getElementById("body-entrypoint");
     elements.selectFilesInput = document.getElementById("boson-select-files");
+    elements.selectDirectoryInput = document.getElementById("boson-select-directory");
     elements.footerEntryPoint = document.getElementById("footer-entrypoint");
     elements.projectRoot = document.getElementById("project-root-list");
     elements.saveFilesInput = document.getElementById("boson-save-file");
@@ -69,6 +70,9 @@ var plugins = {};
     //Hook on change selectFilesInput.
     elements.selectFilesInput.addEventListener("change", function(res) {
       bs.attemptOpenFiles(this.value);
+    }, false);
+    elements.selectDirectoryInput.addEventListener("change", function(res){
+      bs.changeWorkingDirectory(this.value);
     }, false);
 
     //Hook on viewport focus.
@@ -567,6 +571,43 @@ var plugins = {};
 
     elements.selectFilesInput.click();
 
+  };
+
+  /*
+   * Open folder dialogue
+   */
+  this.triggerChangeWorkingDirectory = function() {
+
+    if (! bs.procHooks("change-working-directory") ) {
+      return;
+    }
+
+    elements.selectDirectoryInput.click();
+
+  };
+
+  /*
+   * Changes the current working directory.
+   */
+  this.changeWorkingDirectory = function(directory) {
+
+    if ( directory === "" ) {
+      bs.bsError("No directory to change to");
+      return;
+    }
+
+    boson.working_dir = directory;
+    modules["treeview"].reset();
+    bs.moduleReInitByName("treeview");
+
+  };
+
+  /*
+   * Refresh the current directory
+   */
+  this.refreshWorkingDirectory = function() {
+    modules["treeview"].reset();
+    bs.moduleReInitByName("treeview");
   };
 
   /*
@@ -2302,6 +2343,26 @@ var plugins = {};
     } else {
       bs.bsError("Plugin " + plugin + " has no method 'shutdown'");
     }
+
+  };
+
+  /*
+   * ReInitializes a core module by name
+   */
+  this.moduleReInitByName = function(name) {
+
+    var passObject;
+
+    passObject = {
+      gui: gui,
+      win: win,
+      bs: this,
+      boson: boson,
+      elements: elements,
+      config: config
+    };
+
+    modules[name].init(passObject);
 
   };
 

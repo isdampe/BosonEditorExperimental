@@ -3,8 +3,11 @@ var fs = require("fs");
 var menu = this;
 var current_menu_item = false;
 var open_directory = {};
+var coreGl;
 
 exports.init = function( core ) {
+
+	coreGl = core;
 
 	//Fetch directory listing.
 	fs.readdir( core.boson.working_dir, function(err, files) {
@@ -24,6 +27,14 @@ exports.init = function( core ) {
 
 };
 
+exports.reset = function() {
+
+	coreGl.elements.projectRoot.innerHTML = "";
+	current_menu_item = false;
+	open_directory = {};
+
+};
+
 exports.sortFiles = function ( files, cwd ) {
 
 	//Sort folder to top, file to bottom.
@@ -35,10 +46,10 @@ exports.sortFiles = function ( files, cwd ) {
 		try {
 			fstat = fs.statSync( uid );
 		} catch (err) {
-			
+
 		}
 
-		
+
 		if ( fstat.isFile() ) {
 			fileBuffer.push( files[key] );
 		} else {
@@ -148,7 +159,7 @@ exports.handleClick = function( file, list_item, cwd, bs ) {
 	if ( current_menu_item !== false && list_item !== current_menu_item ) {
 		current_menu_item.className = "";
 	}
-	
+
 	list_item.className = "current";
 	current_menu_item = list_item;
 

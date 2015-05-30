@@ -38,6 +38,25 @@ exports.init = function( core ) {
   //Spacer
   menus.fileMenu.submenu.append(new core.gui.MenuItem({ type: 'separator' }));
 
+  //Refresh directory
+  menus.fileMenu.submenu.append(new core.gui.MenuItem({
+  	label: 'Refresh working directory',
+  	click: function () {
+      bs.refreshWorkingDirectory();
+  	}
+  }));
+
+  //Change directory
+  menus.fileMenu.submenu.append(new core.gui.MenuItem({
+  	label: 'Change working directory',
+  	click: function () {
+      bs.triggerChangeWorkingDirectory();
+  	}
+  }));
+
+  //Spacer
+  menus.fileMenu.submenu.append(new core.gui.MenuItem({ type: 'separator' }));
+
   //Save
   menus.fileMenu.submenu.append(new core.gui.MenuItem({
   	label: 'Save',
@@ -288,6 +307,39 @@ exports.init = function( core ) {
   bs.deleteTabMenu = nativemenu.deleteTabMenu;
   bs.insertMenuItem = nativemenu.insertMenuItem;
   bs.removeMenuItem = nativemenu.removeMenuItem;
+
+  nativemenu.createTreeMenu();
+
+};
+
+exports.createTreeMenu = function() {
+
+  var contextMenu;
+
+  contextMenu = new coreGl.gui.Menu();
+
+  //Refresh
+  contextMenu.append(new coreGl.gui.MenuItem({
+    label: 'Refresh directory',
+    click: function() {
+      bs.refreshWorkingDirectory();
+    }
+  }));
+
+  //Change
+  contextMenu.append(new coreGl.gui.MenuItem({
+    label: 'Change working directory',
+    click: function() {
+      bs.triggerChangeWorkingDirectory();
+    }
+  }));
+
+  coreGl.elements.sidebar.addEventListener('contextmenu', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    contextMenu.popup(e.x,e.y);
+    return false;
+  })
 
 };
 
