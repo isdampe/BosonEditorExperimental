@@ -756,6 +756,7 @@ var plugins = {};
     elements.editorEntryPoint.className = mode;
     boson.currentPaneMode = mode;
     bs.rerouteOverflowingPanes( mode, colNumber );
+    bs.updateConfig("paneMode", mode);
 
   };
 
@@ -2467,6 +2468,8 @@ var plugins = {};
 
     bs.setFontSize(config.fontSize);
 
+    bs.switchPaneMode(config.paneMode);
+
     //Fetch window.
     win = gui.Window.get();
 
@@ -2566,5 +2569,6 @@ var plugins = {};
   fontSize: 14,
 	lineWrapping: true,
 	sidebarWidth: 190,
-  plugins: {}
+  plugins: {},
+  paneMode: "single"
 });
