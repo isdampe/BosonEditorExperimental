@@ -42,7 +42,7 @@ exports.render = function() {
   var sidebar_width, element_width, sidebar_offset, x;
   sidebar_width = window.getComputedStyle(elements.sidebar).width;
   element_width = window.getComputedStyle(resizeElement).width;
-  x = parseInt(sidebar_width,10) - ( parseInt(element_width) );
+  x = parseInt(sidebar_width,10);
 
   resizeElement.style.left = x + "px";
 
