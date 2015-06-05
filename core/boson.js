@@ -842,6 +842,32 @@ var plugins = {};
   };
 
   /*
+   * Get an editor by ID.
+   */
+  this.getEditorById = function(i) {
+
+    if ( editor.hasOwnProperty(i) ) {
+      return editor[i];
+    } else {
+      return false;
+    }
+
+  };
+
+  /*
+   * Gets editor data by ID.
+   */
+  this.getEditorDataById = function(i) {
+
+    if ( editorData.hasOwnProperty(i) ) {
+      return editorData[i];
+    } else {
+      return false;
+    }
+
+  };
+
+  /*
    * Creates a new editor / Codemirror instance.
    * Also hooks required Codemirror sections.
    */
