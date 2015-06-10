@@ -1,0 +1,8 @@
+{
+  "name": "live-preview",
+  "description": "Watch your HTML edits in real time",
+  "version": "1.0",
+  "main": "live-preview.js",
+  "author": "@isdampe",
+  "url": "https://github.com/isdampe"
+}
