@@ -1,5 +1,5 @@
 {
-  "name": "Boson Editor",
+  "name": "Boson-Editor",
   "main": "editor.html",
   "single-instance": false,
   "description": "Experimental editor",
@@ -18,5 +18,8 @@
   },
   "webkit": {
     "plugin": false
+  },
+  "dependencies": {
+    "async": "^1.2.1"
   }
 }

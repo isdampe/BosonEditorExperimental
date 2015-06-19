@@ -4,6 +4,7 @@
  */
 var gui = require('nw.gui');
 var fs = require('fs');
+var async = require("async");
 var path = require('path');
 var args = window.gui.App.argv;
 var child = require('child_process');
@@ -95,31 +96,31 @@ var plugins = {};
   /*
    * Loads the config from saved file.
    */
-  this.loadConfig = function() {
+  this.loadConfig = function(callback) {
 
     var configJson, configObject, key, fileFound = true;
 
-    try {
-      configJson = fs.readFileSync("config.json", {
-        encoding: "utf-8"
-      });
-    } catch (err) {
-      bs.bsError("No config.json file found");
-      fileFound = false;
-    }
+    configJson = fs.readFile("config.json", {
+      encoding: "utf-8"
+    }, function (err, configJson) {
+      if (err) {
+        bs.bsError("No config.json file found");
+        fileFound = false;
+      }
+      if ( fileFound === true ) {
+        try {
+          configObject = JSON.parse(configJson);
+        } catch (err) {
+          bs.bsError("Invalid config.json file.");
+        }
 
-    if ( fileFound === true ) {
-      try {
-        configObject = JSON.parse(configJson);
-      } catch (err) {
-        bs.bsError("Invalid config.json file.");
+        for ( key in configObject ) {
+          config[key] = configObject[key];
+        }
       }
 
-      for ( key in configObject ) {
-        config[key] = configObject[key];
-      }
-    }
-
+      callback();
+    });
   };
 
   /*
@@ -1577,36 +1578,6 @@ var plugins = {};
   };
 
   /*
-   * Synchronously saves a editor buffer as defined by i (editor id)
-   */
-  this.saveBufferByIdSync = function(i) {
-
-    if (! bs.procHooks("save-buffer-by-id-sync", {
-      i: i
-    } ) ) {
-      return;
-    }
-
-    //Save the specified buffer changes to buffer.
-    var fh, fileBuffer;
-
-    if (editorData[i].guid.substring(0, 12) === "new-document") {
-      return;
-    }
-
-    //Sync Codemirror and editorData.
-    editorData[i].buffer = editor[i].cm.getValue();
-    fileBuffer = editorData[i];
-
-    fs.writeFileSync(fileBuffer.cwd + "/" + fileBuffer.name, fileBuffer.buffer);
-
-    bs.flagHasChanged(i, false);
-
-    return;
-
-  };
-
-  /*
    * Loops through all active file buffers, and save them in their current state to disk.
    */
   this.saveAllBuffers = function(callback) {
@@ -1617,19 +1588,20 @@ var plugins = {};
       return;
     }
 
-    var key;
-
-    for (key in editor) {
-      if (editor[key].changed === true) {
-        bs.saveBufferByIdSync(key);
+    async.forEachOf(editor, function (value, key, callback) {
+      if (value.changed === true) {
+        bs.saveBufferById(key, function() {
+          callback();
+        });
+      } else {
+        callback();
       }
-    }
-
-    if (typeof callback === "function") {
-      callback();
-    }
-
-    return;
+    },
+    function() {
+      if (typeof callback === "function") {
+        callback();
+      }
+    });
 
   };
 
@@ -2436,9 +2408,6 @@ var plugins = {};
    * Bootstraps the entire app.
    */
   this.init = function() {
-
-    var startupTime, bootUpTime, totalBootTime, i, fileCount, argCountType;
-
     //Check command line args.
     if (args.length > 0) {
 
@@ -2446,19 +2415,21 @@ var plugins = {};
         case 1:
 
           //Is first arg file or directory?
-          try {
-            argCountType = fs.lstatSync(args[0]);
-            if (argCountType.isDirectory()) {
-              boson.working_dir = args[0];
-            } else if (argCountType.isFile()) {
-              //Get the file's working directory.
-              boson.working_dir = path.dirname(args[0]);
-              bs.openFileFromPath(args[0]);
-            }
-          } catch(err) {
-            boson_working_dir = process.env.PWD;
-            bs.openFileFromPath(process.env.PWD + "/" + args[0]);
-          }
+            fs.lstat(args[0], function (err, argCountType) {
+              if(err) {
+                boson_working_dir = process.env.PWD;
+                bs.openFileFromPath(process.env.PWD + "/" + args[0]);
+              }
+
+              if (argCountType.isDirectory()) {
+                boson.working_dir = args[0];
+              } else if (argCountType.isFile()) {
+                //Get the file's working directory.
+                boson.working_dir = path.dirname(args[0]);
+                bs.openFileFromPath(args[0]);
+              }
+              bs.initializeUI();
+            });
 
         break;
         case 2:
@@ -2467,6 +2438,7 @@ var plugins = {};
           boson.working_dir = args[0];
           bs.openFileFromPath(args[0] + "/" + args[1]);
 
+          bs.initializeUI();
         break;
       }
 
@@ -2476,63 +2448,71 @@ var plugins = {};
       } else {
         boson.working_dir = process.env.PWD;
       }
-    }
 
+      bs.initializeUI();
+    }
+  };
+
+  /**
+   * Initialize Boson's user interface
+   */
+  this.initializeUI = function() {
+    var fileCount, startupTime, bootUpTime, totalBootTime;
     //Log the startup time.
     startupTime = new Date().getTime();
 
     //Load config.
-    bs.loadConfig();
+    bs.loadConfig(function() {
 
-    //Set Codemirror options.
-    CodeMirror.modeURL = "assets/codemirror/mode/%N/%N.js";
+      //Set Codemirror options.
+      CodeMirror.modeURL = "assets/codemirror/mode/%N/%N.js";
 
-    //Preload dom selection.
-    bs.preloadDom();
-    bs.injectTheme();
-    bs.injectCmTheme(config.theme + ".css");
+      //Preload dom selection.
+      bs.preloadDom();
+      bs.injectTheme();
+      bs.injectCmTheme(config.theme + ".css");
 
-    bs.setFontSize(config.fontSize);
+      bs.setFontSize(config.fontSize);
 
-    bs.switchPaneMode(config.paneMode);
+      bs.switchPaneMode(config.paneMode);
 
-    //Fetch window.
-    win = gui.Window.get();
+      //Fetch window.
+      win = gui.Window.get();
 
-    win.on("close", function() {
-      bs.closeBoson();
-    });
+      win.on("close", function() {
+        bs.closeBoson();
+      });
 
-    //Load modules.
-    bs.moduleInit();
+      //Load modules.
+      bs.moduleInit();
 
-    //Register Drag and drop tabs.
-    bs.registerDragDrop();
+      //Register Drag and drop tabs.
+      bs.registerDragDrop();
 
-    //Show the window.
-    win.show();
+      //Show the window.
+      win.show();
 
-    //Auto select editor.
-    if (boson.current_editor === null) {
-      if (fileCount >= 1) {
-        this.switchToEditor(fileCount - 1);
+      //Auto select editor.
+      if (boson.current_editor === null) {
+        if (fileCount >= 1) {
+          this.switchToEditor(fileCount - 1);
+        }
       }
-    }
 
-    //Load themes.
-    bs.loadCmThemes();
+      //Load themes.
+      bs.loadCmThemes();
 
-    //Calc boot time.
-    bootUpTime = new Date().getTime();
-    totalBootTime = bootUpTime - startupTime;
+      //Calc boot time.
+      bootUpTime = new Date().getTime();
+      totalBootTime = bootUpTime - startupTime;
 
-    //Scan for plugins later to keep startup speed down.
-    bs.pluginInit();
+      //Scan for plugins later to keep startup speed down.
+      bs.pluginInit();
 
-    //Log boot time.
-    this.log("Boot complete, " + totalBootTime + " ms");
-
-  };
+      //Log boot time.
+      this.log("Boot complete, " + totalBootTime + " ms");
+    });
+  }
 
   /*
    * Closes the Boson app.
