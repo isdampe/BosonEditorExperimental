@@ -32,6 +32,7 @@ body {
 	-webkit-user-select: none;
 	overflow-y: scroll;
 	padding: 0;
+	transition: 0.03s all;
 
 	.module {
 
@@ -65,6 +66,7 @@ body {
 	height: 40px;
 	width: calc(100% - 190px);
 	-webkit-user-select: none;
+	transition: 0.03s all;
 }
 
 #tabs-entrypoint {
@@ -135,6 +137,7 @@ body {
 	width: calc(100% - 190px);
 	height: calc(100% - 38px);
 	background: url("../media/logo-256.png") center center no-repeat #292929;
+	transition: 0.03s all;
 
 	textarea {
   	position: absolute;

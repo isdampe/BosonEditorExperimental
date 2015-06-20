@@ -1,9 +1,8 @@
 var resize = this;
-var bs, elements;
-var resizeElement;
-var sideBarWidth;
+var bs, elements, resizeElement, sideBarWidth;
+var resizeTimer = false;
 
-exports.init = function( core ) {
+exports.init = function(core) {
 
   bs = core.bs;
   elements = core.elements;
@@ -16,19 +15,26 @@ exports.init = function( core ) {
 
 
   //Set sidebar width from config.
-  resize.setWidthByConfig( core.config.sidebarWidth );
+  resize.setWidthByConfig(core.config.sidebarWidth);
 
   resize.render();
-  window.addEventListener("resize", function(e){
+  window.addEventListener("resize", function(e) {
     resize.render();
   });
 
-  resizeElement.addEventListener("drag", function(e){
+  resizeElement.addEventListener("drag", function(e) {
 
-    resize.setWidthByConfig(e.clientX);
+    /* Throttle the resize function and let chromium smoothly
+    animate the resize with css. */
+    if (resizeTimer === false) {
+      resize.setWidthByConfig(e.clientX);
+      resizeTimer = setTimeout(function() {
+        resizeTimer = false;
+      }, 30);
+    }
 
   });
-  resizeElement.addEventListener("dragend", function(e){
+  resizeElement.addEventListener("dragend", function(e) {
 
     bs.updateConfig("sidebarWidth", sideBarWidth);
 
@@ -42,15 +48,15 @@ exports.render = function() {
   var sidebar_width, element_width, sidebar_offset, x;
   sidebar_width = window.getComputedStyle(elements.sidebar).width;
   element_width = window.getComputedStyle(resizeElement).width;
-  x = parseInt(sidebar_width,10);
+  x = parseInt(sidebar_width, 10);
 
   resizeElement.style.left = x + "px";
 
 };
 
-exports.setWidthByHook = function( event ) {
+exports.setWidthByHook = function(event) {
 
-  if ( event.rect.width < 160 || event.rect.width > 639 ) {
+  if (event.rect.width < 160 || event.rect.width > 639) {
     return;
   }
 
@@ -58,13 +64,13 @@ exports.setWidthByHook = function( event ) {
     x = (parseFloat(target.getAttribute('data-x')) || 0),
     y = (parseFloat(target.getAttribute('data-y')) || 0);
 
-  target.style.width  = event.rect.width + 'px';
+  target.style.width = event.rect.width + 'px';
 
   var calcString = "calc(100% - " + event.rect.width + "px)";
   elements.editorEntryPoint.style.width = calcString;
-  elements.editorEntryPoint.style.left  = event.rect.width + 'px';
+  elements.editorEntryPoint.style.left = event.rect.width + 'px';
   elements.topbar.style.width = calcString;
-  elements.topbar.style.left  = event.rect.width + 'px';
+  elements.topbar.style.left = event.rect.width + 'px';
 
   target.setAttribute('data-x', x);
   target.setAttribute('data-y', y);
@@ -75,7 +81,7 @@ exports.setWidthByHook = function( event ) {
 };
 
 
-exports.setWidthByConfig = function( width ) {
+exports.setWidthByConfig = function(width) {
 
   var ev = {};
   ev.rect = {};
