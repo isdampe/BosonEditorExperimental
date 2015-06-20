@@ -1312,27 +1312,16 @@ var plugins = {};
     if (editor[i].changed === true) {
 
       //Confirm save.
-      popup = this.warnSave(i, function(i) {
-
+      if ( confirm("Do you want to save your changes before closing this file?") ) {
         //On save.
         bs.saveBufferById(i, function() {
           bs.closeEditor(i);
-          bs.suspendCancelEvent("Save before closing?");
         });
-
-      }, function(i) {
-
+      } else {
         //On not save.
         bs.closeEditor(i);
-        bs.suspendCancelEvent("Save before closing?");
-
-      });
-
-      bs.addCancelEvent("Save before closing?", function() {
-        bs.removePopupDialogue(popup);
-        bs.suspendCancelEvent("Save before closing?");
-      });
-
+      }
+      
     } else {
       this.closeEditor(i);
     }
@@ -1358,26 +1347,13 @@ var plugins = {};
     if (editor[boson.current_editor].changed === true) {
 
       //Confirm save.
-      popup = this.warnSave(boson.current_editor, function(i) {
-
-        //On save.
-        bs.saveCurrentBuffer(function() {
+      if ( confirm("Do you want to save your changes before closing this file?") ) {
+         bs.saveCurrentBuffer(function() {
           bs.closeEditor(boson.current_editor);
-          bs.suspendCancelEvent("Save before closing?");
         });
-
-      }, function(i) {
-
-        //On not save.
+      } else {
         bs.closeEditor(boson.current_editor);
-        bs.suspendCancelEvent("Save before closing?");
-
-      });
-
-      bs.addCancelEvent("Save before closing?", function() {
-        bs.removePopupDialogue(popup);
-        bs.suspendCancelEvent("Save before closing?");
-      });
+      }
 
     } else {
       this.closeEditor(boson.current_editor);
@@ -2556,27 +2532,13 @@ var plugins = {};
     if (allSaved === false) {
 
       //Confirm save.
-      popup = this.warnSave(boson.current_editor, function(i) {
-
-        //On save.
+      if ( confirm("Save all unsaved files before closing?") ) {
         bs.saveAllBuffers(function() {
-          bs.suspendCancelEvent("Save all before closing?");
           process.exit(0);
         });
-
-      }, function(i) {
-
-        //On not save.
-        bs.suspendCancelEvent("Save all before closing?");
+      } else {
         process.exit(0);
-
-      });
-
-      bs.addCancelEvent("Save all before closing?", function() {
-        bs.removePopupDialogue(popup);
-        bs.suspendCancelEvent("Save all before closing?");
-      });
-
+      }
 
     } else {
       process.exit(0);
