@@ -37,6 +37,7 @@ exports.init = function(core) {
   resizeElement.addEventListener("dragend", function(e) {
 
     bs.updateConfig("sidebarWidth", sideBarWidth);
+    resize.render();
 
   });
 
