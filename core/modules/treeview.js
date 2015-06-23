@@ -1,4 +1,5 @@
 var fs = require("fs");
+var async = require("async");
 
 var menu = this;
 var current_menu_item = false;
@@ -16,13 +17,11 @@ exports.init = function( core ) {
 		} else {
 
 			//Sort tabs.
-			files = menu.sortFiles( files, core.boson.working_dir );
-
-			//Add tabs.
-			menu.injectFilesToRoot( files, core.elements.projectRoot, core.boson.working_dir, core.bs );
-
+			menu.sortFiles( files, core.boson.working_dir, function(files) {
+				//Add tabs.
+				menu.injectFilesToRoot( files, core.elements.projectRoot, core.boson.working_dir, core.bs );
+			});
 		}
-
 	} );
 
 };
@@ -35,38 +34,35 @@ exports.reset = function() {
 
 };
 
-exports.sortFiles = function ( files, cwd ) {
+exports.sortFiles = function ( files, cwd, callback) {
 
 	//Sort folder to top, file to bottom.
 	var mainBuffer = [], folderBuffer = [], fileBuffer = [], key, fstat, uid;
 
-	for ( key in files ) {
+	var series = [];
 
-		uid = cwd + "/" + files[key];
-		try {
-			fstat = fs.statSync( uid );
-		} catch (err) {
 
+	async.forEachOf(files, function (value, key, callback) {
+		uid = cwd + "/" + value;
+		fs.stat( uid, function(err, data) {
+			if ( data.isFile() ) {
+				fileBuffer.push( value );
+			} else {
+				folderBuffer.push( value );
+			}
+			callback();
+		} );
+	},
+	function() {
+		for ( key in folderBuffer ) {
+			mainBuffer.push( folderBuffer[key] );
+		}
+		for ( key in fileBuffer ) {
+			mainBuffer.push( fileBuffer[key] );
 		}
 
-
-		if ( fstat.isFile() ) {
-			fileBuffer.push( files[key] );
-		} else {
-			folderBuffer.push( files[key] );
-		}
-
-	}
-
-	for ( key in folderBuffer ) {
-		mainBuffer.push( folderBuffer[key] );
-	}
-	for ( key in fileBuffer ) {
-		mainBuffer.push( fileBuffer[key] );
-	}
-
-	return mainBuffer;
-
+		callback(mainBuffer);
+	});
 };
 
 exports.injectFilesToRoot = function( files, projectRoot, cwd, bs ) {
@@ -196,15 +192,16 @@ exports.expandDir = function( list_item, bs ) {
 			return;
 		}
 
-		files = menu.sortFiles( files, uri );
+		menu.sortFiles( files, uri, function(files) {
+			submenu = window.document.createElement("ul");
+			submenu.className = "submenu";
+			submenu.setAttribute("data-uri", uri);
 
-		submenu = window.document.createElement("ul");
-		submenu.className = "submenu";
-		submenu.setAttribute("data-uri", uri);
+			list_item.appendChild(submenu);
 
-		list_item.appendChild(submenu);
+			menu.injectFilesToRoot( files, submenu, uri, bs );
+		});
 
-		menu.injectFilesToRoot( files, submenu, uri, bs );
 
 	});
 

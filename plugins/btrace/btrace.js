@@ -147,10 +147,6 @@ exports.init = function( core ) {
     bs.log("bs.saveCurrentBuffer");
   },"btrace-save-current-buffer");
 
-  bs.addHook("save-buffer-by-id-sync", function(){
-    bs.log("bs.saveBufferByIdSync");
-  },"btrace-save-buffer-by-id-sync");
-
   bs.addHook("save-all-buffers", function(){
     bs.log("bs.saveAllBuffers");
   },"btrace-save-all-buffers");
