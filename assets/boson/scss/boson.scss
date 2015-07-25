@@ -136,7 +136,7 @@ body {
 	font-size: 24px;
 	width: calc(100% - 190px);
 	height: calc(100% - 38px);
-	background: url("../media/logo-256.png") center center no-repeat #292929;
+	background: #292929;
 	transition: 0.03s all;
 
 	textarea {
@@ -184,7 +184,7 @@ body {
 		display: block;
 		width: 50%;
 		height: 100%;
-		border-left: 1px solid #000;
+		border-left: 1px solid #1b1b1b;
 	}
 	#viewport-3 {
 		display: none;
@@ -208,7 +208,7 @@ body {
 		display: block;
 		width: 33.3333333332%;
 		height: 100%;
-		border-left: 1px solid #000;
+		border-left: 1px solid #1b1b1b;
 		border-right: 1px solid #333;
 	}
 	#viewport-3 {
@@ -216,7 +216,7 @@ body {
 		display: block;
 		width: 33.3333333332%;
 		height: 100%;
-		border-left: 1px solid #000;
+		border-left: 1px solid #1b1b1b;
 	}
 	#viewport-4 {
 		display: none;
@@ -237,7 +237,7 @@ body {
 		display: block;
 		width: 25%;
 		height: 100%;
-		border-left: 1px solid #000;
+		border-left: 1px solid #1b1b1b;
 		border-right: 1px solid #333;
 	}
 	#viewport-3 {
@@ -245,7 +245,7 @@ body {
 		display: block;
 		width: 25%;
 		height: 100%;
-		border-left: 1px solid #000;
+		border-left: 1px solid #1b1b1b;
 		border-right: 1px solid #333;
 	}
 	#viewport-4 {
@@ -253,7 +253,7 @@ body {
 		display: block;
 		width: 25%;
 		height: 100%;
-		border-left: 1px solid #000;
+		border-left: 1px solid #1b1b1b;
 	}
 
 }
@@ -264,7 +264,7 @@ body {
 		display: block;
 		width: 100%;
 		height: 50%;
-		border-bottom: 1px solid #000;
+		border-bottom: 1px solid #1b1b1b;
 	}
 	#viewport-2 {
 		display: block;
@@ -287,13 +287,13 @@ body {
 		display: block;
 		width: 100%;
 		height: 33.333333332%;
-		border-bottom: 1px solid #000;
+		border-bottom: 1px solid #1b1b1b;
 	}
 	#viewport-2 {
 		display: block;
 		width: 100%;
 		height: 33.333333332%;
-		border-bottom: 1px solid #000;
+		border-bottom: 1px solid #1b1b1b;
 		border-top: 1px solid #333;
 	}
 	#viewport-3 {
@@ -315,8 +315,8 @@ body {
 		display: block;
 		width: 50%;
 		height: 50%;
-		border-bottom: 1px solid #000;
-		border-right: 1px solid #000;
+		border-bottom: 1px solid #1b1b1b;
+		border-right: 1px solid #1b1b1b;
 	}
 	#viewport-2 {
 		float: left;
@@ -324,7 +324,7 @@ body {
 		width: 50%;
 		height: 50%;
 		border-left: 1px solid #333;
-		border-bottom: 1px solid #000;
+		border-bottom: 1px solid #1b1b1b;
 	}
 	#viewport-3 {
 		float: left;
@@ -332,7 +332,7 @@ body {
 		width: 50%;
 		height: 50%;
 		border-top: 1px solid #333;
-		border-right: 1px solid #000;
+		border-right: 1px solid #1b1b1b;
 	}
 	#viewport-4 {
 		float: left;
@@ -434,32 +434,32 @@ body {
 
 	li ul li ul li span {
 		margin: 0;
-		padding: 3px 0 0 30px;
+		padding: 3px 0 0 35px;
 	}
 
 	li ul li ul li ul li span {
 		margin: 0;
-		padding: 3px 0 0 40px;
+		padding: 3px 0 0 50px;
 	}
 
 	li ul li ul li ul li ul li span {
 		margin: 0;
-		padding: 3px 0 0 50px;
+		padding: 3px 0 0 65px;
 	}
 
 	li ul li ul li ul li ul li ul li span {
 		margin: 0;
-		padding: 3px 0 0 60px;
+		padding: 3px 0 0 80px;
 	}
 
 	li ul li ul li ul li ul li ul li ul li span {
 		margin: 0;
-		padding: 3px 0 0 70px;
+		padding: 3px 0 0 95px;
 	}
 
 	li ul li ul li ul li ul li ul li ul li ul li span {
 		margin: 0;
-		padding: 3px 0 0 80px;
+		padding: 3px 0 0 110px;
 	}
 
 }
