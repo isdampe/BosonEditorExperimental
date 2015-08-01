@@ -8,6 +8,7 @@ exports.init = function(core) {
   elements = core.elements;
   sideBarWidth = core.config.sidebarWidth;
 
+  //Sidebar resize element.
   resizeElement = window.document.createElement("div");
   resizeElement.className = "resize-element";
   resizeElement.setAttribute("draggable", "true");
