@@ -70,12 +70,6 @@ var plugins = {};
     elements.projectRoot = document.getElementById("project-root-list");
     elements.saveFilesInput = document.getElementById("boson-save-file");
     elements.sidebar = document.getElementById("sidebar-entrypoint");
-    elements.topbar = document.getElementById("topbar-entrypoint");
-    elements.viewports = [];
-    elements.viewports[1] = document.getElementById("viewport-1");
-    elements.viewports[2] = document.getElementById("viewport-2");
-    elements.viewports[3] = document.getElementById("viewport-3");
-    elements.viewports[4] = document.getElementById("viewport-4");
 
     //Hook on change selectFilesInput.
     elements.selectFilesInput.addEventListener("change", function(res) {
@@ -86,16 +80,16 @@ var plugins = {};
     }, false);
 
     //Hook on viewport focus.
-    elements.viewports[1].addEventListener("click", function(e){
+    viewports[1].wrapper.addEventListener("click", function(e){
       bs.activateViewport(1);
     });
-    elements.viewports[2].addEventListener("click", function(e){
+    viewports[2].wrapper.addEventListener("click", function(e){
       bs.activateViewport(2);
     });
-    elements.viewports[3].addEventListener("click", function(e){
+    viewports[3].wrapper.addEventListener("click", function(e){
       bs.activateViewport(3);
     });
-    elements.viewports[4].addEventListener("click", function(e){
+    viewports[4].wrapper.addEventListener("click", function(e){
       bs.activateViewport(4);
     });
 
@@ -195,7 +189,9 @@ var plugins = {};
     max = editor.length;
     i = 0;
     for ( i; i<max; i++ ) {
-      editor[i].cm.setOption("theme", uri.replace(".css","") );
+      if ( editor[i].hasOwnProperty("cm") ) {
+        editor[i].cm.setOption("theme", uri.replace(".css","") );
+      }
     }
 
   };
@@ -212,12 +208,10 @@ var plugins = {};
     if (boson.sidebarActive === true) {
       elements.sidebar.className = "sidebar-deactivated";
       elements.editorWrapper.className = "editor-fullscreen";
-      elements.topbar.className = "topbar-fullscreen";
       boson.sidebarActive = false;
     } else {
       elements.sidebar.className = "";
       elements.editorWrapper.className = "";
-      elements.topbar.className = "";
       boson.sidebarActive = true;
     }
 
