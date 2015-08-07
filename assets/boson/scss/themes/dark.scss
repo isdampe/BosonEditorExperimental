@@ -23,6 +23,10 @@ body {
 #editor-entrypoint {
 	background: #111;
 
+	.viewport {
+		background: #292929;
+	}
+
 	.tabs {
 		li {
 			background: #222;
@@ -38,6 +42,7 @@ body {
 			}
 
 		}
+
 		li.active {
 			background: #353535;
 			border-left: 2px solid $sidebarhighlight;
