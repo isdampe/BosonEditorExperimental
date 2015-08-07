@@ -69,59 +69,6 @@ body {
 	transition: 0.03s all;
 }
 
-#tabs-entrypoint {
-	margin: 0;
-	padding-left: 0;
-	height: 40px;
-	-webkit-user-select: none;
-	font-size: 11px;
-	margin-top: 5px;
-
-	ul {
-		margin: 0;
-		padding: 0;
-	}
-
-	li {
-		display: block;
-		position: relative;
-		float: left;
-		padding: 0 25px 0 15px;
-		margin: 0;
-		height: 31px;
-		width: 100px;
-		min-width: 150px;
-		list-style-type: none;
-		margin-top: 0;
-		line-height: 31px;
-		white-space: nowrap;
-  	overflow: hidden;
-  	text-overflow: ellipsis;
-  	border-top-left-radius: 3px;
-  	border-top-right-radius: 3px;
-	}
-	li.active {
-		margin-top: 0;
-		min-width: 150px;
-
-		.close {
-			background: url("../media/icons-inverted.png") center center no-repeat;
-		}
-	}
-	.close {
-		position: absolute;
-		top: 8px;
-		right: 6px;
-		display: block;
-		width: 16px;
-		height: 16px;
-		text-align: center;
-		line-height: 16px;
-		background: url("../media/icons.png") center center no-repeat;
-	}
-}
-
-
 .editor-fullscreen {
 	#editor-entrypoint {
 		width: 100%!important;
@@ -131,13 +78,15 @@ body {
 
 #editor-entrypoint {
 	position: fixed;
-	top: 38px;
+	top: 0;
 	left: 190px;
 	font-size: 24px;
 	width: calc(100% - 190px);
-	height: calc(100% - 38px);
-	background: #292929;
+	height: 100%;
 	transition: 0.03s all;
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
 
 	textarea {
   	position: absolute;
@@ -149,6 +98,11 @@ body {
   	opacity: 0;
   }
 
+  .viewport {
+  	width: 100%;
+  	height: 100%;
+  }
+
 }
 
 #editor-entrypoint {
@@ -157,15 +111,82 @@ body {
 		display: block;
 		width: 100%;
 		height: 100%;
+		position: relative;
+		background: #292929;
 	}
 	#viewport-2 {
 		display: none;
+		position: relative;
+		background: #292929;
 	}
 	#viewport-3 {
 		display: none;
+		position: relative;
+		background: #292929;
 	}
 	#viewport-4 {
 		display: none;
+		position: relative;
+		background: #292929;
+	}
+
+	.tabs {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		background: #191919;
+		height: 30px;
+		-webkit-user-select: none;
+		font-size: 11px;
+		margin: 0;
+		padding: 0;
+
+		li {
+			display: block;
+			position: relative;
+			float: left;
+			padding: 0 25px 0 15px;
+			margin: 0;
+			height: 30px;
+			width: 100px;
+			min-width: 150px;
+			list-style-type: none;
+			margin-top: 0;
+			line-height: 30px;
+			white-space: nowrap;
+	  	overflow: hidden;
+	  	text-overflow: ellipsis;
+	  	border-top-left-radius: 3px;
+	  	border-top-right-radius: 3px;
+		}
+		li.active {
+			margin-top: 0;
+			min-width: 150px;
+
+			.close {
+				background: url("../media/icons-inverted.png") center center no-repeat;
+			}
+		}
+		.close {
+			position: absolute;
+			top: 8px;
+			right: 6px;
+			display: block;
+			width: 16px;
+			height: 16px;
+			text-align: center;
+			line-height: 16px;
+			background: url("../media/icons.png") center center no-repeat;
+		}
+
+	}
+
+	.editor {
+		position: absolute;
+		top: 30px;
+		height: calc(100% - 30px);
+		width: 100%;
 	}
 
 }
@@ -175,16 +196,14 @@ body {
 	#viewport-1 {
 		float: left;
 		display: block;
-		width: 50%;
+		width: calc(50% - 5px);
 		height: 100%;
-		border-right: 1px solid #333;
 	}
 	#viewport-2 {
 		float: left;
 		display: block;
-		width: 50%;
+		width: calc(50% - 5px);
 		height: 100%;
-		border-left: 1px solid #1b1b1b;
 	}
 	#viewport-3 {
 		display: none;
@@ -199,24 +218,20 @@ body {
 	#viewport-1 {
 		float: left;
 		display: block;
-		width: 33.3333333332%;
+		width: calc(33.33333% - 5px);
 		height: 100%;
-		border-right: 1px solid #333;
 	}
 	#viewport-2 {
 		float: left;
 		display: block;
-		width: 33.3333333332%;
+		width: calc(33.33333% - 5px);
 		height: 100%;
-		border-left: 1px solid #1b1b1b;
-		border-right: 1px solid #333;
 	}
 	#viewport-3 {
 		float: left;
 		display: block;
-		width: 33.3333333332%;
+		width: calc(33.33333% - 5px);
 		height: 100%;
-		border-left: 1px solid #1b1b1b;
 	}
 	#viewport-4 {
 		display: none;
@@ -228,32 +243,26 @@ body {
 	#viewport-1 {
 		float: left;
 		display: block;
-		width: 25%;
+		width: calc(25% - 5px);
 		height: 100%;
-		border-right: 1px solid #333;
 	}
 	#viewport-2 {
 		float: left;
 		display: block;
-		width: 25%;
+		width: calc(25% - 5px);
 		height: 100%;
-		border-left: 1px solid #1b1b1b;
-		border-right: 1px solid #333;
 	}
 	#viewport-3 {
 		float: left;
 		display: block;
-		width: 25%;
+		width: calc(25% - 5px);
 		height: 100%;
-		border-left: 1px solid #1b1b1b;
-		border-right: 1px solid #333;
 	}
 	#viewport-4 {
-		float: left;
 		display: block;
-		width: 25%;
+		width: calc(25% - 5px);
 		height: 100%;
-		border-left: 1px solid #1b1b1b;
+
 	}
 
 }
@@ -263,14 +272,15 @@ body {
 	#viewport-1 {
 		display: block;
 		width: 100%;
-		height: 50%;
+		height: calc(50% - 5px);
 		border-bottom: 1px solid #1b1b1b;
 	}
 	#viewport-2 {
 		display: block;
 		width: 100%;
-		height: 50%;
+		height: calc(50% - 5px);
 		border-top: 1px solid #333;
+		align-self: flex-end;
 	}
 	#viewport-3 {
 		display: none;
@@ -286,21 +296,22 @@ body {
 	#viewport-1 {
 		display: block;
 		width: 100%;
-		height: 33.333333332%;
+		height: calc(33.333333332% - 5px);
 		border-bottom: 1px solid #1b1b1b;
 	}
 	#viewport-2 {
 		display: block;
 		width: 100%;
-		height: 33.333333332%;
+		height: calc(33.333333332% - 5px);
 		border-bottom: 1px solid #1b1b1b;
 		border-top: 1px solid #333;
 	}
 	#viewport-3 {
 		display: block;
 		width: 100%;
-		height: 33.333333332%;
+		height: calc(33.333333332% - 5px);
 		border-top: 1px solid #333;
+		align-self: flex-end;
 	}
 	#viewport-4 {
 		display: none;
@@ -311,36 +322,26 @@ body {
 #editor-entrypoint.grid {
 
 	#viewport-1 {
-		float: left;
 		display: block;
-		width: 50%;
-		height: 50%;
-		border-bottom: 1px solid #1b1b1b;
-		border-right: 1px solid #1b1b1b;
+		width: calc(50% - 5px);
+		height: calc(50% - 5px);
 	}
 	#viewport-2 {
-		float: left;
 		display: block;
-		width: 50%;
-		height: 50%;
-		border-left: 1px solid #333;
-		border-bottom: 1px solid #1b1b1b;
+		width: calc(50% - 5px);
+		height: calc(50% - 5px);
 	}
 	#viewport-3 {
-		float: left;
 		display: block;
-		width: 50%;
-		height: 50%;
-		border-top: 1px solid #333;
-		border-right: 1px solid #1b1b1b;
+		width: calc(50% - 5px);
+		height: calc(50% - 5px);
+		align-self: flex-end;
 	}
 	#viewport-4 {
-		float: left;
 		display: block;
-		width: 50%;
-		height: 50%;
-		border-top: 1px solid #333;
-		border-left: 1px solid #333;
+		width: calc(50% - 5px);
+		height: calc(50% - 5px);
+		align-self: flex-end;
 	}
 
 }

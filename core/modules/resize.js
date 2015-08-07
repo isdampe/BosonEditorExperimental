@@ -71,8 +71,8 @@ exports.setWidthByHook = function(event) {
   var calcString = "calc(100% - " + event.rect.width + "px)";
   elements.editorEntryPoint.style.width = calcString;
   elements.editorEntryPoint.style.left = event.rect.width + 'px';
-  elements.topbar.style.width = calcString;
-  elements.topbar.style.left = event.rect.width + 'px';
+  //elements.topbar.style.width = calcString;
+  //elements.topbar.style.left = event.rect.width + 'px';
 
   target.setAttribute('data-x', x);
   target.setAttribute('data-y', y);

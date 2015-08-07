@@ -1,23 +1,51 @@
-.cm-s-cobalt.CodeMirror { background: #002240; color: white; }
-.cm-s-cobalt div.CodeMirror-selected { background: #b36539 !important; }
-.cm-s-cobalt .CodeMirror-gutters { background: #002240; border-right: 1px solid #aaa; }
-.cm-s-cobalt .CodeMirror-guttermarker { color: #ffee80; }
-.cm-s-cobalt .CodeMirror-guttermarker-subtle { color: #d0d0d0; }
-.cm-s-cobalt .CodeMirror-linenumber { color: #d0d0d0; }
-.cm-s-cobalt .CodeMirror-cursor { border-left: 1px solid white !important; }
-
-.cm-s-cobalt span.cm-comment { color: #08f; }
-.cm-s-cobalt span.cm-atom { color: #845dc4; }
-.cm-s-cobalt span.cm-number, .cm-s-cobalt span.cm-attribute { color: #ff80e1; }
-.cm-s-cobalt span.cm-keyword { color: #ffee80; }
-.cm-s-cobalt span.cm-string { color: #3ad900; }
-.cm-s-cobalt span.cm-meta { color: #ff9d00; }
-.cm-s-cobalt span.cm-variable-2, .cm-s-cobalt span.cm-tag { color: #9effff; }
-.cm-s-cobalt span.cm-variable-3, .cm-s-cobalt span.cm-def { color: white; }
-.cm-s-cobalt span.cm-bracket { color: #d8d8d8; }
-.cm-s-cobalt span.cm-builtin, .cm-s-cobalt span.cm-special { color: #ff9e59; }
-.cm-s-cobalt span.cm-link { color: #845dc4; }
-.cm-s-cobalt span.cm-error { color: #9d1e15; }
-
-.cm-s-cobalt .CodeMirror-activeline-background {background: #002D57 !important;}
-.cm-s-cobalt .CodeMirror-matchingbracket {outline:1px solid grey;color:white !important}
+.cm-s-cobalt {
+	font-size: 1em;
+	line-height: 1.5em;
+	font-family: inconsolata, monospace;
+	letter-spacing: 0.3px;
+	word-spacing: 1px;
+	background: #002240;
+	color: #FFFFFF;
+}
+.cm-s-cobalt .CodeMirror-lines {
+	padding: 8px 0;
+}
+.cm-s-cobalt .CodeMirror-gutters {
+	box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.5);
+	background-color: #002240;
+	padding-right: 10px;
+	z-index: 3;
+	border: none;
+}
+.cm-s-cobalt div.CodeMirror-cursor {
+	border-left: 3px solid #FFFFFF;
+}
+.cm-s-cobalt .CodeMirror-activeline-background {
+	background: #00000059;
+}
+.cm-s-cobalt .CodeMirror-selected {
+	background: #B36539BF;
+}
+.cm-s-cobalt .cm-keyword {
+	color: #FF9D00;
+}
+.cm-s-cobalt .cm-comment {
+	font-style: italic;
+	color: #0088FF;
+}
+.cm-s-cobalt .cm-property {
+	color: #FFB054;
+}
+.cm-s-cobalt .cm-atom {
+	color: #FFB054;
+}
+.cm-s-cobalt .cm-number {
+	color: #FFB054;
+}
+.cm-s-cobalt .cm-operator {
+	color: #FF9D00;
+}
+.cm-s-cobalt .CodeMirror-linenumber {
+	color: italic;
+}

@@ -38,6 +38,15 @@ var plugins = {};
     platform: process.platform
   };
 
+  var viewports = [];
+  for ( i =1; i<5; i++ ) {
+    viewports[i] = {
+      wrapper: document.getElementById("viewport-" + i),
+      editorElement: document.querySelector("#viewport-" + i + " .editor"),
+      tabElement: document.getElementById("viewport-" + i + "-tabs")
+    };
+  }
+
   var hooks = [];
 
   boson.currentSubView[1] = null;
@@ -654,14 +663,14 @@ var plugins = {};
    */
   this.registerDragDrop = function() {
 
-    nativesortable(elements.tabsEntryPoint, {
+    /*nativesortable(elements.tabsEntryPoint, {
       change: function() {
 
       },
       childClass: "sortable-child",
       draggingClass: "sortable-dragging",
       overClass: "sortable-over"
-    });
+    });*/
 
   };
 
@@ -712,7 +721,7 @@ var plugins = {};
       contextMenu = null;
     }
 
-    elements.tabsEntryPoint.appendChild(tab);
+    viewports[boson.currentViewport].tabElement.appendChild(tab);
 
     tabs[i] = {
       tab: tab,
@@ -802,8 +811,11 @@ var plugins = {};
     }
 
     //Append to new viewport.
-    elements.viewports[futureViewport].appendChild( editor[i].ta );
-    elements.viewports[futureViewport].appendChild( editor[i].cm.getWrapperElement() );
+    viewports[futureViewport].editorElement.appendChild( editor[i].ta );
+    viewports[futureViewport].editorElement.appendChild( editor[i].cm.getWrapperElement() );
+
+    //Move tabs to new viewport.
+    viewports[futureViewport].tabElement.appendChild( tabs[i].tab );
 
     //Update editor.
     editor[i].currentViewport = futureViewport;
@@ -837,7 +849,7 @@ var plugins = {};
       return;
     }
 
-    elements.viewports[boson.currentViewport].appendChild(element);
+    viewports[boson.currentViewport].editorElement.appendChild(element);
 
   };
 

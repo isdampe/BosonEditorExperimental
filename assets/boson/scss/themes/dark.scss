@@ -20,38 +20,37 @@ body {
 	background: #222;
 }
 
-#tabs-entrypoint {
-	background: #222;
-
-	li {
-		background: #222;
-		border-left: 2px solid #222;
-		border-top: 1px solid transparent;
-		border-right: 1px solid transparent;
-
-		.close {
-			opacity: 0.25;
-		}
-		.close:hover {
-			opacity: 1;
-		}
-
-	}
-	li.active {
-		background: #313131;
-		border-left: 2px solid $sidebarhighlight;
-		border-top: 1px solid #111;
-		border-right: 1px solid #111;
-		color: #eee;
-
-		.close {
-			background: url("../../media/icons.png") center center no-repeat;
-		}
-	}
-}
-
 #editor-entrypoint {
-	background: #292929;
+	background: #111;
+
+	.tabs {
+		li {
+			background: #222;
+			border-left: 2px solid #222;
+			border-top: 1px solid transparent;
+			border-right: 1px solid transparent;
+
+			.close {
+				opacity: 0.25;
+			}
+			.close:hover {
+				opacity: 1;
+			}
+
+		}
+		li.active {
+			background: #313131;
+			border-left: 2px solid $sidebarhighlight;
+			border-top: 1px solid #111;
+			border-right: 1px solid #111;
+			color: #eee;
+
+			.close {
+				background: url("../../media/icons.png") center center no-repeat;
+			}
+		}
+	}
+
 }
 
 #module-project {
