@@ -35,18 +35,11 @@ var plugins = {};
     app_dir: path.resolve(path.dirname()),
     cmTheme: false,
     ui_theme_element: false,
-    platform: process.platform
+    platform: process.platform,
+    dragSourceEl: null
   };
 
   var viewports = [];
-  for ( i =1; i<5; i++ ) {
-    viewports[i] = {
-      wrapper: document.getElementById("viewport-" + i),
-      editorElement: document.querySelector("#viewport-" + i + " .editor"),
-      tabElement: document.getElementById("viewport-" + i + "-tabs")
-    };
-  }
-
   var hooks = [];
 
   boson.currentSubView[1] = null;
@@ -70,6 +63,44 @@ var plugins = {};
     elements.projectRoot = document.getElementById("project-root-list");
     elements.saveFilesInput = document.getElementById("boson-save-file");
     elements.sidebar = document.getElementById("sidebar-entrypoint");
+
+    //Preload viewports.
+    for ( i =1; i<5; i++ ) {
+      viewports[i] = {
+        wrapper: document.getElementById("viewport-" + i),
+        editorElement: document.querySelector("#viewport-" + i + " .editor"),
+        tabElement: document.getElementById("viewport-" + i + "-tabs")
+      };
+
+      (function(i){
+        viewports[i].tabElement.setAttribute("data-viewport", i);
+      })(i);
+
+      viewports[i].tabElement.addEventListener("dragstart", function(e){
+        boson.dragSourceEl = this;
+      });
+      viewports[i].tabElement.addEventListener("dragover", function(e){
+        if ( e.preventDefault ) {
+          e.preventDefault();          
+        }
+      });
+
+      viewports[i].tabElement.addEventListener("drop", function(e){
+
+        var previousViewport, newViewport;
+
+        if ( e.preventDefault ) {
+          e.preventDefault();
+
+          newViewport = this.getAttribute("data-viewport");
+          previousViewport = boson.dragSourceEl.getAttribute("data-viewport");
+
+          bs.moveEditorToViewport(boson.current_editor,newViewport);
+
+        }
+
+      });
+    }
 
     //Hook on change selectFilesInput.
     elements.selectFilesInput.addEventListener("change", function(res) {
@@ -1757,81 +1788,6 @@ var plugins = {};
 
   };
 
-  /*
-   * Creates a dialogue to pick a new pane for a specified editor.
-   */
-  this.selectNewPane = function(xi) {
-
-    if (! bs.procHooks("select-new-pane", {
-      xi: xi
-    } ) ) {
-      return;
-    }
-
-    if (boson.currentPaneMode === "single") {
-      bs.log("There's no other active pane to use in single mode.");
-      return;
-    }
-
-    var popup, popup_cancel_button, paneWrapper, paneHandles = [];
-
-    popup = document.createElement("div");
-    popup.className = "popup prompt selectpane"
-    popup.id = "popup-selectpane";
-
-    popup_cancel_button = document.createElement("div");
-    popup_cancel_button.className = "cancel";
-
-    //Add the panes.
-    paneWrapper = document.createElement("div");
-    paneWrapper.id = "panewrapper";
-    paneWrapper.className = boson.currentPaneMode;
-
-    for ( i=1; i<5; i++ ) {
-      paneHandles[i] = document.createElement("div");
-      paneHandles[i].id = "viewport-" + i;
-      if ( editor[xi].currentViewport === i ) {
-        paneHandles[i].className = "viewport active viewport-" + i;
-      } else {
-        paneHandles[i].className = "viewport viewport-" + i;
-      }
-
-      //Need to preserve anonymous scope for i.
-      (function(i){
-        paneHandles[i].addEventListener("click", function(e){
-          e.preventDefault();
-          bs.moveEditorToViewport(xi,i);
-          bs.removePopupDialogue(popup);
-          bs.suspendCancelEvent("SelectPane");
-        });
-      })(i);
-
-    }
-
-    bs.addCancelEvent("SelectPane", function() {
-      bs.removePopupDialogue(popup);
-      bs.suspendCancelEvent("SelectPane");
-    });
-
-    popup_cancel_button.addEventListener("click", function(e) {
-      e.preventDefault();
-      bs.removePopupDialogue(popup);
-      bs.suspendCancelEvent("SelectPane");
-    });
-
-    for ( i=1; i<5; i++ ) {
-      paneWrapper.appendChild(paneHandles[i]);
-    }
-
-    popup.appendChild(popup_cancel_button);
-    popup.appendChild(paneWrapper);
-
-    elements.bodyEntryPoint.appendChild(popup);
-
-    return popup;
-
-  };
-
   this.activateCmTheme = function(i) {
 
     if ( cm.themes[i].uri === config.theme + ".css" ) {
@@ -2508,6 +2464,9 @@ var plugins = {};
     win.on("close", function() {
       bs.closeBoson();
     });
+
+    //Register viewport callback.
+    bs.viewports = viewports;
 
     //Load modules.
     bs.moduleInit();

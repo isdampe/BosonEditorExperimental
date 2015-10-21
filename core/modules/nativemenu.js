@@ -357,14 +357,6 @@ exports.createTabMenu = function( element, i ) {
     }
   }));
 
-  //Move to pane.
-  contextMenu.append(new coreGl.gui.MenuItem({
-    label: 'Move to pane...',
-    click: function() {
-      bs.selectNewPane(i);
-    }
-  }));
-
   contextMenu.append(new coreGl.gui.MenuItem({ type: 'separator' }));
 
   //New file.
